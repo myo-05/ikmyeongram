@@ -3,9 +3,7 @@ from .models import Post
 
 # @login_required(login_url='/sign-in') # 로그인을 하지 않고 url을 통해 접속할 경우 리디렉션
 
-'''
-정은님이 만드실 홈화면 구동을 위해 임시로 만들었습니다 뷰 함수 이름만 다르고 완전히 같으니까 참고해서 merge 해 주시면 됩니다 팀장님 ^-^
-'''
+
 def home(request): # 홈 화면으로 렌더링
     all_post = Post.objects.all() # models의 Post 객체를 가져온다. (모든 글 가져오기)
     '''
