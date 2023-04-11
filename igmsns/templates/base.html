@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>
+      {% block title %}{% endblock %}
+      익명이그램
+    </title>
+    <style>
+      .title-center {
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      .wrap {
+        width: 400px;
+        margin: 0 auto;
+      }
+
+      .form-area {
+        margin-top: 25px;
+      }
+
+      .timeline-container {
+        margin-top: 25px;
+      }
+
+      .navbar {
+        background-color: #5e5e5e;
+        color: white;
+      }
+
+      .navbar-brand:hover {
+        font-weight: bold;
+      }
+
+      .navbar-brand:not(:last-child) {
+        margin-right: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        {% if not user.is_authenticated %}
+          {# 유저가 인증이 되어있지 않다면 #}
+          {# 로그인, 회원가입 화면 표시 #}
+          <a class="navbar-brand" href="/">홈 아이콘</a>
+        {% else %}
+          {# 그렇지 않다면 - 인증이 되어있다면 #}
+
+          <a class="navbar-brand" href="/">홈 아이콘</a>
+          <a class="navbar-brand" href="글쓰기 페이지">글쓰기 아이콘</a>
+
+        {% endif %}
+        {# if문 종료 #}
+
+        <form class="form-inline my-2 my-lg-0">
+
+          {% if not user.is_authenticated %}
+            {# 유저가 인증이 되어있지 않다면 #}
+            {# 로그인, 회원가입 화면 표시 #}
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="/로그인url">
+                  로그인
+                  <span class="sr-only"></span></a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="/회원가입url">
+                  회원가입
+                  <span class="sr-only"></span></a>
+              </li>
+            </ul>
+          {% else %}
+            {# 그렇지 않다면 - 인증이 되어있다면 #}
+
+            <ul class="navbar-nav mr-auto">
+
+              <li class="nav-item">
+                <a class="nav-link" href="/로그아웃url">
+                  로그아웃
+                </a>
+              </li>
+            </ul>
+
+          {% endif %}
+          {# if문 종료 #}
+        </form>
+      </div>
+    </nav>
+    {% block content %}{% endblock %}
+
+  </body>
+
+</html>
