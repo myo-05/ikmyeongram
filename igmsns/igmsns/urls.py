@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/user/", include("user.urls")),
     path("api/sns/", include("sns.urls")),
-    path('', include('user.urls')), #?왜 만든건가요?
+    #path('', include('user.urls')),
 
 ]
 
