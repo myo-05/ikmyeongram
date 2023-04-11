@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}
+상세페이지
+{% endblock %}
+{% block content %}
+
+<h1>글제목 {{post.post_title}}</h1>
+<p>글내용 {{post.post_content}}</p>
+<p>사진 {{post.post_img}}</p>
+<p>작성자 {{post.post_author}}</p>
+<p>작성시간 {{post.created_at}}</p>
+<p>수정시간 {{post.updated_at}}</p>
+
+
+{% endblock %}
