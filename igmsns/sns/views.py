@@ -3,7 +3,8 @@ from django.http import HttpResponse
 from .models import Post
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+# @login_required(login_url='/sign-in') # 로그인을 하지 않고 url을 통해 접속할 경우 리디렉션
+
 
 '''
 
@@ -25,13 +26,27 @@ def home(request): # 홈 화면으로 렌더링
 def new(request): # 새 글 작성 페이지로 렌더링
     return render(request, 'sns/new_post.html')
     
-# @login_required(login_url='/sign-in') # 로그인을 하지 않고 url을 통해 접속할 경우 리디렉션
+    
+# 글 작성
+
 def new_post_view(request):
     if request.method == 'POST':
         post_title = request.POST['post_title']
         post_content = request.POST['post_content']
         # post_author = 유저id
-        post = Post.objects.create(post_title=post_title, post_content=post_content)
+        post_img = request.FILES.get('post_img') # 이미지 업로드 받아오기
+        
+        post = Post.objects.create(post_title=post_title, post_content=post_content, post_img=post_img)
         post.save()
+        
         return redirect('home')
+    
     return render(request, 'new_post.html')
+        
+         
+# 게시글 상세보기
+def detail_post_view(request, id):
+    a_post = Post.objects.get(id=id)
+    if request.method == 'GET':
+        return render(request, 'sns/detail_post.html', {'post': a_post})
+
