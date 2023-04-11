@@ -3,10 +3,12 @@
 상세페이지
 {% endblock %}
 {% block content %}
-
+{% comment %} 게시글 상세 페이지 {% endcomment %}
 <h1>글제목 {{post.post_title}}</h1>
 <p>글내용 {{post.post_content}}</p>
-<p>사진 {{post.post_img}}</p>
+<p>{% if post.post_img %}
+    <img src="{{ post.post_img.url }}" alt="post image">
+  {% endif %}</p>
 <p>작성자 {{post.post_author}}</p>
 <p>작성시간 {{post.created_at}}</p>
 <p>수정시간 {{post.updated_at}}</p>
