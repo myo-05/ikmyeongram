@@ -22,5 +22,3 @@ urlpatterns = [
     path("api/user/", include("user.urls")),
     path("api/sns/", include("sns.urls")),
 
-]
-

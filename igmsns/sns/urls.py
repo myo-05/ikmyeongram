@@ -1,5 +1,4 @@
 from django.urls import path
-
 from sns import views
 
 urlpatterns = [
@@ -8,4 +7,3 @@ urlpatterns = [
     path('post/', views.new_post_view, name='post'),  # /api/sns/post/ 실제 주소창에 보이는 주소
 
 ]
-

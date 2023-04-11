@@ -3,9 +3,11 @@ from django.http import HttpResponse
 from .models import Post
 from django.contrib.auth.decorators import login_required
 
+
 # Create your views here.
 
 '''
+
 [정은]
 게시글 리스트 불러오기는 회원이랑 비회원 접근이 가능하기 때문에 바로 렌더 되게 해줬습니다!
 
