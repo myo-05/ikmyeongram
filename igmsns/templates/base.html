@@ -48,11 +48,11 @@
     <div class="container">
         {% if not user.is_authenticated %} {# 유저가 인증이 되어있지 않다면 #}
                 {# 로그인, 회원가입 화면 표시 #}
-                <a class="navbar-brand" href="/">홈 아이콘</a>
+                <a class="navbar-brand" href="{% url 'home' %}">홈 아이콘</a>
                 <a class="navbar-brand" href="{% url 'new' %}">글쓰기 아이콘</a>
             {% else %} {# 그렇지 않다면 - 인증이 되어있다면 #}
 
-                <a class="navbar-brand" href="/">홈 아이콘</a>
+                <a class="navbar-brand" href="{% url 'home' %}">홈 아이콘</a>
                 <a class="navbar-brand" href="{% url 'new' %}">글쓰기 아이콘</a>
 
             {% endif %} {# if문 종료 #}
