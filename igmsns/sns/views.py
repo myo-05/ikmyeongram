@@ -57,8 +57,8 @@ def delete(request, id):
 
 
 #게시글 수정하기
-def update(request,l ):   
-    post = Post.objects.get(id=l) 
+def update(request,id ):   
+    post = Post.objects.get(id=id) 
     if request.method == 'POST':
         post_title = request.POST['post_title']
         post_content = request.POST['post_content']
@@ -66,7 +66,7 @@ def update(request,l ):
         post_img = request.FILES.get('post_img') # 이미지 업로드 받아오기
         # update_at = request.datetie
 
-        post = Post.objects.update(id=l,post_title=post_title, post_content=post_content, post_img=post_img)
+        post = Post.objects.update(id=id,post_title=post_title, post_content=post_content, post_img=post_img)
 
 
         return redirect('home')
