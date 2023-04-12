@@ -4,81 +4,89 @@
 
 {% block content %}
 
-<style>
-  .container {
-    {% comment %} max-width: 800px; {% endcomment %}
-    margin: 0 20px auto 20px;
-    padding-right: var(--bs-gutter-x,.75rem);
-    padding-left: var(--bs-gutter-x,.75rem);
-  }
+  <style>
+    .container {
 
-  .post-form {
-    margin-top: 40px;
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
+      max-width: 800px;
 
-  .form-group {
-    margin-bottom: 20px;
-  }
+      {
+        % endcomment %
+      }
 
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
+      margin: 0 20px auto;
+      padding-right: var(--bs-gutter-x, .75rem);
+      padding-left: var(--bs-gutter-x, .75rem);
+    }
 
-  input[type="text"],
-  textarea {
-    width: 100%;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-  }
+    .post-form {
+      margin-top: 40px;
+      background-color: #fff;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
 
-  input[type="file"] {
-    border: none;
-  }
+    .form-group {
+      margin-bottom: 20px;
+    }
 
-  button[type="submit"] {
-    margin-top: 20px;
-  }
-</style>
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
 
-<script>
-  /*썸네일 미리보기 함수*/
-  function setThumbnail(event) {
-    var reader = new FileReader();
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
 
-    reader.onload = function(event) {
-      var img = document.createElement("img");
-      img.setAttribute("src", event.target.result);
-      document.querySelector("div#image_container").appendChild(img);
-    };
+    input[type="file"] {
+      border: none;
+    }
 
-    reader.readAsDataURL(event.target.files[0]);
-  }
-</script>
+    button[type="submit"] {
+      margin-top: 20px;
+    }
+  </style>
 
-<div class="container">
-  <form class="post-form" action="{% url 'post' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="form-group">
-      <label for="post_title">제목</label>
-      <input type="text" class="form-control" id="post_title" name="post_title">
-    </div>
-    <div class="form-group">
-      <label for="post_content">내용</label>
-      <textarea class="form-control" id="post_content" name="post_content" rows="5"></textarea>
-    </div>
-    <div class="form-group">
-      <label for="post_img">이미지</label>
-      <input type="file" class="form-control-file" id="post_img" name="post_img" onchange="setThumbnail(event);">
-      <div id="image_container"></div>
-    </div>
-    <button type="submit" class="btn btn-primary">게시</button>
-  </form>
-</div>
+  <script>
+    /* 썸네일 미리보기 함수 */
+    function setThumbnail(event) {
+      var reader = new FileReader();
+
+      reader.onload = function (event) {
+        var img = document.createElement("img");
+        img.setAttribute("src", event.target.result);
+        document
+          .querySelector("div#image_container")
+          .appendChild(img);
+      };
+
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  </script>
+
+  <div class="container">
+    <form class="post-form" action="{% url'post' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="post_title">제목</label>
+        <input type="text" class="form-control" id="post_title" name="post_title">
+      </div>
+      <div class="form-group">
+        <label for="post_content">내용</label>
+        <textarea class="form-control" id="post_content" name="post_content" rows="5"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="post_img">이미지</label>
+        <input type="file" class="form-control-file" id="post_img" name="post_img" onchange="setThumbnail(event);">
+        <div id="image_container"></div>
+      </div>
+      <button type="submit" class="btn btn-primary">게시</button>
+    </form>
+  </div>
 {% endblock %}
