@@ -58,6 +58,6 @@ def detail_post_view(request, id):
 
 # 프로필 페이지보기
 def profile_view(request, id):
-    contents = UserModel(AbstractUser).objects.get(id=id)
+    contents = UserModel.objects.get(id=id)
     if request.method == 'GET':
         return render(request, 'sns/profile.html', {'contents': contents})
