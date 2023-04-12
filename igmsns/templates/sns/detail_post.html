@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+<!--static 폴더 로드-->
+{% load static %} 
+
 {% block title %}
 상세페이지
 {% endblock %}
@@ -49,9 +52,16 @@
 <div class="container">
   <h1 class="title">{{post.post_title}}</h1>
   
+  <!-- 이미지 업로드 섹션 -->
+    <!-- 업로드된 이미지가 있다면 -->
     {% if post.post_img %}
-      <img class="post-image" src="{{ post.post_img.url }}" alt="post image" style="width:50vw ; max-width:500px">
+      <img class="post-image" src="{{ post.post_img.url }}" alt="post image" style="width : 50vw ; max-width:500px ;">
+    <!-- 업로드된 이미지가 없다면 : 디폴트값 -->
+    {% else %}
+      <img src = "{% static 'admin/img/default_img.png' %}" alt = "default Image" style="width : 20vw ; max-width:500px ;">
     {% endif %}
+
+
       <div class="post">
         <div class="post-content">{{post.post_content}}</div>
       <div class="post-meta">
