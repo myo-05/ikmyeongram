@@ -3,6 +3,7 @@ from .models import UserModel
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -55,3 +56,9 @@ def sign_in_view(request):
 # 정은 : 임시로 만들었습니다
 def sign_up_detail(request):
     return render(request, 'user/signup_detail.html')
+
+# 로그아웃
+@login_required
+def logout(request):
+    auth.logout(request) # 인증 되어있는 정보를 없애기
+    return redirect("home")
