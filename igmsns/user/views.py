@@ -17,7 +17,7 @@ def sign_up_view(request):
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)
         password2 = request.POST.get('password2', None)
-        bio = request.POST.get('bio', None)
+        # remove 'bio'
         nickname = request.POST.get('nickname', None)
 
         if password != password2:
@@ -28,7 +28,7 @@ def sign_up_view(request):
                 return render(request, 'user/signup.html')
             else:
                 UserModel.objects.create_user(
-                    username=username, password=password, bio=bio)
+                    username=username, password=password, nickname = nickname)
                 return redirect('sign-in')
 
 #로그인 함수
@@ -56,6 +56,8 @@ def sign_in_view(request):
 # 정은 : 임시로 만들었습니다
 def sign_up_detail(request):
     return render(request, 'user/signup_detail.html')
+
+
 
 # 로그아웃
 @login_required
