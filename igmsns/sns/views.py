@@ -50,3 +50,29 @@ def detail_post_view(request, id):
     if request.method == 'GET':
         return render(request, 'sns/detail_post.html', {'post': a_post})
 
+# 게시글 삭제
+def delete(request, id):
+    Post.objects.get(id=id).delete()
+    return redirect('home') #삭제 성공!
+
+
+#게시글 수정하기
+def update(request,l ):   
+    post = Post.objects.get(id=l) 
+    if request.method == 'POST':
+        post_title = request.POST['post_title']
+        post_content = request.POST['post_content']
+        # post_author = 유저id
+        post_img = request.FILES.get('post_img') # 이미지 업로드 받아오기
+        # update_at = request.datetie
+
+        post = Post.objects.update(id=l,post_title=post_title, post_content=post_content, post_img=post_img)
+
+
+        return redirect('home')
+    else: # GET
+        
+        return render(request, 'sns/new_update.html', {'post': post})
+            
+    
+    

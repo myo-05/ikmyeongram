@@ -9,56 +9,57 @@
     margin: 0 auto;
     padding: 20px;
   }
-  
+
   .title {
     margin-top: 40px;
     margin-bottom: 20px;
     font-size: 36px;
   }
-  
+
   .post {
     margin-bottom: 40px;
   }
-  
+
   .post-content {
     line-height: 1.6;
   }
-  
+
   .post-image {
     display: block;
     margin: 20px auto;
     max-width: 100%;
   }
-  
+
   .post-meta {
     margin-top: 20px;
     font-size: 14px;
     color: #666;
   }
-  
+
   .post-author {
     margin-right: 20px;
   }
-  
+
   .post-date {
     margin-right: 20px;
   }
-  
 </style>
 {% comment %} 게시글 상세 페이지 {% endcomment %}
 <div class="container">
   <h1 class="title">{{post.post_title}}</h1>
-  
-    {% if post.post_img %}
-      <img class="post-image" src="{{ post.post_img.url }}" alt="post image" style="width:50vw ; max-width:500px">
-    {% endif %}
-      <div class="post">
-        <div class="post-content">{{post.post_content}}</div>
-      <div class="post-meta">
+
+  {% if post.post_img %}
+  <img class="post-image" src="{{ post.post_img.url }}" alt="post image" style="width:50vw ; max-width:500px">
+  {% endif %}
+  <div class="post">
+    <div class="post-content">{{post.post_content}}</div>
+    <div class="post-meta">
       <span class="post-author">작성자: {{post.post_author}}</span>
       <span class="post-date">작성시간: {{post.created_at}}</span>
+      <a href="/api/sns/post/{{post.id}}/delete/">[삭제]</a><br />
+      <a href="/api/sns/post/{{post.id}}/update/">[수정]</a><br />
       {% if post.updated_at %}
-        <span class="post-date">수정시간: {{post.updated_at}}</span>
+      <span class="post-date">수정시간: {{post.updated_at}}</span>
       {% endif %}
     </div>
   </div>

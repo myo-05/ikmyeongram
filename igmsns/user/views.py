@@ -8,3 +8,5 @@ def sign_up_view(request):
 
 def sign_in_view(request):
     return render(request, 'user/signin.html')
+
+
