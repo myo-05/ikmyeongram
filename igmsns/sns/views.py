@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import Post
 from django.contrib.auth.decorators import login_required
 
+
 # @login_required(login_url='/sign-in') # 로그인을 하지 않고 url을 통해 접속할 경우 리디렉션
 
 
@@ -49,4 +50,3 @@ def detail_post_view(request, id):
     a_post = Post.objects.get(id=id)
     if request.method == 'GET':
         return render(request, 'sns/detail_post.html', {'post': a_post})
-
