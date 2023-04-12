@@ -46,6 +46,20 @@
       
 </style>
 
+<script>
+  function setThumbnail(event) {
+    var reader = new FileReader();
+
+    reader.onload = function(event) {
+      var img = document.createElement("img");
+      img.setAttribute("src", event.target.result);
+      document.querySelector("div#image_container").appendChild(img);
+    };
+
+    reader.readAsDataURL(event.target.files[0]);
+  }
+</script>
+
 <div class="container">
   <form class="post-form" action="{% url 'post' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -59,7 +73,10 @@
     </div>
     <div class="form-group">
       <label for="post_img">이미지</label>
-      <input type="file" class="form-control-file" id="post_img" name="post_img">
+      <input type="file" class="form-control-file" id="post_img" name="post_img" onchange="setThumbnail(event);">
+      <div id="image_container"></div>
+      
+    
     </div>
     <button type="submit" class="btn btn-primary">게시</button>
   </form>
