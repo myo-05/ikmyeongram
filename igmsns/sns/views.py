@@ -61,6 +61,7 @@ def delete(request, id):
 
 
 #게시글 수정하기
+@login_required(login_url='/sign-in') # 로그인을 하지 않고 url을 통해 접속할 경우 리디렉션
 def update(request,l ):   
     post = Post.objects.get(id=l) 
     if request.method == 'POST':

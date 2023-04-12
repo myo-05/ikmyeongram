@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}프로필페이지{% endblock %}
+
+{% block content %}
+
+
+<div class = "container">
+
+{% for post in posts %}
+<a href ="/api/sns/post/{{post.id}}" style="text-decoration : none; color: inherit;">
+    <div class="card mb-3" >
+        <div class="row g-0" >
+            <div class="col-md-4" style="width : 200px">
+                {% if post.post_img %}
+                    <img class="img-fluid rounded-start" src="{{ post.post_img.url }}" alt="post image" style="height : 130px">
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.post_title }}</h5>
+                    <p class="card-text">{{ post.post_content|truncatechars:30 }}</p> 
+                    {% comment %} 본문 30자까지만 나오게 {% endcomment %}
+                    <p class="card-text"><small class="text-body-secondary">{{ post.created_at }}</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+  {% endfor %}
+</a>
+</div>
+{% endblock %}
