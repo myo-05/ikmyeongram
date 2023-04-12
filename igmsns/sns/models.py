@@ -11,4 +11,3 @@ class Post(models.Model):
     post_img = models.FileField("이미지", upload_to='',blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
