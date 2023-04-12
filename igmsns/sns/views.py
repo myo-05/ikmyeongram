@@ -43,3 +43,10 @@ def new_post_view(request):
         return redirect('home')
     
     return render(request, 'new_post.html')
+        
+
+# 게시글 상세보기
+def detail_post_view(request, id):
+    a_post = Post.objects.get(id=id)
+    if request.method == 'GET':
+        return render(request, 'sns/detail_post.html', {'post': a_post})
