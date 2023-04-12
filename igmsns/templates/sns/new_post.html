@@ -71,7 +71,7 @@
   </script>
 
   <div class="container">
-    <form class="post-form" action="{% url'post' %}" method="post" enctype="multipart/form-data">
+    <form class="post-form" action="{% url 'post' %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="form-group">
         <label for="post_title">제목</label>
