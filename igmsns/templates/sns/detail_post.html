@@ -51,6 +51,9 @@
   
     {% if post.post_img %}
       <img class="post-image" src="{{ post.post_img.url }}" alt="post image" style="width:50vw ; max-width:500px">
+    {% else %}
+      <img class="post-image" src= "기본익명이.png" alt="post image" style="width:50vw ; max-width:500px">
+    
     {% endif %}
       <div class="post">
         <div class="post-content">{{post.post_content}}</div>

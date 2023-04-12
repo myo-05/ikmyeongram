@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Post
+from user.models import UserModel
 from django.contrib.auth.decorators import login_required
 
 # @login_required(login_url='/sign-in') # 로그인을 하지 않고 url을 통해 접속할 경우 리디렉션
@@ -50,3 +51,8 @@ def detail_post_view(request, id):
     if request.method == 'GET':
         return render(request, 'sns/detail_post.html', {'post': a_post})
 
+# 프로필 페이지보기
+def profile_view(request, id):
+    contents = UserModel(AbstractUser).objects.get(id=id)
+    if request.method == 'GET':
+        return render(request, 'sns/profile.html', {'contents': contents})
