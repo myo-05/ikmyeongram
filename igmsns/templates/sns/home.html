@@ -5,7 +5,7 @@
 {% block content %}
 
 
-<div class = "container">
+<div class="container">
 
 {% for post in posts %}
 <a href ="/api/sns/post/{{post.id}}" style="text-decoration : none; color: inherit;">
@@ -25,8 +25,7 @@
                 </div>
             </div>
         </div>
-    </div>
-  {% endfor %}
-</a>
+        {% endfor %}
+    </a>
 </div>
 {% endblock %}
