@@ -43,7 +43,7 @@ def new_post_view(request):
     
     return render(request, 'new_post.html')
         
-         
+
 # 게시글 상세보기
 def detail_post_view(request, id):
     a_post = Post.objects.get(id=id)
