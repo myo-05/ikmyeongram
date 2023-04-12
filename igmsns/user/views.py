@@ -1,10 +1,52 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .models import UserModel
+from django.http import HttpResponse
+from django.contrib.auth import get_user_model
+from django.contrib import auth
 
 
 # Create your views here.
+
+
 def sign_up_view(request):
-    return render(request, 'user/signup.html')
+    if request.method == 'GET':
+        return render(request, 'user/signup.html')
+    elif request.method == 'POST':
+        username = request.POST.get('username', None)
+        password = request.POST.get('password', None)
+        password2 = request.POST.get('password2', None)
+        bio = request.POST.get('bio', None)
+
+        if password != password2:
+            return render(request, 'user/signup.html')
+        else:
+            exist_user = get_user_model().objects.filter(username=username)
+            if exist_user:
+                return render(request, 'user/signup.html')
+            else:
+                UserModel.objects.create_user(
+                    username=username, password=password, bio=bio)
+                return redirect('/api/user/sign-in')
 
 
 def sign_in_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', None)
+        password = request.POST.get('password', None)
+
+        me = authenticate(request, username=username, password=password)
+        if me is not None:
+            auth.login(request, me)
+            return HttpResponse("로그인 성공!")
+        else:
+            return redirect('/api/user/sign-in')
+
+    elif request.method == 'GET':
+        return render(request, 'user/signin.html')
+
     return render(request, 'user/signin.html')
+
+
+# 정은 : 임시로 만들었습니다
+def sign_up_detail(request):
+    return render(request, 'user/signup_detail.html')
