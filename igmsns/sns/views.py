@@ -31,9 +31,12 @@ def new(request): # 새 글 작성 페이지로 렌더링
 # 글 작성
 
 def new_post_view(request):
+    '''
+    게시글 db 에 저장된 제목, 내용, 이미지, 작성 시간, 작성자를 불러옵니다.
+    '''
     if request.method == 'POST':
-        post_title = request.POST['post_title']
-        post_content = request.POST['post_content']
+        post_title = request.POST['post_title'] # 글 제목
+        post_content = request.POST['post_content'] # 글 내용
         # post_author = 유저id
         post_img = request.FILES.get('post_img') # 이미지 업로드 받아오기
         
