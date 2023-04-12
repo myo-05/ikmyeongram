@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import UserModel
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
+from django.contrib import auth
 
 
 # Create your views here.
@@ -33,9 +34,9 @@ def sign_in_view(request):
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)
 
-        me = UserModel.objects.get(username=username)
-        if me.password == password:
-            request.session['user'] = me.username
+        me = authenticate(request, username=username, password=password)
+        if me is not None:
+            auth.login(request, me)
             return HttpResponse("로그인 성공!")
         else:
             return redirect('/api/user/sign-in')
