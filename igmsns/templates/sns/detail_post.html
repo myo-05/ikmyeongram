@@ -107,26 +107,41 @@
       </div>
       <div>
 
-        {% for comment in comments%}
+        {% for comment in comments %}
           <br>
-          <div style = "border:solid 1px gray; border-radius : 10px ">
-
-            <ul>작성자 :
-              {{comment.user.nickname}}</ul>
-            <ul>내용 :
-              {{comment.comment}}</ul>
+          <div style="border:solid 1px gray; border-radius:10px">
+            <ul>작성자:
+              {{ comment.user.nickname }}</ul>
+            {% if edit_comment == comment.id %}
+              <form action="{% url 'comment_edit' id=post.id comment_id=comment.id %}" method="post">
+                {% csrf_token %}
+                <label for="comment">댓글</label>
+                <textarea class="form-control" id="comment" name="comment">{{ comment.comment }}</textarea>
+                <button type="submit" class="btn btn-primary">수정</button>
+              </form>
+            {% else %}
+              <ul>내용:
+                {{ comment.comment }}</ul>
+            {% endif %}
             <ul>작성시각:
-              {{comment.created_at}}</ul>
-            {%if comment.user == request.user%}
+              {{ comment.created_at }}</ul>
+            {% if comment.user == request.user %}
               <ul>
-                <a href="{%url 'comment_delete' id=post.id comment_id=comment.id%}">삭제</a>
+                {% if edit_comment == comment.id %}
+                  <a href="{% url 'comment' id=post.id %}">취소</a>
+                {% else %}
+                  <a href="{% url 'comment_edit' id=post.id comment_id=comment.id %}">수정</a>
+                  <a href="{% url 'comment_delete' id=post.id comment_id=comment.id %}">삭제</a>
+                {% endif %}
               </ul>
-              {%endif%}
-            </div>
-          {% endfor %}
+            {% endif %}
+          </div>
+        {% endfor %}
 
-        </div>
       </div>
     </div>
+  </div>
 
-  {% endblock %}
+  <!-- ================================= 댓글 수정 폼 ================================= -->
+
+{% endblock %}

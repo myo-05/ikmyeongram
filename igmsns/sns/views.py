@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+
 from .models import Comment, Post
 from user.models import UserModel
 from django.contrib.auth.decorators import login_required
@@ -120,6 +121,7 @@ def profile_view(request, post_author):
     
     
 # ============================= 댓글 작성 =============================     
+
 @login_required
 def comment_create(request,id):
     post = Post.objects.get(id=id)
@@ -131,6 +133,39 @@ def comment_create(request,id):
             Comment.objects.create(name= request.user.nickname, comment=comment, user=request.user, post=post)
             return redirect('detail', post.id)
         
+
+
+
+# ============================= 댓글 수정 =============================
+# @login_required
+# def comment_update(request, comment_id, id):
+#     comment = comment = Comment.objects.get(id=comment_id)
+#     a_post = Post.objects.get(id=id)
+#     if request.method == "POST":
+
+@login_required       
+def comment_edit(request, id, comment_id):
+    post = Post.objects.get(id=id)
+    comment = Comment.objects.get(id=comment_id)
+
+    if id == post.id and comment_id == comment.id:
+        
+        if request.method == 'POST':
+            if comment.user == request.user:
+                comment.comment = request.POST['comment']
+                comment.save()
+            return redirect('detail', id=post.id)
+
+        context = {
+            'post': post,
+            'comment': comment,
+            'edit_comment': comment.id,
+            'comments': post.comment_set.all(),
+        }
+        return render(request, 'sns/detail_post.html', context)
+    else:
+        return HttpResponse("권한이 없습니다.")
+
 # ============================= 댓글 삭제  ============================= 
 @login_required
 def comment_delete(request, comment_id, id):
