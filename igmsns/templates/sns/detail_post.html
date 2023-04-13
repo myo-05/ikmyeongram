@@ -3,82 +3,145 @@
 {% load static %}
 
 {% block title %}
-상세페이지
+  상세페이지
 {% endblock %}
 {% block content %}
-<style>
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
+  <style>
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
 
-  .title {
-    margin-top: 40px;
-    margin-bottom: 20px;
-    font-size: 36px;
-  }
+    .title {
+      margin-top: 40px;
+      margin-bottom: 20px;
+      font-size: 36px;
+    }
 
-  .post {
-    margin-bottom: 40px;
-  }
+    .post {
+      margin-bottom: 40px;
+    }
 
-  .post-content {
-    line-height: 1.6;
-  }
+    .post-content {
+      line-height: 1.6;
+    }
 
-  .post-image {
-    display: block;
-    margin: 20px auto;
-    max-width: 100%;
-  }
+    .post-image {
+      display: block;
+      margin: 20px auto;
+      max-width: 100%;
+    }
 
-  .post-meta {
-    margin-top: 20px;
-    font-size: 14px;
-    color: #666;
-  }
+    .post-meta {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
 
-  .post-author {
-    margin-right: 20px;
-  }
+    .post-author {
+      margin-right: 20px;
+    }
 
-  .post-date {
-    margin-right: 20px;
-  }
-</style>
-{% comment %} 게시글 상세 페이지 {% endcomment %}
-<div class="container">
-  <h1 class="title">{{post.post_title}}</h1>
+    .post-date {
+      margin-right: 20px;
+    }
+  </style>
 
-  <!-- 이미지 업로드 섹션 -->
-  <!-- 업로드된 이미지가 있다면 -->
-  {% if post.post_img %}
-  <img class="post-image" src="{{ post.post_img.url }}" alt="post image" style="width : 50vw ; max-width:500px ;">
-  <!-- 업로드된 이미지가 없다면 : 디폴트값 -->
-  {% else %}
-  <img src="{% static 'admin/img/default_img.png' %}" alt="default Image" style="width : 20vw ; max-width:500px ;">
-  {% endif %}
+  <!-- 삭제 버튼 클릭시 확인 문구 출력 -> 원하시면 다른 버튼들에도 활용할 수 있습니다. -->
+  <script>
+    function confirmDelete(id) {
+      if (confirm("정말 삭제하시겠습니까?")) {
+        window.location.href = "/api/sns/post/" + id + "/delete/";
+      }
+    }
+  </script>
 
+  <!-- ================================= 게시글 상세 페이지 ================================= -->
+  <div class="container">
+    <h1 class="title">{{post.post_title}}</h1>
 
-  <div class="post">
-    <div class="post-content">{{post.post_content}}</div>
-    <div class="post-meta">
-      <!-- author을 외래키로 연결해서 이부분 수정 -->
-      <span class="post-author">작성자: {{post.post_author.username}}</span>
-      <span class="post-date">작성시간: {{post.created_at}}</span>
+    <!-- 이미지 업로드 섹션 -->
+    <!-- 업로드된 이미지가 있다면 -->
+    {% if post.post_img %}
+      <img class="post-image" src="{{ post.post_img.url }}" alt="post image" style="width : 50vw ; max-width:500px ;">
+      <!-- 업로드된 이미지가 없다면 : 디폴트값 -->
+    {% else %}
+      <img src="{% static 'admin/img/default_img.png' %}" alt="default Image" style="width : 20vw ; max-width:500px ;">
+    {% endif %}
+    <!-- 이미지 업로드 섹션 끝 -->
 
-      <!-- 게시글의 작성자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 -->
-      {% if post.post_author == request.user %}
-        <!-- 수정/삭제 버튼을 보여준다 -->
-        <a href="/api/sns/post/{{post.id}}/delete/">[삭제]</a><br />
-        <a href="/api/sns/post/{{post.id}}/update/">[수정]</a><br />
-      {% endif %}
+    <div class="post">
+      <div class="post-content">{{post.post_content}}</div>
+      <div class="post-meta">
+        <!-- author을 외래키로 연결해서 이부분 수정 -->
+        <span class="post-author">작성자:
+          {{post.post_author.nickname}}</span>
+        <span class="post-date">작성시간:
+          {{post.created_at}}</span>
 
-      {% if post.updated_at %}
-      <span class="post-date">수정시간: {{post.updated_at}}</span>
-      {% endif %}
+        <!-- 게시글의 작성자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 -->
+        {% if post.post_author == request.user %}
+          <!-- 수정/삭제 버튼을 보여준다 -->
+          <a href="#" onclick="confirmDelete({{ post.id }})">[삭제]</a><br/>
+          <a href="/api/sns/post/{{post.id}}/update/">[수정]</a><br/>
+        {% endif %}
+
+        {% if post.updated_at %}
+          <span class="post-date">수정시간:
+            {{post.updated_at}}</span>
+        {% endif %}
+      </div>
+    </div>
+    <!-- ================================= 게시글 상세 페이지 끝 ================================= -->
+
+    <!-- ================================= 댓글 작성 폼 ================================= -->
+    <div>
+      <div>
+        <form action="{%url 'comment' id=post.id%}" method='post'>
+          {%csrf_token%}
+          <label for="comment">댓글</label>
+          <textarea class="form-control" id="comment" name="comment"></textarea>
+          <button type="submit" class="btn btn-primary">게시</button>
+        </form>
+      </div>
+      <div>
+
+        {% for comment in comments %}
+          <br>
+          <div style="border:solid 1px gray; border-radius:10px">
+            <ul>작성자:
+              {{ comment.user.nickname }}</ul>
+            {% if edit_comment == comment.id %}
+              <form action="{% url 'comment_edit' id=post.id comment_id=comment.id %}" method="post">
+                {% csrf_token %}
+                <label for="comment">댓글</label>
+                <textarea class="form-control" id="comment" name="comment">{{ comment.comment }}</textarea>
+                <button type="submit" class="btn btn-primary">수정</button>
+              </form>
+            {% else %}
+              <ul>내용:
+                {{ comment.comment }}</ul>
+            {% endif %}
+            <ul>작성시각:
+              {{ comment.created_at }}</ul>
+            {% if comment.user == request.user %}
+              <ul>
+                {% if edit_comment == comment.id %}
+                  <a href="{% url 'comment' id=post.id %}">취소</a>
+                {% else %}
+                  <a href="{% url 'comment_edit' id=post.id comment_id=comment.id %}">수정</a>
+                  <a href="{% url 'comment_delete' id=post.id comment_id=comment.id %}">삭제</a>
+                {% endif %}
+              </ul>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+      </div>
     </div>
   </div>
-</div>
+
+  <!-- ================================= 댓글 수정 폼 ================================= -->
+
 {% endblock %}
