@@ -78,8 +78,8 @@
                   <image src="/static/more 1.png" class="nav_icon"></a>
                 </div>
                 {% endif %}
+                {# if문 종료 #}
                 <text class="title_">안녕! 나는 익명이야!!</text>
-              {# if문 종료 #}
 
               <form class="form-inline my-2 my-lg-0">
 
@@ -103,6 +103,9 @@
 
                   <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
+                      
+                      <text>사용자 닉네임</text>
+                      <image src="/static/more 1.png" class="nav_icon">
                       <a class="nav-link" href="{% url 'sign-out' %}">
                         로그아웃
                       </a>
