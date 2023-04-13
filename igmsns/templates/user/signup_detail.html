@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 <!--static 폴더 로드-->
-{% load static %} 
+{% load static %}
 
 {% block title %}
   회원가입
@@ -85,16 +85,18 @@
   </style>
 
   <script>
-    /*썸네일 미리보기 함수*/
+    /* 썸네일 미리보기 함수 */
     function setThumbnail(event) {
       var reader = new FileReader();
-  
-      reader.onload = function(event) {
+
+      reader.onload = function (event) {
         var img = document.createElement("img");
         img.setAttribute("src", event.target.result);
-        document.querySelector("div#image_container").appendChild(img);
+        document
+          .querySelector("div#image_container")
+          .appendChild(img);
       };
-  
+
       reader.readAsDataURL(event.target.files[0]);
     }
   </script>
@@ -102,9 +104,9 @@
   <div class="container signup-box">
     <div class="wrap">
       <h2 class="title-center">
-        <image class="profil-img" src="{% static 'admin/img/default_img.png' %}" alt = "default Image">
+        <image class="profil-img" src="{% static 'image 26.png' %}" alt="default Image">
           <span class="profil-title">익명이 등록하기</span>
-      </h2>
+        </h2>
         <form class="form-area" method="post" action="/api/user/sign-up-detail/">
           {% csrf_token %}
           <div style="float: right">
