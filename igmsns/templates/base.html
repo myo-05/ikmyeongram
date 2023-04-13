@@ -69,7 +69,6 @@
           {# 로그인, 회원가입 화면 표시 #}
           <a class="navbar-brand" href="{% url 'home' %}">
             <image src="/static/home 1.png" class="nav_icon"></a>
-            <text class="title_">안녕! 나는 익명이야!!</text>
           {% else %}
             {# 그렇지 않다면 - 인증이 되어있다면 #}
             <div class="icon-box">
@@ -78,9 +77,8 @@
                 <a class="navbar-brand" href="{% url 'new' %}">
                   <image src="/static/more 1.png" class="nav_icon"></a>
                 </div>
+                {% endif %}
                 <text class="title_">안녕! 나는 익명이야!!</text>
-
-              {% endif %}
               {# if문 종료 #}
 
               <form class="form-inline my-2 my-lg-0">
