@@ -44,15 +44,15 @@
         font-weight: bold;
       }
 
+      .navbar-brand:not(:last-child) {
+        margin-right: 20px;
+      }
+
       .title_ {
         color: black;
         font-size: 150%;
         font-weight: bold;
         font-style: oblique;
-      }
-
-      .navbar-brand:not(:last-child) {
-        margin-right: 20px;
       }
     </style>
   </head>
@@ -64,6 +64,7 @@
           {# 유저가 인증이 되어있지 않다면 #}
           {# 로그인, 회원가입 화면 표시 #}
           <a class="navbar-brand" href="{% url 'home' %}">홈 아이콘</a>
+          <text class="title_">안녕! 나는 익명이야!!</text>
         {% else %}
           {# 그렇지 않다면 - 인증이 되어있다면 #}
 
@@ -78,10 +79,6 @@
           {% if not user.is_authenticated %}
             {# 유저가 인증이 되어있지 않다면 #}
             {# 로그인, 회원가입 화면 표시 #}
-            <a class="navbar-brand" href="{% url 'home' %}">홈 아이콘</a>
-            <text class="title_">안녕! 나는 익명이야!!</text>
-          {% else %}
-            {# 그렇지 않다면 - 인증이 되어있다면 #}
             <ul class="navbar-nav mr-auto">
               <li class="nav-item active">
                 <a class="nav-link" href="{% url 'sign-in' %}">
@@ -96,6 +93,7 @@
             </ul>
           {% else %}
             {# 그렇지 않다면 - 인증이 되어있다면 #}
+
             <ul class="navbar-nav mr-auto">
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'sign-out' %}">
