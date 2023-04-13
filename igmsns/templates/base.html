@@ -54,6 +54,10 @@
         font-weight: bold;
         font-style: oblique;
       }
+
+      .nav_icon {
+        width: 40px;
+      }
     </style>
   </head>
 
@@ -63,51 +67,56 @@
         {% if not user.is_authenticated %}
           {# 유저가 인증이 되어있지 않다면 #}
           {# 로그인, 회원가입 화면 표시 #}
-          <a class="navbar-brand" href="{% url 'home' %}">홈 아이콘</a>
-          <text class="title_">안녕! 나는 익명이야!!</text>
-        {% else %}
-          {# 그렇지 않다면 - 인증이 되어있다면 #}
-
-          <a class="navbar-brand" href="{% url 'home' %}">홈 아이콘</a>
-          <a class="navbar-brand" href="{% url 'new' %}">글쓰기 아이콘</a>
-
-        {% endif %}
-        {# if문 종료 #}
-
-        <form class="form-inline my-2 my-lg-0">
-
-          {% if not user.is_authenticated %}
-            {# 유저가 인증이 되어있지 않다면 #}
-            {# 로그인, 회원가입 화면 표시 #}
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="{% url 'sign-in' %}">
-                  로그인
-                  <span class="sr-only"></span></a>
-              </li>
-              <li class="nav-item active">
-                <a class="nav-link" href="{% url 'sign-up' %}">
-                  회원가입
-                  <span class="sr-only"></span></a>
-              </li>
-            </ul>
+          <a class="navbar-brand" href="{% url 'home' %}">
+            <image src="/static/home 1.png" class="nav_icon"></a>
+            <text class="title_">안녕! 나는 익명이야!!</text>
           {% else %}
             {# 그렇지 않다면 - 인증이 되어있다면 #}
+            <div class="icon-box">
+              <a class="navbar-brand" href="{% url 'home' %}">
+                <image src="/static/home 1.png" class="nav_icon"></a>
+                <a class="navbar-brand" href="{% url 'new' %}">
+                  <image src="/static/more 1.png" class="nav_icon"></a>
+                </div>
+                <text class="title_">안녕! 나는 익명이야!!</text>
 
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'sign-out' %}">
-                  로그아웃
-                </a>
-              </li>
-            </ul>
-          {% endif %}
-          {# if문 종료 #}
-        </form>
-      </div>
-    </nav>
-    {% block content %}{% endblock %}
+              {% endif %}
+              {# if문 종료 #}
 
-  </body>
+              <form class="form-inline my-2 my-lg-0">
 
-</html>
+                {% if not user.is_authenticated %}
+                  {# 유저가 인증이 되어있지 않다면 #}
+                  {# 로그인, 회원가입 화면 표시 #}
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'sign-in' %}">
+                        로그인
+                        <span class="sr-only"></span></a>
+                    </li>
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'sign-up' %}">
+                        회원가입
+                        <span class="sr-only"></span></a>
+                    </li>
+                  </ul>
+                {% else %}
+                  {# 그렇지 않다면 - 인증이 되어있다면 #}
+
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'sign-out' %}">
+                        로그아웃
+                      </a>
+                    </li>
+                  </ul>
+                {% endif %}
+                {# if문 종료 #}
+              </form>
+            </div>
+          </nav>
+          {% block content %}{% endblock %}
+
+        </body>
+
+      </html>
