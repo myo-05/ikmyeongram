@@ -4,94 +4,117 @@
 
 <html lang="ko">
 
-<head>
+  <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %} | 익명이그램</title>
+    <title>
+      {% block title %}{% endblock %}
+      | 익명이그램</title>
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
     <style>
-        .title-center {
+      .title-center {
 
-            text-align: center;
-            margin-top: 50px;
-        }
+        text-align: center;
+        margin-top: 50px;
+      }
 
-        .wrap {
-            width: 400px;
-            margin: 0 auto;
-        }
+      .wrap {
+        width: 400px;
+        margin: 0 auto;
+      }
 
-        .form-area {
-            margin-top: 25px;
-        }
+      .form-area {
+        margin-top: 25px;
+      }
 
-        .timeline-container {
+      .timeline-container {
 
-            margin-top: 25px
-        }
+        margin-top: 25px;
+      }
 
-        .navbar {
-            background-color: #5e5e5e;
-            color: white;
-        }
+      .navbar {
+        background-color: #5e5e5e;
+        color: white;
+      }
 
-        .navbar-brand:hover {
-            font-weight: bold;
-        }
+      .navbar-brand:hover {
+        font-weight: bold;
+      }
 
-        .navbar-brand:not(:last-child) {
-            margin-right: 20px;
-        }
+      .navbar-brand:not(:last-child) {
+        margin-right: 20px;
+      }
+
+      .title_ {
+        color: black;
+        font-size: 150%;
+        font-weight: bold;
+        font-style: oblique;
+      }
+
+      .nav_icon {
+        width: 40px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            {% if not user.is_authenticated %} {# 유저가 인증이 되어있지 않다면 #}
-            {# 로그인, 회원가입 화면 표시 #}
-            <a class="navbar-brand" href="{% url 'home' %}">홈 아이콘</a>
-            {% else %} {# 그렇지 않다면 - 인증이 되어있다면 #}
+      <div class="container">
+        {% if not user.is_authenticated %}
+          {# 유저가 인증이 되어있지 않다면 #}
+          {# 로그인, 회원가입 화면 표시 #}
+          <a class="navbar-brand" href="{% url 'home' %}">
+            <image src="/static/home 1.png" class="nav_icon"></a>
+          {% else %}
+            {# 그렇지 않다면 - 인증이 되어있다면 #}
+            <div class="icon-box">
+              <a class="navbar-brand" href="{% url 'home' %}">
+                <image src="/static/home 1.png" class="nav_icon"></a>
+                <a class="navbar-brand" href="{% url 'new' %}">
+                  <image src="/static/more 1.png" class="nav_icon"></a>
+                </div>
+                {% endif %}
+                <text class="title_">안녕! 나는 익명이야!!</text>
+              {# if문 종료 #}
 
-            <a class="navbar-brand" href="{% url 'home' %}">홈 아이콘</a>
-            <a class="navbar-brand" href="{% url 'new' %}">글쓰기 아이콘</a>
+              <form class="form-inline my-2 my-lg-0">
 
-            {% endif %} {# if문 종료 #}
-
-
-            <form class="form-inline my-2 my-lg-0">
-
-                {% if not user.is_authenticated %} {# 유저가 인증이 되어있지 않다면 #}
-                {# 로그인, 회원가입 화면 표시 #}
-                <ul class="navbar-nav mr-auto">
+                {% if not user.is_authenticated %}
+                  {# 유저가 인증이 되어있지 않다면 #}
+                  {# 로그인, 회원가입 화면 표시 #}
+                  <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'sign-in' %}"> 로그인 <span class="sr-only"></span></a>
+                      <a class="nav-link" href="{% url 'sign-in' %}">
+                        로그인
+                        <span class="sr-only"></span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'sign-up' %}"> 회원가입 <span class="sr-only"></span></a>
+                      <a class="nav-link" href="{% url 'sign-up' %}">
+                        회원가입
+                        <span class="sr-only"></span></a>
                     </li>
-                </ul>
-                {% else %} {# 그렇지 않다면 - 인증이 되어있다면 #}
+                  </ul>
+                {% else %}
+                  {# 그렇지 않다면 - 인증이 되어있다면 #}
 
-                <ul class="navbar-nav mr-auto">
+                  <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'sign-out' %}"> 로그아웃 </a>
+                      <a class="nav-link" href="{% url 'sign-out' %}">
+                        로그아웃
+                      </a>
                     </li>
-                </ul>
-                {% endif %} {# if문 종료 #}
-            </form>
-        </div>
-    </nav>
-    {% block content %}
+                  </ul>
+                {% endif %}
+                {# if문 종료 #}
+              </form>
+            </div>
+          </nav>
+          {% block content %}{% endblock %}
 
-    {% endblock %}
+        </body>
 
-</body>
-
-</html>
+      </html>

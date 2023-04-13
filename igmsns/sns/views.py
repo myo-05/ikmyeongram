@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from .models import Post
+from user.models import UserModel
 from django.contrib.auth.decorators import login_required
 
 
 '''
-
 [정은]
 게시글 리스트 불러오기는 회원이랑 비회원 접근이 가능하기 때문에 바로 렌더 되게 해줬습니다!
 
@@ -14,34 +14,33 @@ from django.contrib.auth.decorators import login_required
 view 함수 이름만 다르고 완전히 같으니까, 참고해서 merge 해 주시면 됩니다. 팀장님 ^-^* 찡긋~!
 '''
 
-    
-# 로그인 여부에 따라 화면 넘어가는 함수 - 기존 home 함수에서 수정했습니다.
+# ============================= 홈이동 (피드페이지) ============================= 
+
+# 로그인 없이도 피드는 조회가능하지만, 글작성버튼은 없다.
 def home(request):
-    user = request.user.is_authenticated # 로그인 여부 검증
-    if user: # 로그인 했으면 홈으로 넘어가기 # models의 Post 객체를 가져온다. (모든 글 가져오기)
-        all_post = Post.objects.all().order_by('-created_at')
-        return render(request, 'sns/home.html',{'posts':all_post})
-    else:
-        return redirect('sign-in')
+    all_post = Post.objects.all().order_by('-created_at') #모든 글을 가져와 생성일 기준으로 내림차순나열
+    return render(request, 'sns/home.html',{'posts':all_post})
 
 
 def new(request): # 새 글 작성 페이지로 렌더링
     return render(request, 'sns/new_post.html')
     
     
-# 글 작성
+#  ============================= 글 작성 ============================= 
+
 @login_required(login_url='/sign-in') # 로그인을 하지 않고 url을 통해 접속할 경우 리디렉션
 def new_post_view(request):
     '''
-    게시글 db 에 저장된 제목, 내용, 이미지, 작성 시간, 작성자를 불러옵니다.
+    제목, 내용, 이미지, 작성 시간, 작성자를 게시글 db 에 저장합니다.
     '''
     if request.method == 'POST':
-        post_title = request.POST['post_title'] # 글 제목
-        post_content = request.POST['post_content'] # 글 내용
-        # post_author = 유저id
+        post_title = request.POST['post_title'] # 입력한 글 제목 받아오기
+        post_content = request.POST['post_content'] # 입력한 글 내용 받아오기
+        post_author = request.user #현재 로그인된 user의 nickname을 받아오기 (외래키 연결됨)
         post_img = request.FILES.get('post_img') # 이미지 업로드 받아오기
+        post_author_id = request.user.id
         
-        post = Post.objects.create(post_title=post_title, post_content=post_content, post_img=post_img)
+        post = Post.objects.create(post_title=post_title, post_content=post_content, post_img=post_img, post_author= post_author, author_id = post_author_id)
         post.save()
         
         return redirect('home')
@@ -49,35 +48,71 @@ def new_post_view(request):
     return render(request, 'new_post.html')
         
 
-# 게시글 상세보기
+# ============================= 게시글 상세보기 ============================= 
+
 def detail_post_view(request, id):
     a_post = Post.objects.get(id=id)
     if request.method == 'GET':
         return render(request, 'sns/detail_post.html', {'post': a_post})
 
-# 게시글 삭제
-def delete(request, id):
-    Post.objects.get(id=id).delete()
-    return redirect('home') #삭제 성공!
+'''
+수정 뷰, 삭제 뷰 위치 바꿨습니다. 기능의 흐름에 따라 함수를 배치하는 게 알아보기 쉬울 것 같습니다.
+'''
 
+# ============================= 게시글 수정하기 ============================= 
 
-#게시글 수정하기
+@login_required(login_url='/sign-in') # 로그인을 하지 않고 url을 통해 접속할 경우 리디렉션
 def update(request,id ):   
     post = Post.objects.get(id=id) 
     if request.method == 'POST':
-        post_title = request.POST['post_title']
-        post_content = request.POST['post_content']
-        # post_author = 유저id
-        post_img = request.FILES.get('post_img') # 이미지 업로드 받아오기
-        # update_at = request.datetie
-
-        post = Post.objects.update(id=id,post_title=post_title, post_content=post_content, post_img=post_img)
-
-
-        return redirect('home')
-    else: # GET
+        if post.post_author == request.user:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 수정 가능
+            post.post_title = request.POST['post_title'] # 수정할 제목 받아오기
+            post.post_content = request.POST['post_content'] # 수정할 내용 받아오기
+            #post.post_author = request.user.id # 현재 로그인된 user의 id를 받아오기 나중에 내 글만 수정 가능하게 할 때 사용
+            post.post_img = request.FILES.get('post_img') or post.post_img
+            # 이미지 업로드 받아오기, 이미지를 새로 업로드하지 않는다면 기존 이미지를 그대로 사용한다.
+            post.save()
+            '''
+            post = Post.objects.update(post_title=post_title, post_content=post_content, post_img=post_img,post_author=post_author)
+            update 를 하면 테이블 내의 모든 속성들이 업데이트 됩니다.
+            id = id 라고 하면 모든 id 어트리뷰트가 같은 값으로 업데이트 되어 UNIQE가 위배되어 오류가 나는 겁니다.
+            그리고 id = id 를 삭제하게 되면 현재 목록의 모든 글이 같은 글이 됩니다.
+            업데이트 시에도 save 사용해야 하니까 수정했습니다.
+            수정 시간 반영 완료~
+            '''
+            return redirect('home')
+        else:
+            return HttpResponse("권한이 없습니다.") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
+    else:
+        if post.post_author == request.user:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 수정 가능
+            return render(request, 'sns/update_post.html', {'post': post})
+            # 글 수정 html 파일 이름 수정 후 이 부분도 수정 완료 (new_update.html --> update_post.html)
+        else:
+            return HttpResponse("권한이 없습니다.") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
         
-        return render(request, 'sns/new_update.html', {'post': post})
-            
+
+# ============================= 게시글 삭제 ============================= 
+
+@login_required(login_url='/sign-in') # 로그인을 하지 않고 url을 통해 접속할 경우 리디렉션
+def delete(request, id):
+    post = Post.objects.get(id=id)
+    if post.post_author == request.user:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 삭제 가능
+        post.delete()
+        return redirect('home') # 삭제 성공
+    else:
+        return HttpResponse("권한이 없습니다.") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
+
     
-    
+# ============================= 프로필 페이지보기  ============================= 
+
+'''
+해당함수를 실행할 버튼을 고려해야합니다.
+버튼을 누르면 특정 user의 id를 불러와야합니다.
+'''
+@login_required(login_url='/sign-in') # 로그인을 하지 않고 url을 통해 접속할 경우 리디렉션
+def profile_view(request, post_author):
+    #특정 user의 id를 파라미터 id로 받아왔다면
+    user = UserModel.objects.get(nickname=post_author) #user의 정보를 가져옴 -> 프로필사진 등 활용
+    all_post = Post.objects.filter(post_author=post_author).order_by('-created_at') #user의 모든 글을 가져와서 생성일 기준으로 내림차순나열
+    if request.method == 'GET':
+        return render(request, 'sns/profile.html', {'user': user , 'posts': all_post})

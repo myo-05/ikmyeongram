@@ -64,10 +64,17 @@
   <div class="post">
     <div class="post-content">{{post.post_content}}</div>
     <div class="post-meta">
-      <span class="post-author">작성자: {{post.post_author}}</span>
+      <!-- author을 외래키로 연결해서 이부분 수정 -->
+      <span class="post-author">작성자: {{post.post_author.username}}</span>
       <span class="post-date">작성시간: {{post.created_at}}</span>
-      <a href="/api/sns/post/{{post.id}}/delete/">[삭제]</a><br />
-      <a href="/api/sns/post/{{post.id}}/update/">[수정]</a><br />
+
+      <!-- 게시글의 작성자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 -->
+      {% if post.post_author == request.user %}
+        <!-- 수정/삭제 버튼을 보여준다 -->
+        <a href="/api/sns/post/{{post.id}}/delete/">[삭제]</a><br />
+        <a href="/api/sns/post/{{post.id}}/update/">[수정]</a><br />
+      {% endif %}
+
       {% if post.updated_at %}
       <span class="post-date">수정시간: {{post.updated_at}}</span>
       {% endif %}
