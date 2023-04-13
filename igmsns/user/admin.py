@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin # django에서 admin 툴을 사용하겠다
 from .models import UserModel
 
 # Register your models here.
