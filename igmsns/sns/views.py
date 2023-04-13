@@ -62,8 +62,8 @@ def delete(request, id):
 
 #게시글 수정하기
 @login_required(login_url='/sign-in') # 로그인을 하지 않고 url을 통해 접속할 경우 리디렉션
-def update(request,l ):   
-    post = Post.objects.get(id=l) 
+def update(request,id ):   
+    post = Post.objects.get(id=id) 
     if request.method == 'POST':
         post_title = request.POST['post_title'] #수정할 제목 받아오기
         post_content = request.POST['post_content'] #수정할 내용 받아오기
@@ -71,7 +71,7 @@ def update(request,l ):
         post_img = request.FILES.get('post_img') # 이미지 업로드 받아오기
         # update_at = request.datetie
 
-        post = Post.objects.update(id=l,post_title=post_title, post_content=post_content, post_img=post_img)
+        post = Post.objects.update(id=id,post_title=post_title, post_content=post_content, post_img=post_img,post_author=post_author)
 
 
         return redirect('home')
