@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db import models
-from django.conf import settings
 
 # 게시글 테이블 모델
 class Post(models.Model):
@@ -14,3 +13,4 @@ class Post(models.Model):
     post_img = models.FileField("이미지", upload_to='',blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    author_id = models.CharField(max_length=45)
