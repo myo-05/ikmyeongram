@@ -97,6 +97,9 @@
       reader.onload = function (event) {
         var img = document.createElement("img");
         img.setAttribute("src", event.target.result);
+        // 썸네일 크기 조절
+        img.style.width = "200px"; // 너비 200px로 설정
+        img.style.height = "auto"; // 높이 자동 설정
         document
           .querySelector("div#image_container")
           .appendChild(img);
