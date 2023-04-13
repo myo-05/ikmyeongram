@@ -64,19 +64,28 @@ def detail_post_view(request, id):
 def update(request,id ):   
     post = Post.objects.get(id=id) 
     if request.method == 'POST':
-        post_title = request.POST['post_title'] #수정할 제목 받아오기
-        post_content = request.POST['post_content'] #수정할 내용 받아오기
-        post_author = request.user.id #현재 로그인된 user의 id를 받아오기
-        post_img = request.FILES.get('post_img') # 이미지 업로드 받아오기
-        # update_at = request.datetie
-
-        post = Post.objects.update(id=id,post_title=post_title, post_content=post_content, post_img=post_img,post_author=post_author)
-
+        post.post_title = request.POST['post_title'] # 수정할 제목 받아오기
+        post.post_content = request.POST['post_content'] # 수정할 내용 받아오기
+        #post.post_author = request.user.id # 현재 로그인된 user의 id를 받아오기 나중에 내 글만 수정 가능하게 할 때 사용
+        post.post_img = request.FILES.get('post_img') or post.post_img
+        # 이미지 업로드 받아오기, 이미지를 새로 업로드하지 않는다면 기존 이미지를 그대로 사용한다.
+        
+        post.save()
+        
+        '''
+        post = Post.objects.update(post_title=post_title, post_content=post_content, post_img=post_img,post_author=post_author)
+        update 를 하면 테이블 내의 모든 속성들이 업데이트 됩니다.
+        id = id 라고 하면 모든 id 어트리뷰트가 같은 값으로 업데이트 되어 UNIQE가 위배되어 오류가 나는 겁니다.
+        그리고 id = id 를 삭제하게 되면 현재 목록의 모든 글이 같은 글이 됩니다.
+        업데이트 시에도 save 사용해야 하니까 수정했습니다.
+        수정 시간 반영 완료~
+        '''
 
         return redirect('home')
     else: # GET
         
-        return render(request, 'sns/update_post.html', {'post': post}) # 글 수정 html 파일 이름 수정 후 이 부분도 수정 완료 (new_update.html --> update_post.html)
+        return render(request, 'sns/update_post.html', {'post': post}) 
+    # 글 수정 html 파일 이름 수정 후 이 부분도 수정 완료 (new_update.html --> update_post.html)
 
 # ============================= 게시글 삭제 ============================= 
 
