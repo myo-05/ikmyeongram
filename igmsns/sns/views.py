@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import Post
+
+from .models import Comment, Post
 from user.models import UserModel
 from django.contrib.auth.decorators import login_required
 
@@ -52,8 +53,9 @@ def new_post_view(request):
 
 def detail_post_view(request, id):
     a_post = Post.objects.get(id=id)
+    comments = Comment.objects.filter(post=a_post).order_by('-created_at')
     if request.method == 'GET':
-        return render(request, 'sns/detail_post.html', {'post': a_post})
+        return render(request, 'sns/detail_post.html', {'post': a_post, 'comments':comments})
 
 '''
 수정 뷰, 삭제 뷰 위치 바꿨습니다. 기능의 흐름에 따라 함수를 배치하는 게 알아보기 쉬울 것 같습니다.
@@ -116,3 +118,62 @@ def profile_view(request, post_author):
     all_post = Post.objects.filter(post_author=post_author).order_by('-created_at') #user의 모든 글을 가져와서 생성일 기준으로 내림차순나열
     if request.method == 'GET':
         return render(request, 'sns/profile.html', {'user': user , 'posts': all_post})
+    
+    
+# ============================= 댓글 작성 =============================     
+
+@login_required
+def comment_create(request,id):
+    post = Post.objects.get(id=id)
+    if request.method == 'POST':
+        comment = request.POST.get('comment', '')
+        if comment == '':
+            return HttpResponse('댓글을 입력해주세요.')
+        else:
+            Comment.objects.create(name= request.user.nickname, comment=comment, user=request.user, post=post)
+            return redirect('detail', post.id)
+        
+
+
+
+# ============================= 댓글 수정 =============================
+# @login_required
+# def comment_update(request, comment_id, id):
+#     comment = comment = Comment.objects.get(id=comment_id)
+#     a_post = Post.objects.get(id=id)
+#     if request.method == "POST":
+
+@login_required       
+def comment_edit(request, id, comment_id):
+    post = Post.objects.get(id=id)
+    comment = Comment.objects.get(id=comment_id)
+
+    if id == post.id and comment_id == comment.id:
+        
+        if request.method == 'POST':
+            if comment.user == request.user:
+                comment.comment = request.POST['comment']
+                comment.save()
+            return redirect('detail', id=post.id)
+
+        context = {
+            'post': post,
+            'comment': comment,
+            'edit_comment': comment.id,
+            'comments': post.comment_set.all(),
+        }
+        return render(request, 'sns/detail_post.html', context)
+    else:
+        return HttpResponse("권한이 없습니다.")
+
+# ============================= 댓글 삭제  ============================= 
+@login_required
+def comment_delete(request, comment_id, id):
+    comment = Comment.objects.get(id=comment_id)
+    a_post = Post.objects.get(id=id)
+
+    if id==a_post.id and comment_id==comment.id:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 삭제 가능
+        comment.delete()
+        return redirect('detail', id=a_post.id) # 삭제 성공 후 상세 페이지로 이동
+    else:
+        return HttpResponse("권한이 없습니다.")
