@@ -8,61 +8,22 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-#회원가입 함수
-def sign_up_view(request):
-    if request.method == 'GET': #회원가입 페이지를 눌렀을 때
-        return render(request, 'user/signup.html')
-    
-    elif request.method == 'POST': #회원가입정보 제출할 때
-        username = request.POST.get('username', None)
-        password = request.POST.get('password', None)
-        password2 = request.POST.get('password2', None)
-        nickname = request.POST.get('nickname', None)
+'''
+회원가입 페이지로 대체된 페이지 불러오는 임시 함수
+정은 : 임시로 만들었습니다 + 영오: 기능구현해서 수정했습니다.
+채연 : 위치바꿨습니다.
+'''
 
-        if password != password2:
-            return render(request, 'user/signup.html')
-        else:
-            exist_user = get_user_model().objects.filter(username=username)
-            if exist_user:
-                return render(request, 'user/signup.html')
-            else:
-                UserModel.objects.create_user(
-                    username=username, password=password, nickname=nickname)
-                return redirect('sign-in')
-
-#로그인 함수
-def sign_in_view(request):
-    if request.method == 'POST': #POST 요청, 즉 로그인을 시도했을 때
-        username = request.POST.get('username', None)
-        password = request.POST.get('password', None)
-
-        me = auth.authenticate(request, username=username, password=password)
-        if me is not None: #계정이 있다면
-            auth.login(request, me)
-            return redirect('home')
-        else:
-            return redirect('sign-in')
-
-    elif request.method == 'GET': #GET 요청, 즉 로그인페이지 버튼을 눌렀을 때
-        user = request.user.is_authenticated
-        if user:
-            return redirect('home')
-        else:
-            return render(request, 'user/signin.html')
-
-
-#회원가입 페이지로 대체된 페이지 불러오는 임시 함수
-# 정은 : 임시로 만들었습니다 + 영오: 기능구현해서 수정했습니다.
 def sign_up_detail(request):
     if request.method == 'GET': #회원가입 페이지를 눌렀을 때
         return render(request, 'user/signup_detail.html')
     
     elif request.method == 'POST': #회원가입정보 제출할 때
-        username = request.POST.get('username', None)
-        password = request.POST.get('password', None)
-        password2 = request.POST.get('password2', None)
-        nickname = request.POST.get('nickname', None)
-        email = request.POST.get('email', None)
+        username = request.POST.get('username', None) # 회원 ID
+        password = request.POST.get('password', None) # 비밀번호
+        password2 = request.POST.get('password2', None) # 비밀번호 확인
+        nickname = request.POST.get('nickname', None) # 닉네임
+        email = request.POST.get('email', None) # 이메일
         user_img = request.FILES.get('user_img') # 이미지 업로드 받아오기
         
         if password != password2:
@@ -79,6 +40,30 @@ def sign_up_detail(request):
                 UserModel.objects.create_user(
                     username=username, password=password, nickname=nickname,email=email,user_img=user_img)
                 return redirect('sign-in')
+
+
+
+
+#로그인 함수
+def sign_in_view(request):
+    if request.method == 'POST': #POST 요청, 즉 로그인을 시도했을 때
+        username = request.POST.get('username', None) # ID 받아옴
+        password = request.POST.get('password', None) # 비밀번호 받아옴
+
+        me = auth.authenticate(request, username=username, password=password) # 유저 인증(회원가입 된 유저인지)
+        if me is not None: #계정이 있다면
+            auth.login(request, me)
+            return redirect('home')
+        else: #계정이 없다면
+            return redirect('sign-in')
+
+    elif request.method == 'GET': #GET 요청, 즉 로그인페이지 버튼을 눌렀을 때
+        user = request.user.is_authenticated
+        if user:
+            return redirect('home')
+        else:
+            return render(request, 'user/signin.html')
+
 
 # 로그아웃
 @login_required
