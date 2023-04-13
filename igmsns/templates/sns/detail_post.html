@@ -65,7 +65,7 @@
     <div class="post-content">{{post.post_content}}</div>
     <div class="post-meta">
       <!-- author을 외래키로 연결해서 이부분 수정 -->
-      <span class="post-author">작성자: {{post.post_author.username}}</span>
+      <span class="post-author">작성자: {{post.post_author.nickname}}</span>
       <span class="post-date">작성시간: {{post.created_at}}</span>
 
       <!-- 게시글의 작성자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 -->
