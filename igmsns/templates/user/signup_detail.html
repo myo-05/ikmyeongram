@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-  회원가입
+회원가입
 {% endblock %}
 {% block content %}
   <style>
@@ -112,6 +112,9 @@
         <image class="profil-img" src="{% static 'image 26.png' %}" alt="default Image">
           <span class="profil-title">익명이 등록하기</span>
         </h2>
+        {% if error_message %}
+        <div>{{ error_message }}</div>
+        {% endif %}
         <form class="form-area" method="post" action="/api/user/sign-up-detail/">
           {% csrf_token %}
           <div style="float: right">
@@ -140,7 +143,7 @@
           </div>
           <div class="form-group mt-2 mb-2 sign-box">
             <label for="email" class="label-name">이메일</label>
-            <input type="text" class="form-control sign-input" id="email" name="email">
+            <input type="email" class="form-control sign-input" id="email" name="email">
           </div>
           <div class="form-group">
             <label for="user_img">이미지</label>
@@ -148,7 +151,6 @@
             <div id="image_container"></div>
           </div>
         </form>
-
-      </div>
-    </div>
-  {% endblock %}
+  </div>
+</div>
+{% endblock %}
