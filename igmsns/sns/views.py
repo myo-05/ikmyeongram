@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import Post
 from user.models import UserModel
@@ -35,7 +36,7 @@ def new_post_view(request):
     if request.method == 'POST':
         post_title = request.POST['post_title'] # 입력한 글 제목 받아오기
         post_content = request.POST['post_content'] # 입력한 글 내용 받아오기
-        post_author = request.user.nickname #현재 로그인된 user의 nickname을 받아오기
+        post_author = request.user #현재 로그인된 user의 nickname을 받아오기 (외래키 연결됨)
         post_img = request.FILES.get('post_img') # 이미지 업로드 받아오기
         post_author_id = request.user.id
         
@@ -64,35 +65,42 @@ def detail_post_view(request, id):
 def update(request,id ):   
     post = Post.objects.get(id=id) 
     if request.method == 'POST':
-        post.post_title = request.POST['post_title'] # 수정할 제목 받아오기
-        post.post_content = request.POST['post_content'] # 수정할 내용 받아오기
-        #post.post_author = request.user.id # 현재 로그인된 user의 id를 받아오기 나중에 내 글만 수정 가능하게 할 때 사용
-        post.post_img = request.FILES.get('post_img') or post.post_img
-        # 이미지 업로드 받아오기, 이미지를 새로 업로드하지 않는다면 기존 이미지를 그대로 사용한다.
+        if post.post_author == request.user:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 수정 가능
+            post.post_title = request.POST['post_title'] # 수정할 제목 받아오기
+            post.post_content = request.POST['post_content'] # 수정할 내용 받아오기
+            #post.post_author = request.user.id # 현재 로그인된 user의 id를 받아오기 나중에 내 글만 수정 가능하게 할 때 사용
+            post.post_img = request.FILES.get('post_img') or post.post_img
+            # 이미지 업로드 받아오기, 이미지를 새로 업로드하지 않는다면 기존 이미지를 그대로 사용한다.
+            post.save()
+            '''
+            post = Post.objects.update(post_title=post_title, post_content=post_content, post_img=post_img,post_author=post_author)
+            update 를 하면 테이블 내의 모든 속성들이 업데이트 됩니다.
+            id = id 라고 하면 모든 id 어트리뷰트가 같은 값으로 업데이트 되어 UNIQE가 위배되어 오류가 나는 겁니다.
+            그리고 id = id 를 삭제하게 되면 현재 목록의 모든 글이 같은 글이 됩니다.
+            업데이트 시에도 save 사용해야 하니까 수정했습니다.
+            수정 시간 반영 완료~
+            '''
+            return redirect('home')
+        else:
+            return HttpResponse("권한이 없습니다.") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
+    else:
+        if post.post_author == request.user:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 수정 가능
+            return render(request, 'sns/update_post.html', {'post': post})
+            # 글 수정 html 파일 이름 수정 후 이 부분도 수정 완료 (new_update.html --> update_post.html)
+        else:
+            return HttpResponse("권한이 없습니다.") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
         
-        post.save()
-        
-        '''
-        post = Post.objects.update(post_title=post_title, post_content=post_content, post_img=post_img,post_author=post_author)
-        update 를 하면 테이블 내의 모든 속성들이 업데이트 됩니다.
-        id = id 라고 하면 모든 id 어트리뷰트가 같은 값으로 업데이트 되어 UNIQE가 위배되어 오류가 나는 겁니다.
-        그리고 id = id 를 삭제하게 되면 현재 목록의 모든 글이 같은 글이 됩니다.
-        업데이트 시에도 save 사용해야 하니까 수정했습니다.
-        수정 시간 반영 완료~
-        '''
-
-        return redirect('home')
-    else: # GET
-        
-        return render(request, 'sns/update_post.html', {'post': post}) 
-    # 글 수정 html 파일 이름 수정 후 이 부분도 수정 완료 (new_update.html --> update_post.html)
 
 # ============================= 게시글 삭제 ============================= 
 
 @login_required(login_url='/sign-in') # 로그인을 하지 않고 url을 통해 접속할 경우 리디렉션
 def delete(request, id):
-    Post.objects.get(id=id).delete()
-    return redirect('home') #삭제 성공!
+    post = Post.objects.get(id=id)
+    if post.post_author == request.user:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 삭제 가능
+        post.delete()
+        return redirect('home') # 삭제 성공
+    else:
+        return HttpResponse("권한이 없습니다.") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
 
     
 # ============================= 프로필 페이지보기  ============================= 
