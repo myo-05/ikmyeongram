@@ -15,12 +15,15 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) # 생성시각
     updated_at = models.DateTimeField(auto_now=True) # 수정시각
     author_id = models.CharField(max_length=45) # 현재 로그인 중인 유저의 기본키 넣을 자리
+    
+    hearts = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='hearts')
+    # 좋아요 : 게시글과 사용자를 연결하는 Many To Many 필드입니다.
 
 # ============================= 댓글 테이블 모델 =============================    
 class Comment(models.Model):
     class Meta:
-        db_table = "my_comment" # 여기는 테이블 이름이에요! 꼭 기억 해 주세요!
-        
+        db_table = "my_comment"
+        ordering = ['-created_at'] # 댓글 최신순 정렬
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=256)

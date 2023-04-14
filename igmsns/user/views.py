@@ -89,7 +89,7 @@ def sign_in_view(request):
             auth.login(request, me)
             return redirect("home")
         else:  # 계정이 없다면
-            return redirect("sign-in")
+            return render(request, "user/signin.html", {"error_message" : "아이디 또는 비밀번호를 확인해주세요."})
 
     elif request.method == "GET":  # GET 요청, 즉 로그인페이지 버튼을 눌렀을 때
         user = request.user.is_authenticated

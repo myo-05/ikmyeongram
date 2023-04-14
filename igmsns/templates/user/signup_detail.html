@@ -7,6 +7,10 @@
 {% endblock %}
 {% block content %}
   <style>
+    body {
+      max-width: 800px;
+      margin: auto;
+    }
     .signup-box {
       background: #d9d9d9;
       border-radius: 50px;
@@ -118,10 +122,12 @@
         <image class="profil-img" src="{% static 'image 26.png' %}" alt="default Image">
           <span class="profil-title">익명이 등록하기</span>
         </h2>
+
         {% if error_message %}
         <div>{{ error_message }}</div>
         {% endif %}
-        <form class="form-area" method="post" action="/api/user/sign-up-detail/">
+        <!-- 회원가입 폼 시작 -->
+        <form class="form-area" method="post" action="{% url 'sign-up' %}">
           {% csrf_token %}
           <div style="float: right">
             <button type="submit" class="btn btn-primary">회원가입</button>
@@ -152,11 +158,12 @@
             <input type="email" class="form-control sign-input" id="email" name="email">
           </div>
           <div class="form-group">
-            <label for="user_img">이미지</label>
+            <label for="user_img" style="margin-left: 15px;">이미지</label>
             <input type="file" class="form-control-file" id="user_img" name="user_img" onchange="setThumbnail(event);">
             <div id="image_container"></div>
           </div>
         </form>
+        <!-- 회원가입 폼 끝 -->
   </div>
 </div>
 {% endblock %}
