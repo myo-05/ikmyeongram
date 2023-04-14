@@ -181,14 +181,14 @@ def comment_delete(request, comment_id, id):
     
 # ============================= 게시글 좋아요 =============================     
 @require_POST
-def likes(request, id):
+def hearts(request, id):
     if request.user.is_authenticated: # 로그인 인증 여부
         
         post = Post.objects.get(id=id)
 
-        if post.like_users.filter(pk=request.user.id).exists():
-            post.like_users.remove(request.user)
+        if post.hearts.filter(pk=request.user.id).exists():
+            post.hearts.remove(request.user)
         else:
-            post.like_users.add(request.user)
+            post.hearts.add(request.user)
         return redirect('detail', post.id) 
     return redirect('sign-in')
