@@ -76,7 +76,7 @@
       <div class="post-meta">
         <!-- author을 외래키로 연결해서 이부분 수정 -->
         <span class="post-author">작성자: 
-          <!-- 작성자명 클릭시 마이페이지로 이동 -->
+          <!-- 작성자명 클릭시 작성자의 프로필페이지로 이동 -->
           <a href="{% url 'profile' author_id=post.author_id %}">  
             {{post.post_author.nickname}}
           </a>

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import UserModel
+from .models import UserModel, UserImg
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from django.contrib import auth
@@ -25,9 +25,10 @@ def sign_up_detail(request):
         password = request.POST.get("password", None)  # 비밀번호
         password2 = request.POST.get("password2", None)  # 비밀번호 확인
         nickname = request.POST.get("nickname", None)  # 닉네임
-        email = request.POST.get("email", None)  # 이메일
-        user_img = request.FILES.get("user_img")  # 이미지 업로드 받아오기
-        # 공란이 하나라도 있으면 else가 작동하여 에러메세지 출력
+        email = request.POST.get("email", None)  # 이메일       
+        
+        
+        # 입력란이 모두 작성되어있다면 실행, 공란이 하나라도 있으면 else가 작동하여 에러메세지 출력
         if username and password and password2 and nickname and email:
             if password != password2:
                 return render(
@@ -48,14 +49,25 @@ def sign_up_detail(request):
                 else:
                     # 유저계정생성하여 DB저장
                     # 영오: 회원가입완료. 메세지 떠야합니다.
-                    UserModel.objects.create_user(
-                        username=username,
-                        password=password,
-                        nickname=nickname,
-                        email=email,
-                        user_img=user_img,
+                    user=UserModel.objects.create_user(
+                        username=username, #아이디
+                        password=password, #비밀번호
+                        nickname=nickname, #닉네임
+                        email=email, #이메일
                     )
-                    return redirect("sign-in")
+                    # UserImg 객체 생성
+                    user_img = request.FILES.get("user_img") # 이미지 업로드 받아오기
+                    if user_img:
+                        user_img_instance = UserImg.objects.create(
+                            users_img=user,
+                            user_img=user_img,
+                        )
+                        user_img_instance.save()
+                    # else:
+                    #     user_img_instance = UserImg.objects.create(users_img=user)
+                        
+                return redirect("sign-in")
+        # 공란이 하나라도 있으면 else가 작동하여 에러메세지 출력
         else:
             return render(
                 request,

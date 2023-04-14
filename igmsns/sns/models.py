@@ -6,7 +6,7 @@ from user.models import UserModel
 # ============================= 게시글 테이블 모델 =============================    
 class Post(models.Model):
     class Meta:
-        db_table = "my_posting"
+        db_table = "my_posting" # 여기는 테이블 이름이에요! 꼭 기억 해 주세요!
     
     post_author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts') # 글 작성자 : 유저 모델의 사용자를 상속받습니다.
     post_title = models.CharField("글제목", max_length=45)
@@ -19,7 +19,8 @@ class Post(models.Model):
 # ============================= 댓글 테이블 모델 =============================    
 class Comment(models.Model):
     class Meta:
-        db_table = "my_comment"
+        db_table = "my_comment" # 여기는 테이블 이름이에요! 꼭 기억 해 주세요!
+        
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=256)

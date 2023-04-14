@@ -118,7 +118,7 @@ def profile_view(request, author_id):
     all_post = Post.objects.filter(author_id=author_id).order_by('-created_at') #user의 모든 글을 가져와서 생성일 기준으로 내림차순나열
     total_post = all_post.count() #user의 작성글 갯수
     if request.method == 'GET':
-        return render(request, 'sns/profile.html', {'total_post':total_post,'user': user , 'posts': all_post})
+        return render(request, 'sns/profile.html', {'total_post':total_post,'author': user , 'posts': all_post})
     
     
 # ============================= 댓글 작성 =============================     

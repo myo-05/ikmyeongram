@@ -58,6 +58,13 @@
       .nav_icon {
         width: 40px;
       }
+
+      .profile-img-nav{
+        height:50px;
+        width:50px;
+        border-radius: 50px;
+      }
+
     </style>
   </head>
 
@@ -100,13 +107,20 @@
                   </ul>
                 {% else %}
                   {# 그렇지 않다면 - 인증이 되어있다면 #}
-
+                  {# 사용자닉네임, 사용자 프로필사진, 로그아웃 표시#}
                   <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                      
-                      <text>사용자 닉네임</text>
-                      <image src="/static/more 1.png" class="nav_icon">
-                      <a class="nav-link" href="{% url 'sign-out' %}">
+                      {# 사용자의 닉네임 표시 #}
+                      <text style="color:black;"><a> 어서와! [ {{user.nickname}} ]</a></text>
+                      {% if user.user_img %}
+                      {# if문 - 프로필사진을 등록했다면 프로필사진 보여주기, 클릭하면 프로필페이지로 이동 #}
+                      <a href="{% url 'profile' author_id=user.id %}"><image class="profile-img-nav" src="{{ user.user_img }}" alt="default Image" class="nav_icon"></a>
+                      {% else %}
+                      {# if문 - 프로필사진등록 안했다면 기본프로필 보여주기, 클릭하면 프로필페이지로 이동 #}
+                      <a href="{% url 'profile' author_id=user.id %}"><image class="profile-img-nav" src="{% static 'admin/img/default_img.png' %}" class="nav_icon"></a>
+                      {% endif %}
+                      {# if문 종료 #}
+                      <a class="nav-link" href="{% url 'sign-out' %}" style="display: inline-block;">
                         로그아웃
                       </a>
                     </li>

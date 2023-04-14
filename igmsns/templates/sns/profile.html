@@ -39,12 +39,15 @@
 
 </style>
 <div class="profile">
-    {% if user.user_img %}
-    <image class="profile-img" src="{{ user.user_img }}" alt="default Image">
+    {% if author.user_img %}
+    {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
+    <image class="profile-img" src="{{ author.user_img }}" alt="default Image">
     {% else %}
+    {% comment %} if문 - 프로필사진등록 안했다면 기본프로필 보여주기{% endcomment %}
     <image class="profile-img" src="{% static 'admin/img/default_img.png' %}">
     {% endif %}
-    <div class="nickname"><a> {{user.nickname}} </a></div>
+    {% comment %} if문 종료 {% endcomment %}
+    <div class="nickname"><a> {{author.nickname}} </a></div>
 </div>
 <div class="post_count">
     <text>{{total_post}}</text></br>
