@@ -128,7 +128,6 @@ def profile_view(request, author_id):
     
 # ============================= 댓글 작성 =============================     
 
-@login_required(login_url='/sign-in')
 def comment_create(request,id):
     if request.user.is_authenticated: # 로그인 인증 여부
         post = Post.objects.get(id=id) # id값으로 해당 게시글을 찾아온다.
