@@ -21,7 +21,6 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='sns/home.html'), name='main_home'), # 루트가 없는 페이지에서도 홈이 나오게 함
     path('admin/', admin.site.urls),
     path("api/user/", include("user.urls")),
     path("api/sns/", include("sns.urls")),
