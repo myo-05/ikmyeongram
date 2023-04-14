@@ -16,14 +16,18 @@
       margin: 0 20px auto;
       padding-right: var(--bs-gutter-x, .75rem);
       padding-left: var(--bs-gutter-x, .75rem);
+      display: flex;
     }
 
     .post-form {
       margin-top: 40px;
-      background-color: #fff;
       padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
+      background: none;
+      border-color: #848484;
+      color: #6E6E6E;
+      border: double;
+      border-radius: 20px;
+      width: 800px;
     }
 
     .form-group {
@@ -51,6 +55,23 @@
     button[type="submit"] {
       margin-top: 20px;
     }
+
+    .btn-primary {
+      width : 100%;
+      background-color: #ffff;
+      color: #585858;
+      border: double;
+      border-radius: 20px; 
+    }
+
+    .btn-primary:hover {
+      background-color: #848484;
+      color: #ffff;
+      border: double;
+      width : 100%;
+      border-radius: 20px;
+    }
+
   </style>
 
   <script>
@@ -75,6 +96,9 @@
   </script>
 
   <div class="container">
+    <div>
+      <img src="/static/image 28.png" style="width: 150px; margin: 50px 20px;">
+    </div>
     <form class="post-form" action="{% url 'post' %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="form-group">
@@ -87,7 +111,7 @@
       </div>
       <div class="form-group">
         <label for="post_img">이미지</label>
-        <input type="file" class="form-control-file" id="post_img" name="post_img" onchange="setThumbnail(event);" >
+        <input type="file" class="form-control-file file-btn" id="post_img" name="post_img" onchange="setThumbnail(event);" >
         <div id="image_container"></div>
       </div>
       <button type="submit" class="btn btn-primary">게시</button>

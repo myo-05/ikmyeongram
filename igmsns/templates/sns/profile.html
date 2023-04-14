@@ -18,7 +18,6 @@
     display:block;
     height:200px;
     width:200px;
-    background-color: black;
 }
 .post_count{
     display: inline-block;
@@ -26,7 +25,7 @@
     top: -10px;
     left:300px;
     text-align: center;
-    font-size: 50px;
+    font-size: 2rem;
 }
 .nickname{
     text-align:center;    
@@ -36,20 +35,19 @@
     top: 100px;
     left:0px;
 }
-
 </style>
 <div class="profile">
     <!-- 프로필 사진 섹션 -->
     {% if user.user_img %}
     <image class="profile-img" src="{{ user.user_img }}" alt="default Image">
     {% else %}
-    <image class="profile-img" src="{% static 'admin/img/default_img.png' %}">
+    <image class="profile-img" src="{% static 'image 27.png' %}">
     {% endif %}
     <!-- 프로필 사진 섹션 끝 -->
     <div class="nickname"><a> {{user.nickname}} </a></div>
 </div>
 <!-- 게시물 갯수 -->
-<div class="post_count">
+<div class="post_count" style="text-align: center;">
     <text>{{total_post}}</text></br>
     <text>게시물</text>
 </div>
