@@ -15,6 +15,9 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) # 생성시각
     updated_at = models.DateTimeField(auto_now=True) # 수정시각
     author_id = models.CharField(max_length=45) # 현재 로그인 중인 유저의 기본키 넣을 자리
+    
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_posts')
+    # 좋아요 : 게시글과 사용자를 연결하는 Many To Many 필드입니다.
 
 # ============================= 댓글 테이블 모델 =============================    
 class Comment(models.Model):
