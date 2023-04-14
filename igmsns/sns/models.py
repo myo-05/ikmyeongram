@@ -30,4 +30,3 @@ class Comment(models.Model):
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     
-    
