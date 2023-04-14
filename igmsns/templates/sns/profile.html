@@ -37,14 +37,16 @@
 }
 </style>
 <div class="profile">
-    <!-- 프로필 사진 섹션 -->
-    {% if user.user_img %}
-    <image class="profile-img" src="{{ user.user_img }}" alt="default Image">
+    {% if author.user_img %}
+    {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
+    <image class="profile-img" src="{{ author.user_img }}" alt="default Image">
     {% else %}
+    {% comment %} if문 - 프로필사진등록 안했다면 기본프로필 보여주기{% endcomment %}
     <image class="profile-img" src="{% static 'image 27.png' %}">
     {% endif %}
+    {% comment %} if문 종료 {% endcomment %}
     <!-- 프로필 사진 섹션 끝 -->
-    <div class="nickname"><a> {{user.nickname}} </a></div>
+    <div class="nickname"><a> {{author.nickname}} </a></div>
 </div>
 <!-- 게시물 갯수 -->
 <div class="post_count" style="text-align: center;">

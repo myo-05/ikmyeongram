@@ -6,7 +6,7 @@ from user.models import UserModel
 # ============================= 게시글 테이블 모델 =============================    
 class Post(models.Model):
     class Meta:
-        db_table = "my_posting"
+        db_table = "my_posting" # 여기는 테이블 이름이에요! 꼭 기억 해 주세요!
     
     post_author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts') # 글 작성자 : 유저 모델의 사용자를 상속받습니다.
     post_title = models.CharField("글제목", max_length=45)
@@ -18,6 +18,8 @@ class Post(models.Model):
     
     hearts = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='hearts')
     # 좋아요 : 게시글과 사용자를 연결하는 Many To Many 필드입니다.
+    def count_likes(self):
+        return self.hearts.count()
 
 # ============================= 댓글 테이블 모델 =============================    
 class Comment(models.Model):
@@ -29,5 +31,4 @@ class Comment(models.Model):
     name = models.CharField(max_length=256)
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    
     
