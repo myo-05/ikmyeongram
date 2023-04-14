@@ -67,15 +67,16 @@ def detail_post_view(request, id):
 # ============================= 게시글 수정하기 ============================= 
 
 def update(request,id ):   
-    post = Post.objects.get(id=id) 
+    a_post = Post.objects.get(id=id) 
+    comments = Comment.objects.filter(post=a_post).order_by('-created_at')
     if request.method == 'POST':
-        if post.post_author == request.user:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 수정 가능
-            post.post_title = request.POST['post_title'] # 수정할 제목 받아오기
-            post.post_content = request.POST['post_content'] # 수정할 내용 받아오기
+        if a_post.post_author == request.user:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 수정 가능
+            a_post.post_title = request.POST['post_title'] # 수정할 제목 받아오기
+            a_post.post_content = request.POST['post_content'] # 수정할 내용 받아오기
             #post.post_author = request.user.id # 현재 로그인된 user의 id를 받아오기 나중에 내 글만 수정 가능하게 할 때 사용
-            post.post_img = request.FILES.get('post_img') or post.post_img
+            a_post.post_img = request.FILES.get('post_img') or a_post.post_img
             # 이미지 업로드 받아오기, 이미지를 새로 업로드하지 않는다면 기존 이미지를 그대로 사용한다.
-            post.save()
+            a_post.save()
             '''
             post = Post.objects.update(post_title=post_title, post_content=post_content, post_img=post_img,post_author=post_author)
             update 를 하면 테이블 내의 모든 속성들이 업데이트 됩니다.
@@ -84,12 +85,12 @@ def update(request,id ):
             업데이트 시에도 save 사용해야 하니까 수정했습니다.
             수정 시간 반영 완료~
             '''
-            return redirect('home')
+            return render(request, 'sns/detail_post.html', {'post': a_post, 'comments':comments})
         else:
             return HttpResponse("권한이 없습니다.") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
     else:
-        if post.post_author == request.user:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 수정 가능
-            return render(request, 'sns/update_post.html', {'post': post})
+        if a_post.post_author == request.user:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 수정 가능
+            return render(request, 'sns/update_post.html', {'post': a_post})
             # 글 수정 html 파일 이름 수정 후 이 부분도 수정 완료 (new_update.html --> update_post.html)
         else:
             return HttpResponse("권한이 없습니다.") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
