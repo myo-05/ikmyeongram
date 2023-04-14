@@ -5,7 +5,7 @@
 {% block content %}
 
 <style>
-    .container {
+    .container-update {
         max-width: 800px;
         margin: 0 auto;
     }
@@ -45,7 +45,7 @@
     }
 </style>
 <script>
-    /* 썸네일 미리보기 함수 */
+    // 썸네일 미리보기 함수
     function setThumbnail(event) {
         var reader = new FileReader();
 
@@ -60,10 +60,12 @@
           .querySelector("div#image_container")
           .appendChild(img);
       };
+      // 업로드 파일(이미지)데이터를 URL문자열로 변환
+      reader.readAsDataURL(event.target.files[0]);
+    }
   </script>
 
-
-<div class="container">
+<div class="container container-update">
     <form class="post-form" action="{% url 'update' post.id %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group">
