@@ -5,10 +5,52 @@
 {% block title %}프로필페이지{% endblock %}
 
 {% block content %}
+<style>
+.profile{
+    display: inline-block;
+    height:200px;
+    width:200px;
+    position:relative;
+    top: 50px;
+    left:100px;
+}
+.profile-img{
+    display:block;
+    height:200px;
+    width:200px;
+    background-color: black;
+}
+.post_count{
+    display: inline-block;
+    position:relative;
+    top: -10px;
+    left:300px;
+    text-align: center;
+    font-size: 50px;
+}
+.nickname{
+    text-align:center;    
+}
+.add{
+    position:relative;
+    top: 100px;
+    left:0px;
+}
 
-
-<div class="container">
-
+</style>
+<div class="profile">
+    {% if user.user_img %}
+    <image class="profile-img" src="{{ user.user_img }}" alt="default Image">
+    {% else %}
+    <image class="profile-img" src="{% static 'admin/img/default_img.png' %}">
+    {% endif %}
+    <div class="nickname"><a> {{user.nickname}} </a></div>
+</div>
+<div class="post_count">
+    <text>{{total_post}}</text></br>
+    <text>게시물</text>
+</div>
+    <div class="container add" style="width : 50%">
     {% for post in posts %}
     <a href ="/api/sns/post/{{post.id}}" style="text-decoration : none; color: inherit;">
         <div class="card mb-3" >
