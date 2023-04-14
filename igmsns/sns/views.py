@@ -108,16 +108,17 @@ def delete(request, id):
 # ============================= 프로필 페이지보기  ============================= 
 
 '''
-해당함수를 실행할 버튼을 고려해야합니다.
-버튼을 누르면 특정 user의 id를 불러와야합니다.
+로그인하지 않아도 보인다!
+상세페이지에서 작성자의 이름을 클릭하면 이동
+로그인 된 상태에서 헤더의 프로필 클릭시 이동
 '''
-@login_required(login_url='/sign-in') # 로그인을 하지 않고 url을 통해 접속할 경우 리디렉션
-def profile_view(request, post_author):
+def profile_view(request, author_id):
     #특정 user의 id를 파라미터 id로 받아왔다면
-    user = UserModel.objects.get(nickname=post_author) #user의 정보를 가져옴 -> 프로필사진 등 활용
-    all_post = Post.objects.filter(post_author=post_author).order_by('-created_at') #user의 모든 글을 가져와서 생성일 기준으로 내림차순나열
+    user = UserModel.objects.get(id=author_id) #user의 정보를 가져옴 -> 프로필사진 등 활용
+    all_post = Post.objects.filter(author_id=author_id).order_by('-created_at') #user의 모든 글을 가져와서 생성일 기준으로 내림차순나열
+    total_post = all_post.count() #user의 작성글 갯수
     if request.method == 'GET':
-        return render(request, 'sns/profile.html', {'user': user , 'posts': all_post})
+        return render(request, 'sns/profile.html', {'total_post':total_post,'user': user , 'posts': all_post})
     
     
 # ============================= 댓글 작성 =============================     
