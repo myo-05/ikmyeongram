@@ -39,44 +39,53 @@
 
 </style>
 <div class="profile">
+    <!-- 프로필 사진 섹션 -->
     {% if user.user_img %}
     <image class="profile-img" src="{{ user.user_img }}" alt="default Image">
     {% else %}
     <image class="profile-img" src="{% static 'admin/img/default_img.png' %}">
     {% endif %}
+    <!-- 프로필 사진 섹션 끝 -->
     <div class="nickname"><a> {{user.nickname}} </a></div>
 </div>
+<!-- 게시물 갯수 -->
 <div class="post_count">
     <text>{{total_post}}</text></br>
     <text>게시물</text>
 </div>
+<!-- 게시물 갯수 끝 -->
+    <!-- 해당 사용자 게시글 리스트 -->
     <div class="container add" style="width : 50%">
-    {% for post in posts %}
-    <a href ="/api/sns/post/{{post.id}}" style="text-decoration : none; color: inherit;">
-        <div class="card mb-3" >
-            <div class="row g-0" >
-                <!-- 프로필 이미지 업로드 섹션 -->
-                <div class="col-md-4" style="width : 200px">
-                    {% if post.post_img %}
-                        <img class="img-fluid rounded-start" src="{{ post.post_img.url }}" alt="post image" style="height : 130px ; margin-left:20px">
-                    {% else %}
-                        <img class="img-fluid rounded-start" src = "{% static 'admin/img/default_img.png' %}" alt = "default Image" style="height : 130px; margin-left:20px">
-                    {% endif %}
-                </div>
+        {% for post in posts %}
+            <a href ="/api/sns/post/{{post.id}}" style="text-decoration : none; color: inherit;">
+                <div class="card mb-3" >
+                    <div class="row g-0" >
+                        <!-- 게시글 리스트 이미지 썸네일 섹션 -->
+                        <div class="col-md-4" style="width : 200px">
+                            <!-- 업로드된 이미지가 있다면 -->
+                            {% if post.post_img %}
+                                <img class="img-fluid rounded-start" src="{{ post.post_img.url }}" alt="post image" style="height : 130px ; margin-left:20px">
+                                <!-- 업로드된 이미지가 없다면 : 디폴트값 -->
+                            {% else %}
+                                <img class="img-fluid rounded-start" src = "{% static 'admin/img/default_img.png' %}" alt = "default Image" style="height : 130px; margin-left:20px">
+                            {% endif %}
+                        </div>
+                        <!-- 게시글 리스트 이미지 썸네일 섹션 끝 -->
 
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title" style="font-weight: bold;">[{{ post.post_title }}]</h5>
-                        <p class="card-text">{{ post.post_content|truncatechars:100 }}</p> 
-                        {% comment %} 본문 100자까지만 나오게 {% endcomment %}
-                        <p class="card-text"><small class="text-body-secondary">by {{ post.post_author }}</small></p>
-                        <p class="card-text"><small class="text-body-secondary">{{ post.created_at }}</small></p>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title" style="font-weight: bold;">[{{ post.post_title }}]</h5>
+                                <p class="card-text">{{ post.post_content|truncatechars:100 }}</p> 
+                                {% comment %} 본문 100자까지만 나오게 {% endcomment %}
+                                <p class="card-text"><small class="text-body-secondary">by {{ post.post_author }}</small></p>
+                                <p class="card-text"><small class="text-body-secondary">{{ post.created_at }}</small></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </a>
-    {% endfor %}
+            </a>
+        {% endfor %}
     
     </div>
+    <!-- 해당 사용자 게시글 리스트 끝 -->
     {% endblock %}

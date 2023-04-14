@@ -20,6 +20,7 @@ class Post(models.Model):
 class Comment(models.Model):
     class Meta:
         db_table = "my_comment"
+        ordering = ['-created_at'] # 댓글 최신순 정렬
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=256)

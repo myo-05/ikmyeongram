@@ -125,24 +125,19 @@ def profile_view(request, author_id):
 
 @login_required
 def comment_create(request,id):
-    post = Post.objects.get(id=id)
+    post = Post.objects.get(id=id) # id값으로 해당 게시글을 찾아온다.
     if request.method == 'POST':
-        comment = request.POST.get('comment', '')
-        if comment == '':
+        comment = request.POST.get('comment', '') # 폼에서 댓글을 받아옴
+        if comment == '': # 댓글이 없을 경우
             return HttpResponse('댓글을 입력해주세요.')
         else:
-            Comment.objects.create(name= request.user.nickname, comment=comment, user=request.user, post=post)
-            return redirect('detail', post.id)
+            Comment.objects.create(name= request.user.nickname, comment=comment, user=request.user, post=post) # 댓글을 db에 저장
+            return redirect('detail', post.id) 
         
 
 
 
 # ============================= 댓글 수정 =============================
-# @login_required
-# def comment_update(request, comment_id, id):
-#     comment = comment = Comment.objects.get(id=comment_id)
-#     a_post = Post.objects.get(id=id)
-#     if request.method == "POST":
 
 @login_required       
 def comment_edit(request, id, comment_id):

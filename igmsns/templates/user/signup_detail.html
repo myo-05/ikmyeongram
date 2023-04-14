@@ -115,9 +115,11 @@
         <image class="profil-img" src="{% static 'image 26.png' %}" alt="default Image">
           <span class="profil-title">익명이 등록하기</span>
         </h2>
+
         {% if error_message %}
         <div>{{ error_message }}</div>
         {% endif %}
+        <!-- 회원가입 폼 시작 -->
         <form class="form-area" method="post" action="{% url 'sign-up' %}">
           {% csrf_token %}
           <div style="float: right">
@@ -154,6 +156,7 @@
             <div id="image_container"></div>
           </div>
         </form>
+        <!-- 회원가입 폼 끝 -->
   </div>
 </div>
 {% endblock %}

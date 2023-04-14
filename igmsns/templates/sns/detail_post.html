@@ -99,7 +99,10 @@
 
     <!-- ================================= 댓글 작성 폼 ================================= -->
     <div>
+
+      <!-- 댓글 입력 폼 -->
       <div>
+        <!-- 댓글 작성 폼 제출 시 해당 url로 데이터 전송 -->
         <form action="{%url 'comment' id=post.id%}" method='post'>
           {%csrf_token%}
           <label for="comment">댓글</label>
@@ -107,30 +110,36 @@
           <button type="submit" class="btn btn-primary">게시</button>
         </form>
       </div>
-      <div>
+      <!-- 댓글 입력 폼 끝 -->
 
+      <!-- 댓글 리스트 시작 -->
+      <div>
+        
         {% for comment in comments %}
           <br>
+
           <div style="border:solid 1px gray; border-radius:10px">
             <ul>작성자:
               {{ comment.user.nickname }}</ul>
+
             {% if edit_comment == comment.id %}
-              <form action="{% url 'comment_edit' id=post.id comment_id=comment.id %}" method="post">
+              <!-- 댓글 수정 폼 -->
+              <form action="{% url 'comment_edit' id=post.id comment_id=comment.id %}" method="post" >
                 {% csrf_token %}
                 <label for="comment">댓글</label>
                 <textarea class="form-control" id="comment" name="comment">{{ comment.comment }}</textarea>
                 <button type="submit" class="btn btn-primary">수정</button>
               </form>
+              <!-- 댓글 수정 폼 끝 -->
             {% else %}
-              <ul>내용:
-                {{ comment.comment }}</ul>
+              <ul>내용: {{ comment.comment }}</ul>
             {% endif %}
-            <ul>작성시각:
-              {{ comment.created_at }}</ul>
+              <ul>작성시각: {{ comment.created_at }}</ul>
             {% if comment.user == request.user %}
               <ul>
                 {% if edit_comment == comment.id %}
-                  <a href="{% url 'comment' id=post.id %}">취소</a>
+                <!-- 취소버튼 생성: 뒤로가기로 설정 -->
+                  <a href="#"onclick="history.back()">취소</a>
                 {% else %}
                   <a href="{% url 'comment_edit' id=post.id comment_id=comment.id %}">수정</a>
                   <a href="{% url 'comment_delete' id=post.id comment_id=comment.id %}">삭제</a>
@@ -138,12 +147,13 @@
               </ul>
             {% endif %}
           </div>
+
         {% endfor %}
 
       </div>
+      <!-- 댓글 리스트 끝 -->
     </div>
   </div>
 
-  <!-- ================================= 댓글 수정 폼 ================================= -->
 
 {% endblock %}
