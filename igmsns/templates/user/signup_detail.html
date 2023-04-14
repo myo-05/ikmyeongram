@@ -118,7 +118,7 @@
         {% if error_message %}
         <div>{{ error_message }}</div>
         {% endif %}
-        <form class="form-area" method="post" action="/api/user/sign-up-detail/">
+        <form class="form-area" method="post" action="{% url 'sign-up' %}">
           {% csrf_token %}
           <div style="float: right">
             <button type="submit" class="btn btn-primary">회원가입</button>

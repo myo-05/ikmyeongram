@@ -55,6 +55,7 @@
     <a href ="/api/sns/post/{{post.id}}" style="text-decoration : none; color: inherit;">
         <div class="card mb-3" >
             <div class="row g-0" >
+                <!-- 프로필 이미지 업로드 섹션 -->
                 <div class="col-md-4" style="width : 200px">
                     {% if post.post_img %}
                         <img class="img-fluid rounded-start" src="{{ post.post_img.url }}" alt="post image" style="height : 130px ; margin-left:20px">
@@ -62,6 +63,7 @@
                         <img class="img-fluid rounded-start" src = "{% static 'admin/img/default_img.png' %}" alt = "default Image" style="height : 130px; margin-left:20px">
                     {% endif %}
                 </div>
+
                 <div class="col-md-8">
                     <div class="card-body">
                         <h5 class="card-title" style="font-weight: bold;">[{{ post.post_title }}]</h5>
