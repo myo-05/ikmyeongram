@@ -4,10 +4,84 @@
   로그인
 {% endblock %}
 {% block content %}
+  <style>
+    .container {
+      width: 800px;
+      margin: auto;
+    }
+    input.form-control {
+      border: none;
+      border-bottom: 1px solid #ccc;
+      height: 30px;
+      line-height: 30px;
+      background: transparent;
+      padding: 0;
+    }
+    
+    .form-group {
+      background-color: #ffff;
+      border-radius: 30px;
+    }
+  
+    .btn-secondary {
+      color: black;
+      background: #d9d9d9;
+      border-color: #848484;
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 100px;
+      border: double;
+    }
+
+    .btn-secondary:hover {
+      color: #fff;
+      background-color: #A4A4A4;
+      border-color: #A4A4A4;
+    }
+
+    .btn-primary {
+      color: black;
+      background: none;
+      border-color: #585858;
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 100px;
+      border: double;
+    }
+
+    .btn-primary:hover {
+      color: #fff;
+      background-color: #424242;
+      border-color: #424242;
+    }
+
+    input.form-control {
+      border: none;
+      border-bottom: 1px solid #ccc;
+      height: 30px;
+      line-height: 30px;
+      background: transparent;
+      padding: 0;
+    }
+    
+    .form-group {
+      background-color: #ffff;
+      border-radius: 30px;
+    }
+    .title-center {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+  </style>
   <div class="container">
-    <div class="wrap">
+    <div class="wrap title-area">
+      {# ======== 로그인 타이틀 시작 ==============#}
       <h2 class="title-center">
-        로그인</h2>
+        <image src="/static/i16109918150.gif" style="width:100px; right-margin: 10px;">
+        어서와~
+      </h2>
+      {# ======== 로그인 타이틀 끝 ==============#}
+      {# ======== 아이디, 비밀번호 입력란 시작 ==============#}
       <form class="form-area" method="post">
         {% csrf_token %}
         <div class="form-group mt-2 mb-2">
@@ -19,12 +93,12 @@
           <input type="password" class="form-control" id="password" name="password">
         </div>
         <hr>
-        <div style="float: right">
+        <div class="my-btn">
           <button type="submit" class="btn btn-primary">로그인</button>
           <a href="{% url 'sign-up' %}" class="btn btn-secondary">회원가입 페이지로</a>
         </div>
       </form>
-
+      {# ======== 아이디, 비밀번호 입력란 끝 ==============#}
     </div>
   </div>
 {% endblock %}
