@@ -21,10 +21,13 @@
 
     .post {
       margin-bottom: 40px;
+      text-align: center;
     }
 
     .post-content {
       line-height: 1.6;
+      font-size: 25px;
+      font-weight: bold;
     }
 
     .post-image {
@@ -35,7 +38,7 @@
 
     .post-meta {
       margin-top: 20px;
-      font-size: 14px;
+      font-size: 20px;
       color: #666;
     }
 
@@ -46,6 +49,28 @@
     .post-date {
       margin-right: 20px;
     }
+
+    a:hover{
+      text-decoration: underline; !important!
+    }
+
+    .btn-primary {
+      width: 100px;
+      border: double;
+      background: none;
+      color: black;
+      border-radius: 50px;
+      float: right;
+      margin: 30px 10px;
+    }
+
+    .btn-primary:hover {
+      color: #fff;
+      background-color: #424242;
+      border-color: #424242;
+      
+    }
+
   </style>
 
   <!-- 삭제 버튼 클릭시 확인 문구 출력 -> 원하시면 다른 버튼들에도 활용할 수 있습니다. -->
@@ -59,7 +84,7 @@
 
   <!-- ================================= 게시글 상세 페이지 ================================= -->
   <div class="container">
-    <h1 class="title">{{post.post_title}}</h1>
+    <h1 style="text-align: center;" class="title">{{post.post_title}}</h1>
 
     <!-- 이미지 업로드 섹션 -->
     <!-- 업로드된 이미지가 있다면 -->
@@ -67,31 +92,51 @@
       <img class="post-image" src="{{ post.post_img.url }}" alt="post image" style="width : 50vw ; max-width:500px ;">
       <!-- 업로드된 이미지가 없다면 : 디폴트값 -->
     {% else %}
-      <img src="{% static 'admin/img/default_img.png' %}" alt="default Image" style="width : 20vw ; max-width:500px ;">
+      <img class="post-image" src="{% static 'admin/img/default_img.png' %}" alt="default Image" style="width : 20vw ; max-width:500px ;">
     {% endif %}
     <!-- 이미지 업로드 섹션 끝 -->
 
     <div class="post">
+      <!--글내용-->
       <div class="post-content">{{post.post_content}}</div>
+
+      <!-- ===== 좋아요 시작 ===== -->
+      <div>
+        <form action="{% url 'hearts' id=post.id %}" method='POST'>
+          {% csrf_token %}
+          {% if user in post.hearts.all %}
+            <!-- 좋아요가 눌러져있는 경우 : 좋아요 취소 -->
+            <input type="submit" value='좋아요 취소'>
+          {% else %}
+            <!-- 좋아요가 눌러지지 않은 경우 : 좋아요 -->
+            <input type="submit" value='좋아요'>
+          {% endif %}
+        </form>
+      </div>
+      <!-- ===== 좋아요 끝 ===== -->
+
+
       <div class="post-meta">
         <!-- author을 외래키로 연결해서 이부분 수정 -->
-        <span class="post-author">작성자: 
+        <span class="post-author">작성자 : 
           <!-- 작성자명 클릭시 마이페이지로 이동 -->
-          <a href="{% url 'profile' author_id=post.author_id %}">  
-            {{post.post_author.nickname}}
-          </a>
-          <br><span class="post-date">작성시간:
+          <strong>
+            <a href="{% url 'profile' author_id=post.author_id %}" style="text-decoration:none; color:#585858;">  
+              {{post.post_author.nickname}}
+            </a>
+          </strong>
+          <br><span class="post-date">작성시간 :
           {{post.created_at}}</span>
           
         <!-- 게시글의 작성자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 -->
         {% if post.post_author == request.user %}
           <!-- 수정/삭제 버튼을 보여준다 -->
-          <a href="#" onclick="confirmDelete({{ post.id }})">[삭제]</a><br/>
+          <a href="#" onclick="confirmDelete({{ post.id }})" style="text-decoration:none; color:#585858;" >[삭제]</a><br/>
               {% if post.updated_at %}
-              <span class="post-date">수정시간:
+              <span class="post-date">수정시간 :
                 {{post.updated_at}}</span>
               {% endif %}
-          <a href="/api/sns/post/{{post.id}}/update/">[수정]</a>
+          <a href="/api/sns/post/{{post.id}}/update/" style="text-decoration:none; color:#585858;">[수정]</a>
         {% endif %}
       </div>
     </div>
@@ -99,7 +144,10 @@
 
     <!-- ================================= 댓글 작성 폼 ================================= -->
     <div>
+
+      <!-- 댓글 입력 폼 -->
       <div>
+        <!-- 댓글 작성 폼 제출 시 해당 url로 데이터 전송 -->
         <form action="{%url 'comment' id=post.id%}" method='post'>
           {%csrf_token%}
           <label for="comment">댓글</label>
@@ -107,43 +155,52 @@
           <button type="submit" class="btn btn-primary">게시</button>
         </form>
       </div>
+      <div style="margin-top: 70px;">
+      <!-- 댓글 입력 폼 끝 -->
+      <!-- 댓글 리스트 시작 -->
       <div>
-
+        
         {% for comment in comments %}
           <br>
-          <div style="border:solid 1px gray; border-radius:10px">
-            <ul>작성자:
+          <div style="border-radius: 10px; background-color: #ededed; border: double; border-radius:10px; background-color: #ededed;">
+            <ul style="margin-top: 10px;">작성자:
               {{ comment.user.nickname }}</ul>
+
             {% if edit_comment == comment.id %}
-              <form action="{% url 'comment_edit' id=post.id comment_id=comment.id %}" method="post">
+              <!-- 댓글 수정 폼 -->
+              <form action="{% url 'comment_edit' id=post.id comment_id=comment.id %}" method="post" >
                 {% csrf_token %}
-                <label for="comment">댓글</label>
-                <textarea class="form-control" id="comment" name="comment">{{ comment.comment }}</textarea>
-                <button type="submit" class="btn btn-primary">수정</button>
+                <label for="comment" style="margin-left:20px;">댓글</label>
+                <textarea class="form-control" id="comment" name="comment" style="margin-left:20px;">{{ comment.comment }}</textarea>
+                <button type="submit" class="btn btn-primary" style="margin-top:50px;">수정</button>
               </form>
+              <!-- 댓글 수정 폼 끝 -->
             {% else %}
-              <ul>내용:
-                {{ comment.comment }}</ul>
+              <ul>내용: {{ comment.comment }}</ul>
             {% endif %}
-            <ul>작성시각:
-              {{ comment.created_at }}</ul>
+              <ul>작성시각: {{ comment.created_at }}</ul>
             {% if comment.user == request.user %}
+              <hr>
               <ul>
                 {% if edit_comment == comment.id %}
-                  <a href="{% url 'comment' id=post.id %}">취소</a>
+  
+                <!--<a href="{% url 'comment' id=post.id %}" style="text-decoration:none; color:#585858;">취소</a> -->
+                <!-- 취소버튼 생성: 뒤로가기로 설정 -->
+                  <a href="#"onclick="history.back()">취소</a>
                 {% else %}
-                  <a href="{% url 'comment_edit' id=post.id comment_id=comment.id %}">수정</a>
-                  <a href="{% url 'comment_delete' id=post.id comment_id=comment.id %}">삭제</a>
+                  <a href="{% url 'comment_edit' id=post.id comment_id=comment.id %}" style="text-decoration:none; color:#585858; margin-right:10px;">수정</a>
+                  <a href="{% url 'comment_delete' id=post.id comment_id=comment.id %}" style="text-decoration:none; color:#585858;">삭제</a>
                 {% endif %}
               </ul>
             {% endif %}
           </div>
+
         {% endfor %}
 
       </div>
+      <!-- 댓글 리스트 끝 -->
     </div>
   </div>
 
-  <!-- ================================= 댓글 수정 폼 ================================= -->
 
 {% endblock %}
