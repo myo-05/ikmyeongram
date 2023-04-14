@@ -61,9 +61,28 @@
           .appendChild(img);
       };
 
+<script>
+    /* 썸네일 미리보기 함수 */
+    function setThumbnail(event) {
+      var reader = new FileReader();
+
+      reader.onload = function (event) {
+        var img = document.createElement("img");
+        img.setAttribute("src", event.target.result);
+
+        // 썸네일 크기 조절
+        img.style.width = "200px"; // 너비 200px로 설정
+        img.style.height = "auto"; // 높이 자동 설정
+        document
+          .querySelector("div#image_container")
+          .appendChild(img);
+      };
+
       reader.readAsDataURL(event.target.files[0]);
     }
   </script>
+
+
 <div class="container">
     <form class="post-form" action="{% url 'update' post.id %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}

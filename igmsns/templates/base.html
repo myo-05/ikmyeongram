@@ -12,8 +12,8 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <!--Google font-->
     <style>
       .title-center {
 
@@ -58,6 +58,13 @@
       .nav_icon {
         width: 40px;
       }
+
+      .profile-img-nav{
+        height:50px;
+        width:50px;
+        border-radius: 50px;
+      }
+
     </style>
   </head>
 
@@ -79,8 +86,8 @@
                   <image src="/static/more 1.png" class="nav_icon"></a>
                 </div>
                 {% endif %}
+                {# if문 종료 #}
                 <text class="title_">안녕! 나는 익명이야!!</text>
-              {# if문 종료 #}
 
               <form class="form-inline my-2 my-lg-0">
 
@@ -101,10 +108,20 @@
                   </ul>
                 {% else %}
                   {# 그렇지 않다면 - 인증이 되어있다면 #}
-
+                  {# 사용자닉네임, 사용자 프로필사진, 로그아웃 표시#}
                   <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                      <a class="nav-link" href="{% url 'sign-out' %}">
+                      {# 사용자의 닉네임 표시 #}
+                      <text style="color:black;"><a> 어서와! "{{user.nickname}}" 님!</a></text>
+                      {% if user.user_img %}
+                      {# if문 - 프로필사진을 등록했다면 프로필사진 보여주기, 클릭하면 프로필페이지로 이동 #}
+                      <a href="{% url 'profile' author_id=user.id %}"><image class="profile-img-nav" src="{{ user.user_img }}" alt="default Image" class="nav_icon"></a>
+                      {% else %}
+                      {# if문 - 프로필사진등록 안했다면 기본프로필 보여주기, 클릭하면 프로필페이지로 이동 #}
+                      <a href="{% url 'profile' author_id=user.id %}"><image class="profile-img-nav" src="{% static 'admin/img/default_img.png' %}" class="nav_icon"></a>
+                      {% endif %}
+                      {# if문 종료 #}
+                      <a class="nav-link" href="{% url 'sign-out' %}" style="display: inline-block;">
                         로그아웃
                       </a>
                     </li>

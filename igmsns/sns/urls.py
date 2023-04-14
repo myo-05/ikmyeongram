@@ -14,6 +14,5 @@ urlpatterns = [
     path('post/<int:id>/comment/', views.comment_create, name='comment'),  # /api/sns/post/<id>/comment/ 댓글 작성하기
     path('post/<int:id>/comment/<int:comment_id>/delete/', views.comment_delete, name='comment_delete'),  # /api/sns/post/<id>/comment/<comment_id>/delete 댓글 삭제하기
     path('post/<int:id>/comment/<int:comment_id>/edit/', views.comment_edit, name='comment_edit'),
-    
-    path('profile/<str:author_id>/', views.profile_view, name="profile"),  # /api/sns/profile/<id>/ 프로필페이지
+    path('profile/<int:author_id>/', views.profile_view, name="profile"),  # /api/sns/profile/<id>/ 프로필페이지
 ]
