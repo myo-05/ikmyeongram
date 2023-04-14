@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-  회원가입
+회원가입
 {% endblock %}
 {% block content %}
   <style>
@@ -17,22 +17,26 @@
       width: 100px;
       height: 100px;
       position: relative;
-      left: -50px;
+      left: -30px;
     }
-
-    .profil-title {}
+    
+    .profil-title {
+      font-weight: bold;
+      position: relative;
+      left: -20px;
+    }
 
     .title-center {
       padding: 20px 0;
     }
 
     .form-area {
-      margin-top: 40px;
-      padding: 10px 0;
+      margin-top: 0px;
+      padding: 0px 0;
       background-color: #fff;
       border-radius: 10px;
     }
-
+    
     input.form-control {
       border: none;
       border-bottom: 1px solid #ccc;
@@ -41,9 +45,10 @@
       background: transparent;
       padding: 0;
     }
-
+    
     .form-group {
       background-color: #ffff;
+      border-radius: 30px;
     }
 
     .sign-box {
@@ -92,6 +97,9 @@
       reader.onload = function (event) {
         var img = document.createElement("img");
         img.setAttribute("src", event.target.result);
+        // 썸네일 크기 조절
+        img.style.width = "200px"; // 너비 200px로 설정
+        img.style.height = "auto"; // 높이 자동 설정
         document
           .querySelector("div#image_container")
           .appendChild(img);
@@ -107,6 +115,9 @@
         <image class="profil-img" src="{% static 'image 26.png' %}" alt="default Image">
           <span class="profil-title">익명이 등록하기</span>
         </h2>
+        {% if error_message %}
+        <div>{{ error_message }}</div>
+        {% endif %}
         <form class="form-area" method="post" action="/api/user/sign-up-detail/">
           {% csrf_token %}
           <div style="float: right">
@@ -135,7 +146,7 @@
           </div>
           <div class="form-group mt-2 mb-2 sign-box">
             <label for="email" class="label-name">이메일</label>
-            <input type="text" class="form-control sign-input" id="email" name="email">
+            <input type="email" class="form-control sign-input" id="email" name="email">
           </div>
           <div class="form-group">
             <label for="user_img">이미지</label>
@@ -143,7 +154,6 @@
             <div id="image_container"></div>
           </div>
         </form>
-
-      </div>
-    </div>
-  {% endblock %}
+  </div>
+</div>
+{% endblock %}
