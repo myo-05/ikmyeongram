@@ -138,7 +138,7 @@ def comment_create(request,id):
         if request.method == 'POST':
             comment = request.POST.get('comment', '') # 폼에서 댓글을 받아옴
             if comment == '': # 댓글이 없을 경우
-                return HttpResponse('댓글을 입력해주세요.')
+                return HttpResponse('댓글을 입력해주세요.') # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
             else:
                 Comment.objects.create(name= request.user.nickname, comment=comment, user=request.user, post=post) # 댓글을 db에 저장
                 return redirect('detail', post.id) 
