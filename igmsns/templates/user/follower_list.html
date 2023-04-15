@@ -1,0 +1,20 @@
+<!-- follower_list.html -->
+{% extends 'base.html' %}
+<!--static 폴더 로드-->
+{% load static %} 
+
+{% block title %}팔로워{% endblock %}
+
+{% block content %}
+
+<h1>팔로워 리스트</h1>
+
+{% for follower_user in follower_users %}
+<a href="{% url 'profile' author_id=follower_user.id %}"> 
+    <div>{{ follower_user.username }}</div>
+</a>
+{% empty %}
+    <p>팔로워가 없습니다.</p>
+{% endfor %}
+
+{% endblock %}

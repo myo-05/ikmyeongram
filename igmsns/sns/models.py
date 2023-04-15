@@ -19,7 +19,7 @@ class Post(models.Model):
     hearts = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='hearts')
     # 좋아요 : 게시글과 사용자를 연결하는 Many To Many 필드입니다.
     
-    # 좋아요 갯수 더하는 함수 | 인스턴스 메소드
+    # 좋아요 갯수 더하는 함수
     def count_likes(self):
         return self.hearts.count()
 

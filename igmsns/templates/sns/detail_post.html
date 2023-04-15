@@ -160,8 +160,21 @@
         window.location.href = "/api/sns/post/" + id + "/comment/" + comment_id + "/delete/";
       }
     }
+
+    function validation(){
+      let comment = document.getElementById("comment").value;
+
+      if (comment === ""){
+        alert ("빈칸발견! 강냉이가 날아가고 싶으신가요?");
+        return false;
+      }
+    }
+
   </script>
 
+
+
+  
   <!-- ================================= 게시글 상세 페이지 ================================= -->
   <div class="container container-post">
      <!-- 게시글 상세 페이지 타이틀 -->
@@ -247,7 +260,7 @@
       {% else %}
       <div>
         <!-- 댓글 작성 폼 제출 시 해당 url로 데이터 전송 -->
-        <form action="{%url 'comment' id=post.id%}" method='post'>
+        <form action="{%url 'comment' id=post.id%}" method='post' onsubmit = "return validation()">
           {%csrf_token%}
           <label for="comment">댓글</label>
           <textarea class="form-control" style="width:full;" id="comment" name="comment"></textarea>
