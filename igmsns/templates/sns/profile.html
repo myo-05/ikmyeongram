@@ -35,7 +35,9 @@
     text-align: center;
     font-size: 2rem;
 }
-
+.userid{
+    text-align:center;
+}
 .nickname{
     text-align:center;
 }
@@ -55,7 +57,12 @@
     {% endif %}
     {% comment %} if문 종료 {% endcomment %}
     <!-- 프로필 사진 섹션 끝 -->
+    {% if author == request.user %}
+        <div class="userid"><a> {{author.username}} </a></div>
+    {% endif %}
+
     <div class="nickname"><a> {{author.nickname}} </a></div>
+
 </div>
 
 
