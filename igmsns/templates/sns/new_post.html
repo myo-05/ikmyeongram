@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+<!--static 폴더 로드-->
+{% load static %}
 
 {% block title %}글쓰기{% endblock %}
 
@@ -108,23 +110,32 @@
       }
     }
 
-
-
   </script>
+
+  <style>
+    .form-control{
+      word-break: break-all;
+      /*같은 단어나열도 줄넘어가기*/
+      white-space: pre-line;
+      /*엔터 인식 + 줄 넘어가기*/
+    }
+  </style>
 
   <div class="container container-newpost">
     <div>
-      <img src="/static/image 28.png" class="new_update_img">
+      <img src="{% static 'admin/img/img_post.png' %}" class="new_update_img">
     </div>
     <form class="post-form" action="{% url 'post' %}" method="post" enctype="multipart/form-data" onsubmit = "return validation()"> 
       {% csrf_token %}
       <div class="form-group">
         <label for="post_title">제목</label>
-        <input type="text" class="form-control" id="post_title" name="post_title">
+        {% comment %} 제목 20자 제한! {% endcomment %}
+        <input type="text" class="form-control" id="post_title" name="post_title" maxlength="20" placeholder="제목은 간결하게 20자까지만!">
       </div>
       <div class="form-group">
         <label for="post_content">내용</label>
-        <textarea class="form-control" id="post_content" name="post_content" rows="5"></textarea>
+        {% comment %} 게시글 내용 300자 제한! {% endcomment %}
+        <textarea class="form-control" id="post_content" name="post_content" rows="5" maxlength="300" placeholder="300자까지만 쓰라구!!"></textarea>
       </div>
       <div class="form-group">
         <label for="post_img">이미지</label>
