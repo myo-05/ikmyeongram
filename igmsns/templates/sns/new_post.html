@@ -93,13 +93,26 @@
 
       reader.readAsDataURL(event.target.files[0]);
     }
+
+    function validation(){
+      let post_title = document.getElementById("post_title").value;
+      let post_content = document.getElementById("post_content").value;
+
+      if (post_title === "" || post_content === ""){
+        alert ("빈칸발견! 강냉이가 날아가고 싶으신가요?");
+        return false;
+      }
+    }
+
+
+
   </script>
 
   <div class="container container-newpost">
     <div>
       <img src="/static/image 28.png" style="width: 150px; margin: 50px 20px;">
     </div>
-    <form class="post-form" action="{% url 'post' %}" method="post" enctype="multipart/form-data">
+    <form class="post-form" action="{% url 'post' %}" method="post" enctype="multipart/form-data" onsubmit = "return validation()"> 
       {% csrf_token %}
       <div class="form-group">
         <label for="post_title">제목</label>
