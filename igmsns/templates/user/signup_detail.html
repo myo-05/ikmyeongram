@@ -7,10 +7,7 @@
 {% endblock %}
 {% block content %}
   <style>
-    body {
-      max-width: 800px;
-      margin: auto;
-    }
+
     .signup-box {
       background: #d9d9d9;
       border-radius: 50px;
@@ -127,7 +124,7 @@
         <div>{{ error_message }}</div>
         {% endif %}
         <!-- 회원가입 폼 시작 -->
-        <form class="form-area" method="post" action="{% url 'sign-up' %}">
+        <form class="form-area" method="post" action="{% url 'sign-up' %}" enctype="multipart/form-data">
           {% csrf_token %}
           <div style="float: right">
             <button type="submit" class="btn btn-primary">회원가입</button>

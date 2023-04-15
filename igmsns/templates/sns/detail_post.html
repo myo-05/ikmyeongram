@@ -7,7 +7,7 @@
 {% endblock %}
 {% block content %}
   <style>
-    .container {
+    .container-post {
       max-width: 800px;
       margin: 0 auto;
       padding: 20px;
@@ -68,22 +68,32 @@
       color: #fff;
       background-color: #424242;
       border-color: #424242;
-      
+    }
+
+    .nickname{
+      text-decoration:none; 
+      color:#585858;
     }
 
   </style>
 
   <!-- 삭제 버튼 클릭시 확인 문구 출력 -> 원하시면 다른 버튼들에도 활용할 수 있습니다. -->
   <script>
-    function confirmDelete(id) {
-      if (confirm("정말 삭제하시겠습니까?")) {
+    function confirmDeletePost(id) {
+      if (confirm("진짜 지울꺼에오!?")) {
         window.location.href = "/api/sns/post/" + id + "/delete/";
+      }
+    }
+
+    function confirmDeleteComment(id,comment_id) {
+      if (confirm("진짜 지울꺼에오!?")) {
+        window.location.href = "/api/sns/post/" + id + "/comment/" + comment_id + "/delete/";
       }
     }
   </script>
 
   <!-- ================================= 게시글 상세 페이지 ================================= -->
-  <div class="container">
+  <div class="container container-post">
     <h1 style="text-align: center;" class="title">{{post.post_title}}</h1>
 
     <!-- 이미지 업로드 섹션 -->
@@ -106,11 +116,20 @@
           {% csrf_token %}
           {% if user in post.hearts.all %}
             <!-- 좋아요가 눌러져있는 경우 : 좋아요 취소 -->
-            <input type="submit" value='좋아요 취소'>
+            <button class="btn btn-link text-danger">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+              </svg>
+            </button>
           {% else %}
             <!-- 좋아요가 눌러지지 않은 경우 : 좋아요 -->
-            <input type="submit" value='좋아요'>
+            <button class="btn btn-link text-danger">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart" viewBox="0 0 16 16">
+                <path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/>
+              </svg>
+            </button>
           {% endif %}
+          {{ heart_count }}
         </form>
       </div>
       <!-- ===== 좋아요 끝 ===== -->
@@ -121,20 +140,20 @@
         <span class="post-author">작성자 : 
           <!-- 작성자명 클릭시 작성자의 프로필로 이동 -->
           <strong>
-            <a href="{% url 'profile' author_id=post.author_id %}" style="text-decoration:none; color:#585858;">  
+            <a href="{% url 'profile' author_id=post.author_id %}" class="nickname">  
               {{post.post_author.nickname}}
             </a>
           </strong>
-          <br><span class="post-date">작성시간 :
-          {{post.created_at}}</span>
+          <br><span class="post-date">작성일 :
+          {{post.created_at|date:'Y년m월d일 aH:i'}}</span>
           
         <!-- 게시글의 작성자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 -->
         {% if post.post_author == request.user %}
           <!-- 수정/삭제 버튼을 보여준다 -->
-          <a href="#" onclick="confirmDelete({{ post.id }})" style="text-decoration:none; color:#585858;" >[삭제]</a><br/>
+          <a href="#" onclick="confirmDeletePost({{ post.id }})" style="text-decoration:none; color:#585858;" >[삭제]</a><br/>
               {% if post.updated_at %}
-              <span class="post-date">수정시간 :
-                {{post.updated_at}}</span>
+              <span class="post-date">수정일 :
+                {{post.updated_at|date:'Y년m월d일 aH:i'}}</span>
               {% endif %}
           <a href="/api/sns/post/{{post.id}}/update/" style="text-decoration:none; color:#585858;">[수정]</a>
         {% endif %}
@@ -146,39 +165,47 @@
     <div>
 
       <!-- 댓글 입력 폼 -->
+      {% if not user.is_authenticated %}
+      <div></div>
+      {% else %}
       <div>
         <!-- 댓글 작성 폼 제출 시 해당 url로 데이터 전송 -->
         <form action="{%url 'comment' id=post.id%}" method='post'>
           {%csrf_token%}
           <label for="comment">댓글</label>
-          <textarea class="form-control" id="comment" name="comment"></textarea>
+          <textarea class="form-control" style="width:full;" id="comment" name="comment"></textarea>
           <button type="submit" class="btn btn-primary">게시</button>
         </form>
       </div>
       <div style="margin-top: 70px;">
+      {% endif %}
       <!-- 댓글 입력 폼 끝 -->
+
+
       <!-- 댓글 리스트 시작 -->
       <div>
-        
+        <span>댓글 : {{ comment_count }}개</span>
         {% for comment in comments %}
-          <br>
-          <div style="border-radius: 10px; background-color: #ededed; border: double; border-radius:10px; background-color: #ededed;">
-            <ul style="margin-top: 10px;">작성자:
-              {{ comment.user.nickname }}</ul>
+        <br>
+        <div style="border-radius: 10px; background-color: #ededed; border: double; border-radius:10px; background-color: #ededed;">
+          <ul style="margin-top: 10px;">
+          
+            {# 댓글 작성자명 #}
+              <a href="{% url 'profile' author_id=comment.user_id %}" class="nickname">{{ comment.user.nickname }}</a></ul>
 
             {% if edit_comment == comment.id %}
               <!-- 댓글 수정 폼 -->
               <form action="{% url 'comment_edit' id=post.id comment_id=comment.id %}" method="post" >
                 {% csrf_token %}
                 <label for="comment" style="margin-left:20px;">댓글</label>
-                <textarea class="form-control" id="comment" name="comment" style="margin-left:20px;">{{ comment.comment }}</textarea>
+                <textarea class="form-control" style="width:full; " id="comment" name="comment" >{{ comment.comment }}</textarea>
                 <button type="submit" class="btn btn-primary" style="margin-top:50px;">수정</button>
               </form>
               <!-- 댓글 수정 폼 끝 -->
             {% else %}
-              <ul>내용: {{ comment.comment }}</ul>
+              <ul>{{ comment.comment }}</ul>
             {% endif %}
-              <ul>작성시각: {{ comment.created_at }}</ul>
+              <ul>{{ comment.created_at|date:'Y-m-d H:i' }}</ul>
             {% if comment.user == request.user %}
               <hr>
               <ul>
@@ -189,7 +216,7 @@
                   <a href="#"onclick="history.back()">취소</a>
                 {% else %}
                   <a href="{% url 'comment_edit' id=post.id comment_id=comment.id %}" style="text-decoration:none; color:#585858; margin-right:10px;">수정</a>
-                  <a href="{% url 'comment_delete' id=post.id comment_id=comment.id %}" style="text-decoration:none; color:#585858;">삭제</a>
+                  <a href="#" onclick="confirmDeleteComment({{ post.id }},{{ comment.id }})" style="text-decoration:none; color:#585858;" >삭제</a><br/>
                 {% endif %}
               </ul>
             {% endif %}

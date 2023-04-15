@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
-from .models import UserModel, UserImg
+from .models import UserModel
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.files.storage import FileSystemStorage
 
 
 # Create your views here.
@@ -48,24 +49,32 @@ def sign_up_detail(request):
                     )
                 else:
                     # 유저계정생성하여 DB저장
-                    # 영오: 회원가입완료. 메세지 떠야합니다.
                     user=UserModel.objects.create_user(
                         username=username, #아이디
                         password=password, #비밀번호
                         nickname=nickname, #닉네임
                         email=email, #이메일
                     )
-                    # UserImg 객체 생성
-                    user_img = request.FILES.get("user_img") # 이미지 업로드 받아오기
+                    # 유저 이미지 불러와서 파일시스템에 저장하기
+                    user_img = request.FILES.get("user_img",None) # 이미지 업로드 받아오기
+                    
                     if user_img:
-                        user_img_instance = UserImg.objects.create(
-                            users_img=user,
-                            user_img=user_img,
-                        )
-                        user_img_instance.save()
-                    # else:
-                    #     user_img_instance = UserImg.objects.create(users_img=user)
+                        # 프로필사진 파일에 랜덤성 부여! → AWS 배포시 이름 겹치는 경우 고려
+                        # user_img.name = 'user' + str(user.id) + '_' + str(
+                        # random.randint(10000, 100000)) + '.' + str(user_img.name.split('.')[-1])
                         
+                        # 파일을 시스템에 저장 | FileSystemStorage | DB가 아닌 시스템으로 지정한 dir에 저장
+                        storage = FileSystemStorage()
+                        # 
+                        file_saved = storage.save(user_img.name, user_img)
+
+                        # 저장한 파일의 경로를 url로 추출
+                        uploaded_file_url = storage.url(file_saved)
+
+                        # 신규 회원의 id 추출 후 업데이트
+                        check = UserModel.objects.filter(id=user.id)
+                        check.update(user_img=uploaded_file_url)
+                # 회원가입 성공시 로그인 페이지로 이동
                 return redirect("sign-in")
         # 공란이 하나라도 있으면 else가 작동하여 에러메세지 출력
         else:
@@ -82,14 +91,15 @@ def sign_in_view(request):
         username = request.POST.get("username", None)  # ID 받아옴
         password = request.POST.get("password", None)  # 비밀번호 받아옴
 
-        me = auth.authenticate(
-            request, username=username, password=password
-        )  # 유저 인증(회원가입 된 유저인지)
-        if me is not None:  # 계정이 있다면
-            auth.login(request, me)
+        user_check = auth.authenticate(request, username=username, password=password)  # 유저 인증(회원가입 된 유저인지)
+        if user_check:  # 인증이 됐다면
+            auth.login(request, user_check)
             return redirect("home")
-        else:  # 계정이 없다면
-            return render(request, "user/signin.html", {"error_message" : "아이디 또는 비밀번호를 확인해주세요."})
+        else:  # 인증이 안됐다면
+            if UserModel.objects.filter(username=username).exists(): #아이디가 존재한다면
+                return render(request, "user/signin.html", {"error_message" : "[비밀번호 오류!] 아...그거 그렇게 하는거 아닌뒈..!"})
+            else:
+                return render(request, "user/signin.html", {"error_message" : "[아이디 오류!] 뭐에오 가입하고 와요! 훠이훠이~!"})
 
     elif request.method == "GET":  # GET 요청, 즉 로그인페이지 버튼을 눌렀을 때
         user = request.user.is_authenticated

@@ -18,14 +18,18 @@ class Post(models.Model):
     
     hearts = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='hearts')
     # 좋아요 : 게시글과 사용자를 연결하는 Many To Many 필드입니다.
+    
+    # 좋아요 갯수 더하는 함수 | 인스턴스 메소드
+    def count_likes(self):
+        return self.hearts.count()
 
 # ============================= 댓글 테이블 모델 =============================    
 class Comment(models.Model):
     class Meta:
         db_table = "my_comment"
         ordering = ['-created_at'] # 댓글 최신순 정렬
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE) #게시글 
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) #
     name = models.CharField(max_length=256)
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

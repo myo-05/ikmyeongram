@@ -3,8 +3,8 @@ from django.shortcuts import render, redirect
 
 from .models import Comment, Post
 from user.models import UserModel
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.http import require_POST
+
 
 
 '''
@@ -46,7 +46,7 @@ def new_post_view(request):
             post = Post.objects.create(post_title=post_title, post_content=post_content, post_img=post_img, post_author= post_author, author_id = post_author_id)
             post.save()
             
-            return redirect('home')
+            return redirect('detail',post.id)
         
         return render(request, 'new_post.html')
     
@@ -56,9 +56,12 @@ def new_post_view(request):
 
 def detail_post_view(request, id):
     a_post = Post.objects.get(id=id)
+    comment_count = Comment.objects.filter(post=a_post).count()
+    count_heart = a_post.count_likes()
     comments = Comment.objects.filter(post=a_post).order_by('-created_at')
+
     if request.method == 'GET':
-        return render(request, 'sns/detail_post.html', {'post': a_post, 'comments':comments})
+        return render(request, 'sns/detail_post.html', {'post': a_post, 'comments':comments,'comment_count': comment_count, 'heart_count':count_heart})
 
 '''
 수정 뷰, 삭제 뷰 위치 바꿨습니다. 기능의 흐름에 따라 함수를 배치하는 게 알아보기 쉬울 것 같습니다.
@@ -192,3 +195,5 @@ def hearts(request, id):
             post.hearts.add(request.user)
         return redirect('detail', post.id) 
     return redirect('sign-in')
+
+
