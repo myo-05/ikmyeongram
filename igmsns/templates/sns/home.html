@@ -7,13 +7,13 @@
 {% block content %}
 <style>
 
-.card {
+.home_post_card {
     border : none;
+    width : 800px;
 }
-.card-body {
+.post_information {
     background: #ededed;
     border-radius: 20px;
-    text-align: end;
 }
 
 .post_img{
@@ -23,15 +23,34 @@
     border-radius: 50px;
 }
 
+.home_posts {
+    text-decoration:none;
+    color:inherit;
+    margin:20px;
+}
+
+.home_post_text {
+    margin-top: 20px;
+    text-decoration : none;
+    color: #212529;
+}
+
+.home_post_text:hover {
+    color: #212529;
+}
+
+.home_img_area {
+    width : 200px;
+}
 </style>
 
-<div class="container">
+<div class="container home_container" style="display: flex; flex-direction: column; align-items: center;">
 
 {% for post in posts %}
-<a href ="{%url 'detail' id=post.id%}" style="text-decoration : none; color: inherit; margin: 20px;">
-    <div class="card mb-3">
-        <div class="row g-0" style="background:#ededed; border-radius:20px">
-            <div class="col-md-4" style="width : 200px; ">
+<a href ="{%url 'detail' id=post.id%}" class="home_post_text">
+    <div class="card mb-3 home_post_card">
+        <div class="row g-0" style="background:#ededed; border-radius:20px">  <!--우선순위 때문에 인라인 적용-->
+            <div class="col-md-4 home_img_area">
                 {% if post.post_img %} {# 게시글 사진이 있을 경우 #}
                     <img class="img-fluid post_img" src="{{ post.post_img.url }}" alt="post image">
                 {% else %} {# 게시글 사진이 없을 경우 #}
@@ -39,8 +58,8 @@
                 {% endif %}
             </div>
             <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title" style="font-weight: bold;">[{{ post.post_title }}]</h5> {# 게시글 제목 #}
+                <div class="card-body post_information">
+                    <h5 class="card-title">{{ post.post_title }}</h5> {# 게시글 제목 #}
                     <p class="card-text">{{ post.post_content|truncatechars:100 }}</p> {# 게시글 내용 #}
                     {% comment %} 본문 100자까지만 나오게 {% endcomment %}
                     <p class="card-text"><small class="text-body-secondary">by {{ post.post_author.nickname }}</small></p> {# 작성자 닉네임 #}
