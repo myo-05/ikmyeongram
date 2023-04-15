@@ -145,15 +145,14 @@
             </a>
           </strong>
           <br><span class="post-date">작성일 :
-          {{post.created_at|date:'Y년m월d일 aH:i'}}</span>
+          {{post.created_at|date:'Y-m-d H:i'}}</span>
           
         <!-- 게시글의 작성자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 -->
         {% if post.post_author == request.user %}
           <!-- 수정/삭제 버튼을 보여준다 -->
           <a href="#" onclick="confirmDeletePost({{ post.id }})" style="text-decoration:none; color:#585858;" >[삭제]</a><br/>
               {% if post.updated_at %}
-              <span class="post-date">수정일 :
-                {{post.updated_at|date:'Y년m월d일 aH:i'}}</span>
+                <span class="post-date">수정일 : {{post.updated_at|date:'Y-m-d H:i'}}</span>
               {% endif %}
           <a href="/api/sns/post/{{post.id}}/update/" style="text-decoration:none; color:#585858;">[수정]</a>
         {% endif %}
