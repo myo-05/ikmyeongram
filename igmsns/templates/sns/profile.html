@@ -62,16 +62,20 @@
 <!-- 게시물 갯수 -->
 
 <div class="post_count" style="text-align: center;">
+    <a href="{% url 'profilepost' author_id=user.id type='all' %}">
     <text>{{total_post}}</text></br>
     <text>게시물</text>
+    </a>
 </div>
 
 
 <!-- 좋아요 갯수 끝 -->
 
 <div class="like_count" style="text-align: center;">
+    <a href="{% url 'profilepost' author_id=user.id type='liked' %}">
     <text>{{liked_posts_count}}</text></br>
     <text> 좋아요</text>
+    </a>
 </div>
 
     <!-- 해당 사용자 게시글 리스트 -->

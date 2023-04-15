@@ -16,4 +16,8 @@ urlpatterns = [
     path('post/<int:id>/comment/<int:comment_id>/edit/', views.comment_edit, name='comment_edit'), #/api/sns/post/id/comment/id/edit 댓글 수정하기
     
     path('profile/<int:author_id>/', views.profile_view, name="profile"),  # /api/sns/profile/<id>/ 프로필페이지
+
+    path('profile/<int:author_id>/<str:type>', views.profile_postlist_view, name="profilepost"),  # /api/sns/profile/<id>/ 프로필페이지
+    
+
 ]
