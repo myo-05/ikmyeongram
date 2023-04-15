@@ -27,7 +27,7 @@ def sign_up_detail(request):
         password2 = request.POST.get("password2", None)  # 비밀번호 확인
         nickname = request.POST.get("nickname", None)  # 닉네임
         email = request.POST.get("email", None)  # 이메일       
-        user_img = request.FILES.get("user_img",'default_img_profile.png') # 이미지 업로드 받아오기
+        user_img = request.FILES.get("user_img") # 이미지 업로드 받아오기
         
         
         # 입력란이 모두 작성되어있다면 실행, 공란이 하나라도 있으면 else가 작동하여 에러메세지 출력
