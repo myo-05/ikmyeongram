@@ -26,20 +26,21 @@
 
     .post-content {
       line-height: 1.6;
-      font-size: 25px;
-      font-weight: bold;
+      font-size: 17px;
     }
 
     .post-image {
       display: block;
       margin: 20px auto;
-      max-width: 100%;
+      max-width: 300px;
+      width : 50vw
     }
 
     .post-meta {
       margin-top: 20px;
-      font-size: 20px;
       color: #666;
+      display: flex;
+      justify-content: center;
     }
 
     .post-author {
@@ -48,13 +49,10 @@
 
     .post-date {
       margin-right: 20px;
+      font-size: 15px;
     }
 
-    a:hover{
-      text-decoration: underline; !important!
-    }
-
-    .btn-primary {
+    .detail_post_btn {
       width: 100px;
       border: double;
       background: none;
@@ -64,17 +62,61 @@
       margin: 30px 10px;
     }
 
-    .btn-primary:hover {
+    .detail_post_btn:hover {
       color: #fff;
       background-color: #424242;
       border-color: #424242;
     }
 
-    .nickname{
+    .detail_post_nickname{
       text-decoration:none; 
       color:#585858;
+      font-size: 17px;
+      font-weight: bold;
     }
 
+    .detail_post_icon {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .post_icon {
+      width: 40px;
+      margin-right: 20px;
+      text-align: end;
+    }
+
+    .comment_icon {
+      width: 20px;
+      margin-right: 10px;
+    }
+
+    .comment_icon_area {
+      text-align: end;
+      padding-right: 10px;
+    }
+
+    .comment_count{
+      margin_bottom: 10px;
+    }
+
+    .comment_edit {
+      width: 90%;
+      margin: 10px auto;
+    }
+
+    .comment_cancel_icon {
+      width: 20px;
+      margin-right: 10px;
+    }
+
+    .comments-area {
+      border-radius: 10px; 
+      background-color: #ededed;
+      border: double;
+      border-radius:10px; 
+      background-color: #ededed;
+    }
   </style>
 
   <!-- 삭제 버튼 클릭시 확인 문구 출력 -> 원하시면 다른 버튼들에도 활용할 수 있습니다. -->
@@ -94,12 +136,23 @@
 
   <!-- ================================= 게시글 상세 페이지 ================================= -->
   <div class="container container-post">
-    <h1 style="text-align: center;" class="title">{{post.post_title}}</h1>
-
+     <!-- 게시글 상세 페이지 타이틀 -->
+    <h1 style="text-align: center; margin:20px; font-size: 35px;">{{post.post_title}}</h1> <!--우선순위 때문에 인라인 적용-->
+    <div class="detail_post_icon">
+      <!-- 게시글의 작성자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 -->
+      {% if post.post_author == request.user %}
+        <!-- 수정/삭제 버튼을 보여준다 -->
+        <a href="/api/sns/post/{{post.id}}/update/">
+          <img src="/static/admin/img/post_edit_icon.png" class="post_icon">
+        </a>
+        <a href="#" onclick="confirmDeletePost({{ post.id }})">
+          <img  src="/static/admin/img/post_delete_icon.png" class="post_icon"></a><br/>
+      {% endif %}
+    </div>
     <!-- 이미지 업로드 섹션 -->
     <!-- 업로드된 이미지가 있다면 -->
     {% if post.post_img %}
-      <img class="post-image" src="{{ post.post_img.url }}" alt="post image" style="width : 50vw ; max-width:500px ;">
+      <img class="post-image" src="{{ post.post_img.url }}" alt="post image">
       <!-- 업로드된 이미지가 없다면 : 디폴트값 -->
     {% else %}
       <img class="post-image" src="{% static 'admin/img/default_img.png' %}" alt="default Image" style="width : 20vw ; max-width:500px ;">
@@ -137,24 +190,21 @@
 
       <div class="post-meta">
         <!-- author을 외래키로 연결해서 이부분 수정 -->
-        <span class="post-author">작성자 : 
+        <span class="post-author">
           <!-- 작성자명 클릭시 작성자의 프로필로 이동 -->
-          <strong>
-            <a href="{% url 'profile' author_id=post.author_id %}" class="nickname">  
-              {{post.post_author.nickname}}
-            </a>
-          </strong>
-          <br><span class="post-date">작성일 :
+          <a href="{% url 'profile' author_id=post.author_id %}" class="cnickname">  
+            {{post.post_author.nickname}}
+          </a>
+          <br><span class="post-date">
           {{post.created_at|date:'Y-m-d H:i'}}</span>
           
         <!-- 게시글의 작성자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 -->
         {% if post.post_author == request.user %}
-          <!-- 수정/삭제 버튼을 보여준다 -->
-          <a href="#" onclick="confirmDeletePost({{ post.id }})" style="text-decoration:none; color:#585858;" >[삭제]</a><br/>
-              {% if post.updated_at %}
-                <span class="post-date">수정일 : {{post.updated_at|date:'Y-m-d H:i'}}</span>
-              {% endif %}
-          <a href="/api/sns/post/{{post.id}}/update/" style="text-decoration:none; color:#585858;">[수정]</a>
+          <!-- 게시글의 작성일과 수정일을 보여준다 -->
+          <br/>
+          {% if post.updated_at %}
+            <span class="post-date">{{post.updated_at|date:'Y-m-d H:i'}}</span>
+          {% endif %}
         {% endif %}
       </div>
     </div>
@@ -173,7 +223,7 @@
           {%csrf_token%}
           <label for="comment">댓글</label>
           <textarea class="form-control" style="width:full;" id="comment" name="comment"></textarea>
-          <button type="submit" class="btn btn-primary">게시</button>
+          <button type="submit" class="btn btn-primary detail_post_btn">게시</button>
         </form>
       </div>
       <div style="margin-top: 70px;">
@@ -183,22 +233,22 @@
 
       <!-- 댓글 리스트 시작 -->
       <div>
-        <span>댓글 : {{ comment_count }}개</span>
+        <span style="margin-bottom: 10px;">댓글 : {{ comment_count }}개</span>
         {% for comment in comments %}
         <br>
-        <div style="border-radius: 10px; background-color: #ededed; border: double; border-radius:10px; background-color: #ededed;">
+        <div class="comments-area">
           <ul style="margin-top: 10px;">
           
             {# 댓글 작성자명 #}
-              <a href="{% url 'profile' author_id=comment.user_id %}" class="nickname">{{ comment.user.nickname }}</a></ul>
+              <a href="{% url 'profile' author_id=comment.user_id %}" class="detail_post_nickname">{{ comment.user.nickname }}</a></ul>
 
             {% if edit_comment == comment.id %}
               <!-- 댓글 수정 폼 -->
               <form action="{% url 'comment_edit' id=post.id comment_id=comment.id %}" method="post" >
                 {% csrf_token %}
                 <label for="comment" style="margin-left:20px;">댓글</label>
-                <textarea class="form-control" style="width:full; " id="comment" name="comment" >{{ comment.comment }}</textarea>
-                <button type="submit" class="btn btn-primary" style="margin-top:50px;">수정</button>
+                <textarea class="form-control comment_edit" id="comment" name="comment" >{{ comment.comment }}</textarea>
+                <button type="submit" class="btn btn-primary detail_post_btn" style="margin-top:50px;">수정</button>
               </form>
               <!-- 댓글 수정 폼 끝 -->
             {% else %}
@@ -207,15 +257,20 @@
               <ul>{{ comment.created_at|date:'Y-m-d H:i' }}</ul>
             {% if comment.user == request.user %}
               <hr>
-              <ul>
+              <ul class="comment_icon_area">
                 {% if edit_comment == comment.id %}
   
-                <!--<a href="{% url 'comment' id=post.id %}" style="text-decoration:none; color:#585858;">취소</a> -->
                 <!-- 취소버튼 생성: 뒤로가기로 설정 -->
-                  <a href="#"onclick="history.back()">취소</a>
+                  <a href="#"onclick="history.back()">
+                    <image src="/static/admin/img/comment_cancel_icon.png" class="comment_cancel_icon">
+                  </a>
                 {% else %}
-                  <a href="{% url 'comment_edit' id=post.id comment_id=comment.id %}" style="text-decoration:none; color:#585858; margin-right:10px;">수정</a>
-                  <a href="#" onclick="confirmDeleteComment({{ post.id }},{{ comment.id }})" style="text-decoration:none; color:#585858;" >삭제</a><br/>
+                  <a href="{% url 'comment_edit' id=post.id comment_id=comment.id %}" style="text-decoration: none;">   <!--우선순위 때문에 인라인 적용-->
+                    <img src="/static/admin/img/edit_icon.png" class="comment_icon">
+                  </a>
+                  <a href="#" onclick="confirmDeleteComment({{ post.id }},{{ comment.id }})">
+                    <img src="/static/admin/img/delete_icon.png" class="comment_icon">
+                  </a><br/>
                 {% endif %}
               </ul>
             {% endif %}

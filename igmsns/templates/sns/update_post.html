@@ -7,15 +7,29 @@
 <style>
     .container-update {
         max-width: 800px;
+        display: flex;
+        justify-content: center;
         margin: 0 auto;
+        padding-right: var(--bs-gutter-x, .75rem);
+        padding-left: var(--bs-gutter-x, .75rem);
     }
 
+    {% comment %} new/update.html 클래스명 통일 했어요 {% endcomment %}
     .post-form {
         margin-top: 40px;
-        background-color: #fff;
         padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+        background: none;
+        border-color: #848484;
+        color: #6E6E6E;
+        border: double;
+        border-radius: 20px;
+         width: 800px;
+    }
+
+    {% comment %} new/update.html 이미지 클래스명 통일했어요 {% endcomment %}
+    .new_update_img {
+        width: 150px;
+        margin: 50px 20px;
     }
 
     .form-group {
@@ -43,6 +57,23 @@
     button[type="submit"] {
         margin-top: 20px;
     }
+
+    {% comment %} new/update.html 버튼 클래스명 통일했어요 {% endcomment %}
+    .post_btn {
+        width : 100%;
+        background-color: #ffff;
+        color: #585858;
+        border: double;
+        border-radius: 20px; 
+    }
+
+    .post_btn:hover {
+        background-color: #848484;
+        color: #ffff;
+        border: double;
+        width : 100%;
+        border-radius: 20px;
+    }
 </style>
 <script>
     // 썸네일 미리보기 함수
@@ -63,6 +94,9 @@
 </script>
 
 <div class="container container-update">
+    <div>
+        <img src="/static/admin/img/update_image.png" class="new_update_img">
+    </div>
     <form class="post-form" action="{% url 'update' post.id %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group">
@@ -80,7 +114,7 @@
             <input type="file" class="form-control-file" id="post_img" name="post_img" onchange="setThumbnail(event);" >
         <div id="image_container"></div>
         </div>
-        <button type="submit" class="btn btn-primary">수정</button>
+        <button type="submit" class="btn btn-primary post_btn">수정</button>
     </form>
 </div>
 {% endblock %}
