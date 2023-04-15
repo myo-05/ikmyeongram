@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -30,7 +31,7 @@ def new(request): # 새 글 작성 페이지로 렌더링
     
 #  ============================= 글 작성 ============================= 
 
-def new_post_view(request):
+def new_post_view(request): # 새 글 작성 저장
     '''
     제목, 내용, 이미지, 작성 시간, 작성자를 게시글 db 에 저장합니다.
     '''
@@ -40,7 +41,7 @@ def new_post_view(request):
             post_title = request.POST['post_title'] # 입력한 글 제목 받아오기
             post_content = request.POST['post_content'] # 입력한 글 내용 받아오기
             post_author = request.user #현재 로그인된 user의 nickname을 받아오기 (외래키 연결됨)
-            post_img = request.FILES.get('post_img','default_img.png') # 이미지 업로드 받아오기
+            post_img = request.FILES.get('post_img') # 이미지 업로드 받아오기
             post_author_id = request.user.id
             
             post = Post.objects.create(post_title=post_title, post_content=post_content, post_img=post_img, post_author= post_author, author_id = post_author_id)
@@ -55,13 +56,19 @@ def new_post_view(request):
 # ============================= 게시글 상세보기 ============================= 
 
 def detail_post_view(request, id):
-    a_post = Post.objects.get(id=id)
-    comment_count = Comment.objects.filter(post=a_post).count()
-    count_heart = a_post.count_likes()
-    comments = Comment.objects.filter(post=a_post).order_by('-created_at')
+    a_post = Post.objects.get(id=id) # 해당 글의 id값을 받아옵니다.
+    comment_count = Comment.objects.filter(post=a_post).count() # 댓글의 갯수
+    count_heart = a_post.count_likes() # 좋아요 갯수
+    comments = Comment.objects.filter(post=a_post).order_by('-created_at') #댓글 전체 불러오기
+    context = {
+        'post': a_post,
+        'comments':comments,
+        'comment_count': comment_count, 
+        'heart_count':count_heart
+    }
 
     if request.method == 'GET':
-        return render(request, 'sns/detail_post.html', {'post': a_post, 'comments':comments,'comment_count': comment_count, 'heart_count':count_heart})
+        return render(request, 'sns/detail_post.html',context)
 
 '''
 수정 뷰, 삭제 뷰 위치 바꿨습니다. 기능의 흐름에 따라 함수를 배치하는 게 알아보기 쉬울 것 같습니다.
@@ -90,20 +97,22 @@ def update(request,id ):
             '''
             return render(request, 'sns/detail_post.html', {'post': a_post, 'comments':comments})
         else:
-            return HttpResponse("권한이 없습니다.") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
+            return HttpResponse("어림도 없다") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
     else:
         if a_post.post_author == request.user:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 수정 가능
             return render(request, 'sns/update_post.html', {'post': a_post})
             # 글 수정 html 파일 이름 수정 후 이 부분도 수정 완료 (new_update.html --> update_post.html)
         else:
-            return HttpResponse("권한이 없습니다.") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
+            return HttpResponse("어림도 없다") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
         
 
 # ============================= 게시글 삭제 ============================= 
 
 def delete(request, id):
     post = Post.objects.get(id=id)
+    
     if post.post_author == request.user:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 삭제 가능
+        
         '''
         참고로 모든 로그인 사용자와 게시글 작성자 비교 구문은
         사용자가 해당 동작 url을 입력해 강제 이동해도 적용됩니다.
@@ -111,9 +120,10 @@ def delete(request, id):
         post.delete()
         return redirect('home') # 삭제 성공
     else:
-        return HttpResponse("권한이 없습니다.") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
+        return HttpResponse("꺼져라 닝겐") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
+   
 
-    
+
 # ============================= 프로필 페이지보기  ============================= 
 
 '''
@@ -125,9 +135,61 @@ def profile_view(request, author_id):
     #특정 user의 id를 파라미터 id로 받아왔다면
     user = UserModel.objects.get(id=author_id) #user의 정보를 가져옴 -> 프로필사진 등 활용
     all_post = Post.objects.filter(author_id=author_id).order_by('-created_at') #user의 모든 글을 가져와서 생성일 기준으로 내림차순나열
+    
+    
+    liked_posts = user.hearts.all() # 해당 유저가 좋아요를 누른 게시글들의 리스트
+    liked_posts_count = liked_posts.count() # 해당 유저가 좋아요를 누른 게시글들의 갯수
+
+    follower_count = user.followings.count()
+    following_count = user.followers.count()
+
     total_post = all_post.count() #user의 작성글 갯수
     if request.method == 'GET':
-        return render(request, 'sns/profile.html', {'total_post':total_post,'author': user , 'posts': all_post})
+        context = {
+            'total_post':total_post,
+            'author': user , 
+            'posts': all_post, 
+            'liked_posts': liked_posts, 
+            'liked_posts_count': liked_posts_count,
+            'following_count': following_count,
+            'follower_count': follower_count,
+        }
+        return render(request, 'sns/profile.html', context)
+    
+    
+def profile_postlist_view(request, author_id, type):
+    #특정 user의 id를 파라미터 id로 받아왔다면
+    user = UserModel.objects.get(id=author_id) #user의 정보를 가져옴 -> 프로필사진 등 활용
+    all_post = Post.objects.filter(author_id=author_id).order_by('-created_at') #user의 모든 글을 가져와서 생성일 기준으로 내림차순나열
+    
+    liked_posts = user.hearts.all() # 해당 유저가 좋아요를 누른 게시글들의 리스트
+    liked_posts_count = liked_posts.count() # 해당 유저가 좋아요를 누른 게시글들의 갯수
+    
+    follower_count = user.followings.count()
+    following_count = user.followers.count()
+
+    total_post = all_post.count() #user의 작성글 갯수
+    
+    if type == 'liked':
+        posts = liked_posts
+    else:
+        posts = all_post
+        
+        
+    if request.method == 'GET':
+        context = {
+            'total_post':total_post,
+            'author': user , 
+            'posts': posts,
+            'liked_posts': liked_posts, 
+            'liked_posts_count': liked_posts_count,
+            'type': type,
+            'following_count': following_count,
+            'follower_count': follower_count,
+        }
+        return render(request, 'sns/profile.html', context)
+       
+
     
     
 # ============================= 댓글 작성 =============================     
@@ -137,11 +199,9 @@ def comment_create(request,id):
         post = Post.objects.get(id=id) # id값으로 해당 게시글을 찾아온다.
         if request.method == 'POST':
             comment = request.POST.get('comment', '') # 폼에서 댓글을 받아옴
-            if comment == '': # 댓글이 없을 경우
-                return HttpResponse('댓글을 입력해주세요.') # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
-            else:
-                Comment.objects.create(name= request.user.nickname, comment=comment, user=request.user, post=post) # 댓글을 db에 저장
-                return redirect('detail', post.id) 
+            
+            Comment.objects.create(name= request.user.nickname, comment=comment, user=request.user, post=post) # 댓글을 db에 저장
+            return redirect('detail', post.id) 
     return redirect('sign-in')       
 
 
@@ -168,7 +228,7 @@ def comment_edit(request, id, comment_id):
         }
         return render(request, 'sns/detail_post.html', context)
     else:
-        return HttpResponse("권한이 없습니다.")
+        return HttpResponse("여기까지 들어오다니... 건방지군")
 
 # ============================= 댓글 삭제  ============================= 
 def comment_delete(request, comment_id, id):
@@ -179,7 +239,7 @@ def comment_delete(request, comment_id, id):
         comment.delete()
         return redirect('detail', id=a_post.id) # 삭제 성공 후 상세 페이지로 이동
     else:
-        return HttpResponse("권한이 없습니다.")
+        return HttpResponse("꺼져라 닝겐")
     
     
 # ============================= 게시글 좋아요 =============================     

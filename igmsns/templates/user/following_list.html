@@ -1,0 +1,20 @@
+<!-- following_list.html -->
+{% extends 'base.html' %}
+<!--static 폴더 로드-->
+{% load static %} 
+
+{% block title %}팔로잉{% endblock %}
+
+{% block content %}
+
+<h1>팔로잉 리스트</h1>
+
+{% for following_user in following_users %}
+    <a href="{% url 'profile' author_id=following_user.id %}"> 
+        <div>{{ following_user.username }}</div>
+    </a>
+    {% empty %}
+        <p>팔로잉 중인 사용자가 없습니다.</p>
+{% endfor %}
+
+{% endblock %}

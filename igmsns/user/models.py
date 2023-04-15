@@ -11,3 +11,9 @@ class UserModel(AbstractUser):  # UserModel에서 AbstractUser(장고기본유�
     # 기본 모델에 없던 것만 추가 (닉네임, 프로필이미지)
     nickname = models.CharField(max_length=15, default='')
     user_img = models.FileField("프로필이미지", upload_to='',blank=True, null=True)
+    
+    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
+    '''
+    팔로우 필드입니다. 좋아요와 다르게 user 모델 스스로를 many to many 
+    symmetrical : 대칭 여부 설정, 만약 True 라고 한다면 저절로 맞팔이 되는 거겠죠?
+    '''

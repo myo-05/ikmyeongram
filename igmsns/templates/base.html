@@ -29,7 +29,6 @@
       .form-area {
         margin-top: 25px;
       }
-
       
       .navbar {
         background-color: #5e5e5e;
@@ -62,6 +61,16 @@
       }
 
     </style>
+
+    <script>
+      function confirmSignin() {
+        if (confirm("정말... 가실건가요...?")) {
+          window.location.href = "{% url 'sign-out' %}";
+        }
+      }
+  
+    </script>
+
   </head>
 
   <body>
@@ -117,7 +126,7 @@
                       <a href="{% url 'profile' author_id=user.id %}"><image class="profile-img-nav" src="{% static 'admin/img/default_img_profile.png' %}" class="nav_icon"></a>
                       {% endif %}
                       {# if문 종료 #}
-                      <a class="nav-link" href="{% url 'sign-out' %}" style="display: inline-block;">
+                      <a class="nav-link" href="#" onclick=" confirmSignin()" style="display: inline-block;">
                         로그아웃
                       </a>
                     </li>

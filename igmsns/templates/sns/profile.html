@@ -20,7 +20,10 @@
     width:200px;
     border-radius: 100px;
 }
-.post_count{
+.post_count,
+.like_count,
+.following_count,
+.follower_count{
     display: inline-block;
     position:relative;
     top: -10px;
@@ -28,7 +31,7 @@
     text-align: center;
     font-size: 2rem;
 }
-.profile_nickname{
+.nickname{
     text-align:center;
     margin-top: 20px;
     font-weight: bold;
@@ -66,20 +69,72 @@
     {% endif %}
     {% comment %} if문 종료 {% endcomment %}
     <!-- 프로필 사진 섹션 끝 -->
-    <div class="profile_nickname"><a> {{author.nickname}} </a></div>
+    <div class="nickname"><a> {{author.nickname}} </a></div>
 </div>
+
+
 <!-- 게시물 갯수 -->
 <div class="post_count" style="text-align: center;">
+    <a href="{% url 'profilepost' author_id=author.id type='all' %}">
     <text>{{total_post}}</text></br>
     <text>게시물</text>
+    </a>
 </div>
-<!-- 게시물 갯수 끝 -->
+
+<!-- 좋아요하는 글 목록을 내 프로필일때만 보이게 하고 싶다면 if문 사용하기 -->
+<!-- 프로필의 사용자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 = 내 프로필 페이지라면 -->
+{% if author.id == request.user.id %}
+<div class="like_count" style="text-align: center;">
+    <a href="{% url 'profilepost' author_id=author.id type='liked' %}">
+    <text>{{liked_posts_count}}</text></br>
+    <text> 좋아요</text>
+    </a>
+</div>
+{% endif %}
+
+<!-- 좋아요 갯수 끝 -->
+
+<!-- 팔로잉, 팔로워 수 보기 -->
+<div class = "following_count" style="text-align: center;">
+    <a href="{% url 'following-list' id=author.id %}">
+        <text>{{ following_count }}</text></br>
+        <text> 팔로잉 </text>
+    </a>
+</div>
+
+<div class = "follower_count" style="text-align: center;">
+    <a href="{% url 'follower-list' id=author.id %}">
+        <text>{{ follower_count }}</text></br>
+        <text> 팔로워 </text>
+    </a>
+</div>
+<!-- 팔로잉, 팔로워 수 보기 끝 -->
+
+
+<!-- 팔로우하기 버튼 시작! 적절한 위치를 찾아주세요 ㅠㅠ -->
+
+<!-- 프로필의 사용자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 = 내 프로필 페이지라면 -->
+{% if author.id == request.user.id %}
+    <div> </div>
+{% else %}
+    <div>
+        <!-- 상대 팔로우 여부에 따라 다른 버튼 보이기 -->
+        {% if request.user in author.followings.all %}
+            <button class="unfollow-btn" onclick="location.href='{% url 'follow' author.id %}'">언팔로우</button>
+        {% else %}
+            <button class="follow-btn" onclick="location.href='{% url 'follow' author.id %}'">팔로우</button>
+        {% endif %}        
+    </div>
+{% endif %}
+
+<!-- 팔로우하기 버튼 끝 -->
+
     <!-- 해당 사용자 게시글 리스트 -->
-    <div class="container profile_container">
+    <div class="container add" style="width : 50%">
         {% for post in posts %}
-            <a href ="/api/sns/post/{{post.id}}" class="profile_posts">
-                <div class="card mb-3 profile_post_card" >
-                    <div class="row g-0" style="background:#ededed; border-radius:20px">  <!--우선순위 때문에 인라인 적용-->
+            <a href ="/api/sns/post/{{post.id}}" style="text-decoration : none; color: inherit;">
+                <div class="card mb-3" >
+                    <div class="row g-0" >
                         <!-- 게시글 리스트 이미지 썸네일 섹션 -->
                         <div class="col-md-4" style="width : 200px">
                             <!-- 업로드된 이미지가 있다면 -->

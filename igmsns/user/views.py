@@ -1,10 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import UserModel
-from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 
 
@@ -16,7 +14,7 @@ from django.core.files.storage import FileSystemStorage
 채연 : 위치바꿨습니다.
 """
 
-
+# 회원가입
 def sign_up_detail(request):
     if request.method == "GET":  # 회원가입 페이지를 눌렀을 때
         return render(request, "user/signup_detail.html")
@@ -27,7 +25,6 @@ def sign_up_detail(request):
         password2 = request.POST.get("password2", None)  # 비밀번호 확인
         nickname = request.POST.get("nickname", None)  # 닉네임
         email = request.POST.get("email", None)  # 이메일       
-        user_img = request.FILES.get("user_img") # 이미지 업로드 받아오기
         
         
         # 입력란이 모두 작성되어있다면 실행, 공란이 하나라도 있으면 else가 작동하여 에러메세지 출력
@@ -55,8 +52,26 @@ def sign_up_detail(request):
                         password=password, #비밀번호
                         nickname=nickname, #닉네임
                         email=email, #이메일
-                        user_img=user_img, #프로필사진
                     )
+                    # 유저 이미지 불러와서 파일시스템에 저장하기
+                    user_img = request.FILES.get("user_img",None) # 이미지 업로드 받아오기
+                    
+                    if user_img:
+                        # 프로필사진 파일에 랜덤성 부여! → AWS 배포시 이름 겹치는 경우 고려
+                        # user_img.name = 'user' + str(user.id) + '_' + str(
+                        # random.randint(10000, 100000)) + '.' + str(user_img.name.split('.')[-1])
+                        
+                        # 파일을 시스템에 저장 | FileSystemStorage | DB가 아닌 시스템으로 지정한 dir에 저장
+                        storage = FileSystemStorage()
+                        # 
+                        file_saved = storage.save(user_img.name, user_img)
+
+                        # 저장한 파일의 경로를 url로 추출
+                        uploaded_file_url = storage.url(file_saved)
+
+                        # 신규 회원의 id 추출 후 업데이트
+                        check = UserModel.objects.filter(id=user.id)
+                        check.update(user_img=uploaded_file_url)
                 # 회원가입 성공시 로그인 페이지로 이동
                 return redirect("sign-in")
         # 공란이 하나라도 있으면 else가 작동하여 에러메세지 출력
@@ -92,8 +107,33 @@ def sign_in_view(request):
             return render(request, "user/signin.html")
 
 
-# 로그아웃
+# ============================= 로그아웃 ============================= 
 @login_required
 def logout(request):
     auth.logout(request)  # 인증 되어있는 정보를 없애기
     return redirect("home")
+
+
+# ============================= 팔로우 ============================= 
+def follow(request, user_id):
+    if request.user.is_authenticated: # 로그인 된 경우에만
+        target_user = UserModel.objects.get(id = user_id) # 팔로우할 유저의 정보를 가져온다.
+        if target_user != request.user: # 현재 로그인한 유저와 타겟이 다를 경우(내가 아닌 경우)
+            if target_user.followings.filter(id = request.user.id).exists(): # 이미 팔로우중인경우
+                target_user.followings.remove(request.user) # 팔로우 삭제
+            else: # 팔로우중이 아닌 경우
+                target_user.followings.add(request.user) # 팔로우
+        return redirect('profile', target_user.id) # 내 프로필인 경우 팔로우하지않고 프로필로 돌아옴
+    return redirect('sign-in') # 로그인이 되지 않은 경우 로그인 페이지로 넘어옴
+
+
+# ============================= 팔로우, 팔로잉 리스트  ============================= 
+def following_list(request, id):
+    user = UserModel.objects.get(id=id)
+    following_users = user.followers.all()
+    return render(request, 'user/following_list.html', {'following_users': following_users})
+
+def follower_list(request, id):
+    user = UserModel.objects.get(id=id)
+    follower_users = user.followings.all()
+    return render(request, 'user/follower_list.html', {'follower_users': follower_users})
