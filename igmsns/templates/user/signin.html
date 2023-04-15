@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+<!--static 폴더 로드-->
+{% load static %}
 
 {% block title %}
 로그인
@@ -80,7 +82,7 @@
     <div class="wrap title-area">
       {# ======== 로그인 타이틀 시작 ==============#}
       <h2 class="title-center signin_center">
-        <image src="/static/i16109918150.gif" class="signin_img">
+        <image src="{% static 'admin/img/img_signin.gif' %}" class="signin_img">
         어서와~
       </h2>
       {# ======== 로그인 타이틀 끝 ==============#}

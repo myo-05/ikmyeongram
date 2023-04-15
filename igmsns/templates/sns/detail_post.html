@@ -27,6 +27,10 @@
     .post-content {
       line-height: 1.6;
       font-size: 17px;
+      word-break: break-all;
+      /*같은 단어나열도 줄넘어가기*/
+      white-space: pre-line;
+      /*엔터 인식 + 줄 넘어가기*/
     }
 
     .post-image {
@@ -43,9 +47,6 @@
       justify-content: center;
     }
 
-    .post-author {
-      margin-right: 20px;
-    }
 
     .post-date {
       margin-right: 20px;
@@ -94,6 +95,33 @@
     .comment_icon_area {
       text-align: end;
       padding-right: 10px;
+    }
+
+    .comment_count{
+      margin_bottom: 10px;
+    }
+
+    .comment_edit {
+      width: 90%;
+      margin: 10px auto;
+    }
+
+    .comment_cancel_icon {
+      width: 20px;
+      margin-right: 10px;
+    }
+
+    .comments-area {
+      border-radius: 10px; 
+      background-color: #ededed;
+      border: double;
+      border-radius:10px; 
+      background-color: #ededed;
+    }
+
+    .comment_profile{
+      border-radius: 40px;
+      height:40px;
     }
 
     .comment_count{
@@ -192,13 +220,13 @@
         <!-- author을 외래키로 연결해서 이부분 수정 -->
         <span class="post-author">
           <!-- 작성자명 클릭시 작성자의 프로필로 이동 -->
-          <a href="{% url 'profile' author_id=post.author_id %}" class="cnickname">  
+          <a href="{% url 'profile' author_id=post.author_id %}" class="detail_post_nickname">  
             {{post.post_author.nickname}}
           </a>
           <br><span class="post-date">
           {{post.created_at|date:'Y-m-d H:i'}}</span>
           
-        <!-- 게시글의 작성자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 -->
+        <!-- 게시글의 작성자 id가 현재 로그인된 사post-date용자의 id(기본키)와 같다면 -->
         {% if post.post_author == request.user %}
           <!-- 게시글의 작성일과 수정일을 보여준다 -->
           <br/>
@@ -238,7 +266,16 @@
         <br>
         <div class="comments-area">
           <ul style="margin-top: 10px;">
-          
+            {# 댓글 프로필이미지 #}
+              {# if문 - 댓글러가 프로필사진이 있다면 해당프로필 표시, 클릭하면 프로필페이지로 이동 #}
+              {% if user.user_img %}
+              <a href="{% url 'profile' author_id=comment.user_id %}"><image src="{{ post.user_img }}" alt="default Image" class="comment_profile"></a>
+              {% else %}
+              {# if문 - 댓글러가 프로필사진이 없다면 기본프로필 표시, 클릭하면 프로필페이지로 이동 #}
+              <a href="{% url 'profile' author_id=comment.user_id %}"><image src="{% static 'admin/img/default_img.png' %}" class="comment_profile"></a>
+              {% endif %}
+              {# if문 종료 #}
+                
             {# 댓글 작성자명 #}
               <a href="{% url 'profile' author_id=comment.user_id %}" class="detail_post_nickname">{{ comment.user.nickname }}</a></ul>
 

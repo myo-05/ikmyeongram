@@ -40,7 +40,7 @@ def new_post_view(request):
             post_title = request.POST['post_title'] # 입력한 글 제목 받아오기
             post_content = request.POST['post_content'] # 입력한 글 내용 받아오기
             post_author = request.user #현재 로그인된 user의 nickname을 받아오기 (외래키 연결됨)
-            post_img = request.FILES.get('post_img') # 이미지 업로드 받아오기
+            post_img = request.FILES.get('post_img','default_img.png') # 이미지 업로드 받아오기
             post_author_id = request.user.id
             
             post = Post.objects.create(post_title=post_title, post_content=post_content, post_img=post_img, post_author= post_author, author_id = post_author_id)
