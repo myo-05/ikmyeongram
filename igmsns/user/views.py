@@ -107,21 +107,33 @@ def sign_in_view(request):
             return render(request, "user/signin.html")
 
 
-# 로그아웃
+# ============================= 로그아웃 ============================= 
 @login_required
 def logout(request):
     auth.logout(request)  # 인증 되어있는 정보를 없애기
     return redirect("home")
 
 
-# 팔로우
+# ============================= 팔로우 ============================= 
 def follow(request, user_id):
     if request.user.is_authenticated: # 로그인 된 경우에만
-        target_user = UserModel.objects.get(id = user_id)
-        if target_user != request.user:
-            if target_user.followings.filter(id = request.user.id).exists():
-                target_user.followings.remove(request.user)
-            else:
-                target_user.followings.add(request.user)
-        return redirect('profile', target_user.id)
-    return redirect('sign-in')
+        target_user = UserModel.objects.get(id = user_id) # 팔로우할 유저의 정보를 가져온다.
+        if target_user != request.user: # 현재 로그인한 유저와 타겟이 다를 경우(내가 아닌 경우)
+            if target_user.followings.filter(id = request.user.id).exists(): # 이미 팔로우중인경우
+                target_user.followings.remove(request.user) # 팔로우 삭제
+            else: # 팔로우중이 아닌 경우
+                target_user.followings.add(request.user) # 팔로우
+        return redirect('profile', target_user.id) # 내 프로필인 경우 팔로우하지않고 프로필로 돌아옴
+    return redirect('sign-in') # 로그인이 되지 않은 경우 로그인 페이지로 넘어옴
+
+
+# ============================= 팔로우, 팔로잉 리스트  ============================= 
+def following_list(request, id):
+    user = UserModel.objects.get(id=id)
+    following_users = user.followers.all()
+    return render(request, 'user/following_list.html', {'following_users': following_users})
+
+def follower_list(request, id):
+    user = UserModel.objects.get(id=id)
+    follower_users = user.followings.all()
+    return render(request, 'user/follower_list.html', {'follower_users': follower_users})
