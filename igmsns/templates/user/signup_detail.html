@@ -12,6 +12,7 @@
       background: #d9d9d9;
       border-radius: 50px;
       padding-bottom: 40px;
+      width: 800px;
     }
 
     .profil-img {
@@ -27,11 +28,11 @@
       left: -20px;
     }
 
-    .title-center {
+    .signup_center {
       padding: 20px 0;
     }
 
-    .form-area {
+    .signup_form {
       margin-top: 0px;
       padding: 0px 0;
       background-color: #fff;
@@ -47,15 +48,12 @@
       padding: 0;
     }
     
-    .form-group {
-      background-color: #ffff;
-      border-radius: 30px;
-      text-align:center;
-    }
-
     .sign-box {
       display: flex;
       padding: 5px 0;
+      background-color: #ffff;
+      border-radius: 30px;
+      text-align:center;
     }
 
     .label-name {
@@ -66,25 +64,25 @@
       width: 70%;
     }
 
-    btn-secondary {
+    .signup_cancel_btn {
       color: #fff;
       background-color: #848484;
       border-color: #848484;
     }
 
-    .btn-secondary:hover {
+    .signup_cancel_btn:hover {
       color: #fff;
       background-color: #A4A4A4;
       border-color: #A4A4A4;
     }
 
-    .btn-primary {
+    .sign_up_btn {
       color: #fff;
       background-color: #585858;
       border-color: #585858;
     }
 
-    .btn-primary:hover {
+    .sign_up_btn:hover {
       color: #fff;
       background-color: #1C1C1C;
       border-color: #1C1C1C;
@@ -115,7 +113,7 @@
 
   <div class="container signup-box">
     <div class="wrap">
-      <h2 class="title-center">
+      <h2 class="title-center signup_center">
         <image class="profil-img" src="{% static 'admin/img/img_signup.png' %}" alt="default Image">
           <span class="profil-title">익명이 등록하기</span>
         </h2>
@@ -124,11 +122,11 @@
         <div>{{ error_message }}</div>
         {% endif %}
         <!-- 회원가입 폼 시작 -->
-        <form class="form-area" method="post" action="{% url 'sign-up' %}" enctype="multipart/form-data">
+        <form class="form-area signup_form" method="post" action="{% url 'sign-up' %}" enctype="multipart/form-data">
           {% csrf_token %}
           <div style="float: right">
-            <button type="submit" class="btn btn-primary">회원가입</button>
-            <a href="{% url 'sign-in' %}" class="btn btn-secondary cancel">취소</a>
+            <button type="submit" class="btn btn-primary sign_up_btn">회원가입</button>
+            <a href="{% url 'sign-in' %}" class="btn btn-secondary signup_cancel_btn">취소</a>
           </div>
           <div class="form-group mt-2 mb-2 sign-box">
             <label for="username" class="label-name">
