@@ -27,7 +27,6 @@ def sign_up_detail(request):
         password2 = request.POST.get("password2", None)  # 비밀번호 확인
         nickname = request.POST.get("nickname", None)  # 닉네임
         email = request.POST.get("email", None)  # 이메일       
-        user_img = request.FILES.get("user_img") # 이미지 업로드 받아오기
         
         
         # 입력란이 모두 작성되어있다면 실행, 공란이 하나라도 있으면 else가 작동하여 에러메세지 출력
@@ -55,8 +54,26 @@ def sign_up_detail(request):
                         password=password, #비밀번호
                         nickname=nickname, #닉네임
                         email=email, #이메일
-                        user_img=user_img, #프로필사진
                     )
+                    # 유저 이미지 불러와서 파일시스템에 저장하기
+                    user_img = request.FILES.get("user_img",None) # 이미지 업로드 받아오기
+                    
+                    if user_img:
+                        # 프로필사진 파일에 랜덤성 부여! → AWS 배포시 이름 겹치는 경우 고려
+                        # user_img.name = 'user' + str(user.id) + '_' + str(
+                        # random.randint(10000, 100000)) + '.' + str(user_img.name.split('.')[-1])
+                        
+                        # 파일을 시스템에 저장 | FileSystemStorage | DB가 아닌 시스템으로 지정한 dir에 저장
+                        storage = FileSystemStorage()
+                        # 
+                        file_saved = storage.save(user_img.name, user_img)
+
+                        # 저장한 파일의 경로를 url로 추출
+                        uploaded_file_url = storage.url(file_saved)
+
+                        # 신규 회원의 id 추출 후 업데이트
+                        check = UserModel.objects.filter(id=user.id)
+                        check.update(user_img=uploaded_file_url)
                 # 회원가입 성공시 로그인 페이지로 이동
                 return redirect("sign-in")
         # 공란이 하나라도 있으면 else가 작동하여 에러메세지 출력
