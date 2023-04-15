@@ -11,7 +11,7 @@
 
 {% for following_user in following_users %}
     <a href="{% url 'profile' author_id=following_user.id %}"> 
-        <div>{{ following_user.username }}</div>
+        <div>{{ following_user.nickname }}</div>
     </a>
     {% empty %}
         <p>팔로잉 중인 사용자가 없습니다.</p>
