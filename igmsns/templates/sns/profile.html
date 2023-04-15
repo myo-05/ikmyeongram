@@ -18,6 +18,7 @@
     display:block;
     height:200px;
     width:200px;
+    border-radius: 100px;
 }
 .post_count{
     display: inline-block;
@@ -29,11 +30,30 @@
 }
 .profile_nickname{
     text-align:center;
+    margin-top: 20px;
+    font-weight: bold;
 }
-.add{
+.profile_container {
     position:relative;
     top: 100px;
     left:0px;
+    width:800px;
+}
+
+.profile_post_img {
+    margin: auto;
+    width: 200px;
+    padding: 15px;
+    border-radius: 50px;
+}
+
+.profile_posts {
+    text-decoration:none;
+    color: inherit;
+}
+
+.profile_post_card {
+    border : none;
 }
 </style>
 <div class="profile">
@@ -55,26 +75,26 @@
 </div>
 <!-- 게시물 갯수 끝 -->
     <!-- 해당 사용자 게시글 리스트 -->
-    <div class="container add" style="width : 50%">
+    <div class="container profile_container">
         {% for post in posts %}
-            <a href ="/api/sns/post/{{post.id}}" style="text-decoration : none; color: inherit;">
-                <div class="card mb-3" >
+            <a href ="/api/sns/post/{{post.id}}" class="profile_posts">
+                <div class="card mb-3 profile_post_card" >
                     <div class="row g-0" style="background:#ededed; border-radius:20px">  <!--우선순위 때문에 인라인 적용-->
                         <!-- 게시글 리스트 이미지 썸네일 섹션 -->
                         <div class="col-md-4" style="width : 200px">
                             <!-- 업로드된 이미지가 있다면 -->
                             {% if post.post_img %}
-                                <img class="img-fluid rounded-start post_img" src="{{ post.post_img.url }}" alt="post image" style="height : 130px ; margin-left:20px">
+                                <img class="img-fluid profile_post_img" src="{{ post.post_img.url }}" alt="post image">
                                 <!-- 업로드된 이미지가 없다면 : 디폴트값 -->
                             {% else %}
-                                <img class="img-fluid rounded-start post_img" src = "{% static 'admin/img/default_img.png' %}" alt = "default Image" style="height : 130px; margin-left:20px">
+                                <img class="img-fluid profile_post_img" src = "{% static 'admin/img/default_img.png' %}" alt = "default Image">
                             {% endif %}
                         </div>
                         <!-- 게시글 리스트 이미지 썸네일 섹션 끝 -->
 
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title" style="font-weight: bold;">[{{ post.post_title }}]</h5>
+                                <h5 class="card-title">{{ post.post_title }}</h5>
                                 <p class="card-text">{{ post.post_content|truncatechars:100 }}</p> 
                                 {% comment %} 본문 100자까지만 나오게 {% endcomment %}
                                 <p class="card-text"><small class="text-body-secondary">by {{ post.post_author }}</small></p>
