@@ -125,9 +125,21 @@ def profile_view(request, author_id):
     #특정 user의 id를 파라미터 id로 받아왔다면
     user = UserModel.objects.get(id=author_id) #user의 정보를 가져옴 -> 프로필사진 등 활용
     all_post = Post.objects.filter(author_id=author_id).order_by('-created_at') #user의 모든 글을 가져와서 생성일 기준으로 내림차순나열
+    
+    
+    liked_posts = user.hearts.all() # 해당 유저가 좋아요를 누른 게시글들의 리스트
+    liked_posts_count = liked_posts.count() # 해당 유저가 좋아요를 누른 게시글들의 갯수
+
     total_post = all_post.count() #user의 작성글 갯수
     if request.method == 'GET':
-        return render(request, 'sns/profile.html', {'total_post':total_post,'author': user , 'posts': all_post})
+        context = {
+            'total_post':total_post,
+            'author': user , 
+            'posts': all_post, 
+            'liked_posts': liked_posts, 
+            'liked_posts_count': liked_posts_count
+        }
+        return render(request, 'sns/profile.html', context)
     
     
 # ============================= 댓글 작성 =============================     
