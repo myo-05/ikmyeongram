@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -55,13 +56,19 @@ def new_post_view(request):
 # ============================= 게시글 상세보기 ============================= 
 
 def detail_post_view(request, id):
-    a_post = Post.objects.get(id=id)
-    comment_count = Comment.objects.filter(post=a_post).count()
-    count_heart = a_post.count_likes()
-    comments = Comment.objects.filter(post=a_post).order_by('-created_at')
+    a_post = Post.objects.get(id=id) # 해당 글의 id값을 받아옵니다.
+    comment_count = Comment.objects.filter(post=a_post).count() # 댓글의 갯수
+    count_heart = a_post.count_likes() # 좋아요 갯수
+    comments = Comment.objects.filter(post=a_post).order_by('-created_at') #댓글 전체 불러오기
+    context = {
+        'post': a_post,
+        'comments':comments,
+        'comment_count': comment_count, 
+        'heart_count':count_heart
+    }
 
     if request.method == 'GET':
-        return render(request, 'sns/detail_post.html', {'post': a_post, 'comments':comments,'comment_count': comment_count, 'heart_count':count_heart})
+        return render(request, 'sns/detail_post.html',context)
 
 '''
 수정 뷰, 삭제 뷰 위치 바꿨습니다. 기능의 흐름에 따라 함수를 배치하는 게 알아보기 쉬울 것 같습니다.
@@ -90,20 +97,22 @@ def update(request,id ):
             '''
             return render(request, 'sns/detail_post.html', {'post': a_post, 'comments':comments})
         else:
-            return HttpResponse("권한이 없습니다.") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
+            return HttpResponse("어림도 없다") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
     else:
         if a_post.post_author == request.user:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 수정 가능
             return render(request, 'sns/update_post.html', {'post': a_post})
             # 글 수정 html 파일 이름 수정 후 이 부분도 수정 완료 (new_update.html --> update_post.html)
         else:
-            return HttpResponse("권한이 없습니다.") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
+            return HttpResponse("어림도 없다") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
         
 
 # ============================= 게시글 삭제 ============================= 
 
 def delete(request, id):
     post = Post.objects.get(id=id)
+    
     if post.post_author == request.user:  # 현재 로그인된 사용자가 게시글 작성자인 경우에만 삭제 가능
+        
         '''
         참고로 모든 로그인 사용자와 게시글 작성자 비교 구문은
         사용자가 해당 동작 url을 입력해 강제 이동해도 적용됩니다.
@@ -111,9 +120,10 @@ def delete(request, id):
         post.delete()
         return redirect('home') # 삭제 성공
     else:
-        return HttpResponse("권한이 없습니다.") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
+        return HttpResponse("꺼져라 닝겐") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
+   
 
-    
+
 # ============================= 프로필 페이지보기  ============================= 
 
 '''
@@ -181,11 +191,9 @@ def comment_create(request,id):
         post = Post.objects.get(id=id) # id값으로 해당 게시글을 찾아온다.
         if request.method == 'POST':
             comment = request.POST.get('comment', '') # 폼에서 댓글을 받아옴
-            if comment == '': # 댓글이 없을 경우
-                return HttpResponse('댓글을 입력해주세요.') # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
-            else:
-                Comment.objects.create(name= request.user.nickname, comment=comment, user=request.user, post=post) # 댓글을 db에 저장
-                return redirect('detail', post.id) 
+            
+            Comment.objects.create(name= request.user.nickname, comment=comment, user=request.user, post=post) # 댓글을 db에 저장
+            return redirect('detail', post.id) 
     return redirect('sign-in')       
 
 
@@ -212,7 +220,7 @@ def comment_edit(request, id, comment_id):
         }
         return render(request, 'sns/detail_post.html', context)
     else:
-        return HttpResponse("권한이 없습니다.")
+        return HttpResponse("여기까지 들어오다니... 건방지군")
 
 # ============================= 댓글 삭제  ============================= 
 def comment_delete(request, comment_id, id):
@@ -223,7 +231,7 @@ def comment_delete(request, comment_id, id):
         comment.delete()
         return redirect('detail', id=a_post.id) # 삭제 성공 후 상세 페이지로 이동
     else:
-        return HttpResponse("권한이 없습니다.")
+        return HttpResponse("꺼져라 닝겐")
     
     
 # ============================= 게시글 좋아요 =============================     
