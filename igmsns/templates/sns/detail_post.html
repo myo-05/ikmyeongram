@@ -68,7 +68,11 @@
       color: #fff;
       background-color: #424242;
       border-color: #424242;
-      
+    }
+
+    .nickname{
+      text-decoration:none; 
+      color:#585858;
     }
 
   </style>
@@ -76,13 +80,13 @@
   <!-- 삭제 버튼 클릭시 확인 문구 출력 -> 원하시면 다른 버튼들에도 활용할 수 있습니다. -->
   <script>
     function confirmDeletePost(id) {
-      if (confirm("정말 삭제하시겠습니까?")) {
+      if (confirm("진짜 지울꺼에오!?")) {
         window.location.href = "/api/sns/post/" + id + "/delete/";
       }
     }
 
     function confirmDeleteComment(id,comment_id) {
-      if (confirm("댓글을 삭제하시겠습니까?")) {
+      if (confirm("진짜 지울꺼에오!?")) {
         window.location.href = "/api/sns/post/" + id + "/comment/" + comment_id + "/delete/";
       }
     }
@@ -136,20 +140,20 @@
         <span class="post-author">작성자 : 
           <!-- 작성자명 클릭시 작성자의 프로필로 이동 -->
           <strong>
-            <a href="{% url 'profile' author_id=post.author_id %}" style="text-decoration:none; color:#585858;">  
+            <a href="{% url 'profile' author_id=post.author_id %}" class="nickname">  
               {{post.post_author.nickname}}
             </a>
           </strong>
-          <br><span class="post-date">작성시간 :
-          {{post.created_at}}</span>
+          <br><span class="post-date">작성일 :
+          {{post.created_at|date:'Y년m월d일 aH:i'}}</span>
           
         <!-- 게시글의 작성자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 -->
         {% if post.post_author == request.user %}
           <!-- 수정/삭제 버튼을 보여준다 -->
           <a href="#" onclick="confirmDeletePost({{ post.id }})" style="text-decoration:none; color:#585858;" >[삭제]</a><br/>
               {% if post.updated_at %}
-              <span class="post-date">수정시간 :
-                {{post.updated_at}}</span>
+              <span class="post-date">수정일 :
+                {{post.updated_at|date:'Y년m월d일 aH:i'}}</span>
               {% endif %}
           <a href="/api/sns/post/{{post.id}}/update/" style="text-decoration:none; color:#585858;">[수정]</a>
         {% endif %}
@@ -169,7 +173,7 @@
         <form action="{%url 'comment' id=post.id%}" method='post'>
           {%csrf_token%}
           <label for="comment">댓글</label>
-          <textarea class="form-control" id="comment" name="comment"></textarea>
+          <textarea class="form-control" style="width:full;" id="comment" name="comment"></textarea>
           <button type="submit" class="btn btn-primary">게시</button>
         </form>
       </div>
@@ -182,24 +186,26 @@
       <div>
         <span>댓글 : {{ comment_count }}개</span>
         {% for comment in comments %}
-          <br>
-          <div style="border-radius: 10px; background-color: #ededed; border: double; border-radius:10px; background-color: #ededed;">
-            <ul style="margin-top: 10px;">작성자:
-              {{ comment.user.nickname }}</ul>
+        <br>
+        <div style="border-radius: 10px; background-color: #ededed; border: double; border-radius:10px; background-color: #ededed;">
+          <ul style="margin-top: 10px;">
+          
+            {# 댓글 작성자명 #}
+              <a href="{% url 'profile' author_id=comment.user_id %}" class="nickname">{{ comment.user.nickname }}</a></ul>
 
             {% if edit_comment == comment.id %}
               <!-- 댓글 수정 폼 -->
               <form action="{% url 'comment_edit' id=post.id comment_id=comment.id %}" method="post" >
                 {% csrf_token %}
                 <label for="comment" style="margin-left:20px;">댓글</label>
-                <textarea class="form-control" id="comment" name="comment" style="margin-left:20px;">{{ comment.comment }}</textarea>
+                <textarea class="form-control" style="width:full; " id="comment" name="comment" >{{ comment.comment }}</textarea>
                 <button type="submit" class="btn btn-primary" style="margin-top:50px;">수정</button>
               </form>
               <!-- 댓글 수정 폼 끝 -->
             {% else %}
-              <ul>내용: {{ comment.comment }}</ul>
+              <ul>{{ comment.comment }}</ul>
             {% endif %}
-              <ul>작성시각: {{ comment.created_at }}</ul>
+              <ul>{{ comment.created_at|date:'Y-m-d H:i' }}</ul>
             {% if comment.user == request.user %}
               <hr>
               <ul>

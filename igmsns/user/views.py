@@ -91,14 +91,15 @@ def sign_in_view(request):
         username = request.POST.get("username", None)  # ID 받아옴
         password = request.POST.get("password", None)  # 비밀번호 받아옴
 
-        me = auth.authenticate(
-            request, username=username, password=password
-        )  # 유저 인증(회원가입 된 유저인지)
-        if me is not None:  # 계정이 있다면
-            auth.login(request, me)
+        user_check = auth.authenticate(request, username=username, password=password)  # 유저 인증(회원가입 된 유저인지)
+        if user_check:  # 인증이 됐다면
+            auth.login(request, user_check)
             return redirect("home")
-        else:  # 계정이 없다면
-            return render(request, "user/signin.html", {"error_message" : "아이디 또는 비밀번호를 확인해주세요."})
+        else:  # 인증이 안됐다면
+            if UserModel.objects.filter(username=username).exists(): #아이디가 존재한다면
+                return render(request, "user/signin.html", {"error_message" : "[비밀번호 오류!] 아...그거 그렇게 하는거 아닌뒈..!"})
+            else:
+                return render(request, "user/signin.html", {"error_message" : "[아이디 오류!] 뭐에오 가입하고 와요! 훠이훠이~!"})
 
     elif request.method == "GET":  # GET 요청, 즉 로그인페이지 버튼을 눌렀을 때
         user = request.user.is_authenticated

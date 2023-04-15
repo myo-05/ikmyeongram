@@ -16,19 +16,26 @@
     text-align: end;
 }
 
+.post_img{
+    height:200px;
+    weight: auto;
+    padding: 15px;
+    border-radius: 50px;
+}
+
 </style>
 
 <div class="container">
 
 {% for post in posts %}
-<a href ="/api/sns/post/{{post.id}}" style="text-decoration : none; color: inherit; margin: 20px;">
+<a href ="{%url 'detail' id=post.id%}" style="text-decoration : none; color: inherit; margin: 20px;">
     <div class="card mb-3">
         <div class="row g-0" style="background:#ededed; border-radius:20px">
             <div class="col-md-4" style="width : 200px; ">
                 {% if post.post_img %} {# 게시글 사진이 있을 경우 #}
-                    <img class="img-fluid rounded-start" src="{{ post.post_img.url }}" alt="post image" style="width:200px;">
+                    <img class="img-fluid rounded-start post_img" src="{{ post.post_img.url }}" alt="post image">
                 {% else %} {# 게시글 사진이 없을 경우 #}
-                    <img class="img-fluid rounded-start" src = "{% static 'admin/img/default_img.png' %}" alt = "default Image" style="style="width:200px;">
+                    <img class="img-fluid rounded-start post_img" src = "{% static 'admin/img/default_img.png' %}" alt = "default Image">
                 {% endif %}
             </div>
             <div class="col-md-8">
@@ -37,7 +44,7 @@
                     <p class="card-text">{{ post.post_content|truncatechars:100 }}</p> {# 게시글 내용 #}
                     {% comment %} 본문 100자까지만 나오게 {% endcomment %}
                     <p class="card-text"><small class="text-body-secondary">by {{ post.post_author.nickname }}</small></p> {# 작성자 닉네임 #}
-                    <p class="card-text"><small class="text-body-secondary">{{ post.created_at }}</small></p> {# 게시글 작성시간 #}
+                    <p class="card-text"><small class="text-body-secondary">{{ post.created_at|date:'Y-m-d aH:i' }}</small></p> {# 게시글 작성시간 #}
                 </div>
             </div>
         </div>

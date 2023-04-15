@@ -59,8 +59,7 @@ def detail_post_view(request, id):
     comment_count = Comment.objects.filter(post=a_post).count()
     count_heart = a_post.count_likes()
     comments = Comment.objects.filter(post=a_post).order_by('-created_at')
-    
-    
+
     if request.method == 'GET':
         return render(request, 'sns/detail_post.html', {'post': a_post, 'comments':comments,'comment_count': comment_count, 'heart_count':count_heart})
 
