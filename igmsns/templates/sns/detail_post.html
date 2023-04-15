@@ -43,12 +43,8 @@
       justify-content: center;
     }
 
-    .post-author {
-      margin-right: 20px;
-    }
 
     .post-date {
-      margin-right: 20px;
       font-size: 15px;
     }
 
@@ -192,13 +188,13 @@
         <!-- author을 외래키로 연결해서 이부분 수정 -->
         <span class="post-author">
           <!-- 작성자명 클릭시 작성자의 프로필로 이동 -->
-          <a href="{% url 'profile' author_id=post.author_id %}" class="cnickname">  
+          <a href="{% url 'profile' author_id=post.author_id %}" class="detail_post_nickname">  
             {{post.post_author.nickname}}
           </a>
           <br><span class="post-date">
           {{post.created_at|date:'Y-m-d H:i'}}</span>
           
-        <!-- 게시글의 작성자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 -->
+        <!-- 게시글의 작성자 id가 현재 로그인된 사post-date용자의 id(기본키)와 같다면 -->
         {% if post.post_author == request.user %}
           <!-- 게시글의 작성일과 수정일을 보여준다 -->
           <br/>
