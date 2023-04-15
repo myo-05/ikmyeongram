@@ -31,7 +31,7 @@ def new(request): # 새 글 작성 페이지로 렌더링
     
 #  ============================= 글 작성 ============================= 
 
-def new_post_view(request):
+def new_post_view(request): # 새 글 작성 저장
     '''
     제목, 내용, 이미지, 작성 시간, 작성자를 게시글 db 에 저장합니다.
     '''
@@ -140,6 +140,9 @@ def profile_view(request, author_id):
     liked_posts = user.hearts.all() # 해당 유저가 좋아요를 누른 게시글들의 리스트
     liked_posts_count = liked_posts.count() # 해당 유저가 좋아요를 누른 게시글들의 갯수
 
+    following_count = user.followings.count()
+    follower_count = user.followers.count()
+
     total_post = all_post.count() #user의 작성글 갯수
     if request.method == 'GET':
         context = {
@@ -147,7 +150,9 @@ def profile_view(request, author_id):
             'author': user , 
             'posts': all_post, 
             'liked_posts': liked_posts, 
-            'liked_posts_count': liked_posts_count
+            'liked_posts_count': liked_posts_count,
+            'following_count': following_count,
+            'follower_count': follower_count,
         }
         return render(request, 'sns/profile.html', context)
     

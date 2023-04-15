@@ -19,7 +19,10 @@
     height:200px;
     width:200px;
 }
-.post_count{
+.post_count,
+.like_count,
+.following_count,
+.follower_count{
     display: inline-block;
     position:relative;
     top: -10px;
@@ -27,14 +30,7 @@
     text-align: center;
     font-size: 2rem;
 }
-.like_count{
-    display: inline-block;
-    position:relative;
-    top: -10px;
-    left:300px;
-    text-align: center;
-    font-size: 2rem;
-}
+
 .userid{
     text-align:center;
 }
@@ -85,10 +81,28 @@
     </a>
 </div>
 
+<div class = "following_count" style="text-align: center;">
+    <text>{{ follower_count }}</text></br>
+    <text> 팔로잉 </text>
+</div>
+
+<div class = "follower_count" style="text-align: center;">
+    <text>{{ following_count }}</text></br>
+    <text> 팔로워 </text>
+</div>
+
+<div>
+{% if user != target_user %}
+    {% if is_followed %}
+        <button class="unfollow-btn" onclick="location.href='{% url 'follow' author.id %}'">언팔로우</button>
+    {% else %}
+        <button class="follow-btn" onclick="location.href='{% url 'follow' author.id %}'">팔로우</button>
+    {% endif %}
+{% endif %}
+</div>
+
     <!-- 해당 사용자 게시글 리스트 -->
     <div class="container add" style="width : 50%">
-
-
 
 
         {% for post in posts %}

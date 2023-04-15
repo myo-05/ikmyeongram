@@ -1,10 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import UserModel
-from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 
 
@@ -16,7 +14,7 @@ from django.core.files.storage import FileSystemStorage
 채연 : 위치바꿨습니다.
 """
 
-
+# 회원가입
 def sign_up_detail(request):
     if request.method == "GET":  # 회원가입 페이지를 눌렀을 때
         return render(request, "user/signup_detail.html")
@@ -114,3 +112,16 @@ def sign_in_view(request):
 def logout(request):
     auth.logout(request)  # 인증 되어있는 정보를 없애기
     return redirect("home")
+
+
+# 팔로우
+def follow(request, user_id):
+    if request.user.is_authenticated: # 로그인 된 경우에만
+        target_user = UserModel.objects.get(id = user_id)
+        if target_user != request.user:
+            if target_user.followings.filter(id = request.user.id).exists():
+                target_user.followings.remove(request.user)
+            else:
+                target_user.followings.add(request.user)
+        return redirect('profile', target_user.id)
+    return redirect('sign-in')
