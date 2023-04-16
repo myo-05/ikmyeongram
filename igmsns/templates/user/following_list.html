@@ -7,14 +7,80 @@
 
 {% block content %}
 
-<h1>팔로잉 리스트</h1>
+<style>
 
-{% for following_user in following_users %}
-    <a href="{% url 'profile' author_id=following_user.id %}"> 
-        <div>{{ following_user.nickname }}</div>
-    </a>
-    {% empty %}
-        <p>팔로잉 중인 사용자가 없습니다.</p>
-{% endfor %}
+    {% comment %} .profile{
+        display: inline-block;
+        height:200px;
+        width:200px;
+        position:relative;
+        top: 50px;
+        left:100px;
+    }
+    .profile-img{
+        display:block;
+        height:200px;
+        width:200px;
+        border-radius: 100px;
+    }
+  
+    .profile_nickname{
+        text-align:center;
+        margin-top: 20px;
+        font-weight: bold;
+    } {% endcomment %}
+</style>
 
-{% endblock %}
+{% comment %} 
+<div class="profile">
+    {% if author.user_img %}
+    <!-- if문 - 프로필사진을 등록했다면 프로필사진 보여주기 -->
+    <image class="profile-img" src="{{ author.user_img }}" alt="default Image">
+    {% else %}
+    <!-- if문 - 프로필사진등록 안했다면 기본프로필 보여주기 -->
+    <image class="profile-img" src="{% static 'admin/img/default_img_profile.png' %}">
+    {% endif %}
+    <!-- if문 종료 -->
+    <!-- 프로필 사진 섹션 끝 -->
+
+        <!-- 닉네임 -->
+    <div class="profile_nickname"> {{user.nickname}} </div>
+    <!-- 내 페이지라면 아이디를 보여준다. -->
+    {% if user.id == request.user.id %}
+        <div class="profile_nickname"> @{{user.username}} </div>
+  
+    {% endif %}
+
+</div>
+ {% endcomment %}
+
+ <div class = "following_list_section">
+
+    {% for following_user in following_users %}
+        <a href="{% url 'profile' author_id=following_user.id %}"> 
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="col">
+                    <div class="card">
+                        {% if following_user.user_img %}
+                        {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
+                        <img src="{{ follower_user.user_img.url }}">
+                        {% else %}
+                        {% comment %} if문 - 프로필사진등록 안했다면 기본프로필 보여주기{% endcomment %}
+                        <image class="profile-img" src="{% static 'admin/img/default_img_profile.png' %}">
+                        {% endif %}
+                        <div class="card-body">
+                        <h5 class="card-title">{{ following_user.username }}</h5>
+                        <p class="card-text"></p>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+
+        {% empty %}
+            <p>팔로잉 중인 사용자가 없습니다.</p>
+    {% endfor %}
+
+    {% endblock %}
+
+</div>
