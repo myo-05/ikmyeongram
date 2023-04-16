@@ -12,7 +12,7 @@
     .container-signin {
       width: 60vw;
       margin: auto;
-      max-width: 600px
+      max-width: 500px
     }
     input.form-control {
       border: none;
@@ -26,6 +26,7 @@
     .signin_form {
       background-color: #ffff;
       border-radius: 30px;
+      margin : 10px
     }
   
     .go_signup_btn {
@@ -49,7 +50,7 @@
       background: none;
       border-color: #585858;
       width: 100%;
-      margin-top: 10px;
+      margin-top: 40px;
       border-radius: 100px;
       border: double;
     }
@@ -77,6 +78,7 @@
     .signin_img {
       width:100px;
       right-margin: 10px;
+      margin-bottom : 20px;
     } 
   </style>
   <div class="container-signin">
@@ -105,7 +107,6 @@
           <input type="password" class="form-control" id="password" name="password">
         </div>
 
-        <hr>
         <div class="my-btn">
           <button type="submit" class="btn btn-primary login_btn">로그인</button>
           <a href="{% url 'sign-up' %}" class="btn btn-secondary go_signup_btn">회원가입 페이지로</a>

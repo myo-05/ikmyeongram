@@ -10,83 +10,46 @@
 
 <style>
 
-    .profile{
-        display: inline-block;
-        height:200px;
-        width:200px;
-        position:relative;
-        top: 50px;
-        left:100px;
-    }
-    .profile-img{
-        display:block;
-        height:200px;
-        width:200px;
-        border-radius: 100px;
-    }
-  
-    .profile_nickname{
-        text-align:center;
-        margin-top: 20px;
-        font-weight: bold;
-    }
+    .follower_list_section{
+       width : 70vw;
+       margin : 50px auto;
+
+
+   }
+
 </style>
 
-{% comment %} 
-<div class="profile">
-    {% if author.user_img %}
-    <!-- if문 - 프로필사진을 등록했다면 프로필사진 보여주기 -->
-    <image class="profile-img" src="{{ author.user_img }}" alt="default Image">
-    {% else %}
-    <!-- if문 - 프로필사진등록 안했다면 기본프로필 보여주기 -->
-    <image class="profile-img" src="{% static 'admin/img/default_img_profile.png' %}">
-    {% endif %}
-    <!-- if문 종료 -->
-    <!-- 프로필 사진 섹션 끝 -->
-
-        <!-- 닉네임 -->
-    <div class="profile_nickname"> {{user.nickname}} </div>
-    <!-- 내 페이지라면 아이디를 보여준다. -->
-    {% if user.id == request.user.id %}
-        <div class="profile_nickname"> @{{user.username}} </div>
-  
-    {% endif %}
-
-</div>
- {% endcomment %}
 
 <div class = "follower_list_section">
+       
+   <div class="row row-cols-1 row-cols-md-3 g-4">
 
-    {% for follower_user in follower_users %}
-        <a href="{% url 'profile' author_id=follower_user.id %}"> 
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                <div class="col">
-                    <div class="card">
+       {% for follower_user in follower_users %}
+
+           <a href="{% url 'profile' author_id=follower_user.id %}"> 
+
+               <div class="col">
+                   <div class="card">
+
                         {% if follower_user.user_img %}
                         {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
-                        <img src="{{ follower_user.user_img.url }}">
+                            <image class="profile-img" src="{{follower_user.user_img}}">
                         {% else %}
                         {% comment %} if문 - 프로필사진등록 안했다면 기본프로필 보여주기{% endcomment %}
-                        <image class="profile-img" src="{% static 'admin/img/default_img_profile.png' %}">
+                            <image class="profile-img" src="{% static 'admin/img/default_img_profile.png' %}">
                         {% endif %}
+
                         <div class="card-body">
-                        <h5 class="card-title">{{ follower_user.username }}</h5>
-                        <p class="card-text"></p>
-                    </div>
-                </div>
-            </div>
-        </a>
+                           <h5 class="card-title">{{ follower_user.username }}</h5>
+                           <p class="card-text"></p>
+                        </div>
+                   </div>
+               </div>
+                       
+               {% empty %}
+                   <p>팔로잉 중인 사용자가 없습니다.</p>
+           </a>
 
-
-        {% empty %}
-            <p>팔로워가 없습니다.</p>
-    {% endfor %}
-
-    {% endblock %}
-
-
-</div>
-
-
-
-
+       {% endfor %}
+   </div>
+   {% endblock %}
