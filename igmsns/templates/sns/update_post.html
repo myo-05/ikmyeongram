@@ -23,13 +23,13 @@
         color: #6E6E6E;
         border: double;
         border-radius: 20px;
-         width: 800px;
+        width: 800px;
     }
 
     {% comment %} new/update.html 이미지 클래스명 통일했어요 {% endcomment %}
     .new_update_img {
-        width: 150px;
-        margin: 50px 20px;
+        width: 200px;
+        margin-top: 50px;
     }
 
     .form-group {
@@ -95,7 +95,7 @@
 
 <div class="container container-update">
     <div>
-        <img src="/static/admin/img/update_image.png" class="new_update_img">
+        <img src="/static/admin/img/update_image.gif" class="new_update_img">
     </div>
     <form class="post-form" action="{% url 'update' post.id %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}

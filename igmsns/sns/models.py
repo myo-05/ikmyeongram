@@ -7,7 +7,7 @@ from user.models import UserModel
 class Post(models.Model):
     class Meta:
         db_table = "my_posting" # 여기는 테이블 이름이에요! 꼭 기억 해 주세요!
-    
+        ordering = ['-created_at'] # 게시글 최신순 정렬
     post_author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts') # 글 작성자 : 유저 모델의 사용자를 상속받습니다.
     post_title = models.CharField("글제목", max_length=45)
     post_content = models.TextField("글내용")
