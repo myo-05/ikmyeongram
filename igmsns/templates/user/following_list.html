@@ -35,7 +35,8 @@
             
 
                 <div class="col">
-                    <div class="card h-100">
+                    <div class="card h-100" style="border-radius : 15px">
+                        <div style = "display:block; height:15px; "></div>
                         <a class="image-link" href="{% url 'profile' author_id=following_user.id %}"> 
                             {% if following_user.user_img %}
                             {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
@@ -45,6 +46,7 @@
                             <image class="list_profile-img" src="{% static 'admin/img/default_img_profile.png' %}">
                             {% endif %}
                         </a>
+                    
                         <div class="card-body">
                             <h5 class="card-title">{{ following_user.username }}</h5>
                             <p class="card-text"></p>

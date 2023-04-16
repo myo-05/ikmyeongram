@@ -49,8 +49,8 @@
 
 {% for post in posts %}
 <a href ="{%url 'detail' id=post.id%}" class="home_post_text">
-    <div class="card mb-3 home_post_card">
-        <div class="row g-0" style="background:#ededed; border-radius:20px">  <!--우선순위 때문에 인라인 적용-->
+    <div class="card mb-3 home_post_card" style="background:#ededed; border-radius:20px">
+        <div class="row g-0" >  <!--우선순위 때문에 인라인 적용-->
             <div class="col-md-4 home_img_area">
                 {% if post.post_img %} {# 게시글 사진이 있을 경우 #}
                     <img class="img-fluid post_img" src="{{ post.post_img.url }}" alt="post image">

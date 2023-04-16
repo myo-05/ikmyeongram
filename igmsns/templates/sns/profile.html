@@ -145,9 +145,9 @@
     <div class="container profile_container" style="width : 50%">
         {% for post in posts %}
             <a href ="/api/sns/post/{{post.id}}" class = "profile_posts">
-                <div class="card mb-3 profile_post_card" >
+                <div class="card mb-3 profile_post_card" style="background:#ededed; border-radius:20px">
                     <!--우선순위 때문에 인라인 적용-->
-                    <div class="row g-0" style="background:#ededed; border-radius:20px"> 
+                    <div class="row g-0" > 
                         <!-- 게시글 리스트 이미지 썸네일 섹션 -->
                         <div class="col-md-4" style="width : 200px">
                             <!-- 업로드된 이미지가 있다면 -->
