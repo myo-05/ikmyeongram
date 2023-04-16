@@ -7,6 +7,15 @@
 {% block content %}
 
 <style>
+.profile_body{
+    margin : 30px auto;
+
+    border : 3px dashed #b5b4b4;
+    border-radius: 20px;
+    width : 80vw;
+    max-width: 1000px;
+}
+
 .profile_section{
     padding : 5vmin;
     display:flex;
@@ -41,8 +50,8 @@
     font-weight: bold;
 }
 .profile_container {
+    padding : 50px 0px;
     position:relative;
-    top: 100px;
     left:0px;
     max-width : 800px;
     width : 70vw
@@ -71,113 +80,115 @@
 }
 </style>
 
-<div class = "profile_section">
-   
-<div class="profile">
-    {% if author.user_img %}
-    {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
-        <image class="profile-img" src="{{ author.user_img }}" alt="default Image">
-    {% else %}
-    {% comment %} if문 - 프로필사진등록 안했다면 기본프로필 보여주기{% endcomment %}
-        <image class="profile-img" src="{% static 'admin/img/default_img_profile.png' %}">
-    {% endif %}
-    {% comment %} if문 종료 {% endcomment %}
-    <!-- 프로필 사진 섹션 끝 -->
-
-        <!-- 닉네임 -->
-    <div class="profile_nickname"> {{author.nickname}} 
-    <!-- 내 페이지라면 아이디를 보여준다. -->
-    {% if author.id == request.user.id %}
-        <p> @{{author.username}} </p>
-    <!-- 니 페이지라면 팔로우 버튼을 보여준다. -->
-    {% else %}
-        <!-- 팔로우하기 버튼 시작!-->
-        <div>
-            <!-- 상대 팔로우 여부에 따라 다른 버튼 보이기 -->
-            {% if request.user in author.followings.all %}
-                <a href = "{% url 'follow' author.id %}"><img src="/static/admin/img/unfollow1.png" class="unfollow_icon"></a>
+<div class = "profile_body">
+    <div class = "profile_section">
+    
+        <div class="profile">
+            {% if author.user_img %}
+            {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
+                <image class="profile-img" src="{{ author.user_img }}" alt="default Image">
             {% else %}
-                <a href = "{% url 'follow' author.id %}"><img src="/static/admin/img/follow1.png" class="follow_icon"></a>
-            {% endif %}        
+            {% comment %} if문 - 프로필사진등록 안했다면 기본프로필 보여주기{% endcomment %}
+                <image class="profile-img" src="{% static 'admin/img/default_img_profile.png' %}">
+            {% endif %}
+            {% comment %} if문 종료 {% endcomment %}
+            <!-- 프로필 사진 섹션 끝 -->
+
+                <!-- 닉네임 -->
+            <div class="profile_nickname"> {{author.nickname}} 
+            <!-- 내 페이지라면 아이디를 보여준다. -->
+            {% if author.id == request.user.id %}
+                <p> @{{author.username}} </p>
+            <!-- 니 페이지라면 팔로우 버튼을 보여준다. -->
+            {% else %}
+                <!-- 팔로우하기 버튼 시작!-->
+                <div>
+                    <!-- 상대 팔로우 여부에 따라 다른 버튼 보이기 -->
+                    {% if request.user in author.followings.all %}
+                        <a href = "{% url 'follow' author.id %}"><img src="/static/admin/img/unfollow1.png" class="unfollow_icon"></a>
+                    {% else %}
+                        <a href = "{% url 'follow' author.id %}"><img src="/static/admin/img/follow1.png" class="follow_icon"></a>
+                    {% endif %}        
+                </div>
+                <!-- 팔로우하기 버튼 끝 -->
+
+            {% endif %}
+            </div>
         </div>
-        <!-- 팔로우하기 버튼 끝 -->
 
-    {% endif %}
+
+        <!-- 게시물 갯수 -->
+        <div class="post_count" style="text-align: center;">
+            <a href="{% url 'profilepost' author_id=author.id type='all' %}">
+            <text>{{total_post}}</text></br>
+            <text>게시물</text>
+            </a>
+        </div>
+
+        <!--  좋아요 갯수 시작-->
+        <!-- 프로필의 사용자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 = 내 프로필 페이지라면 (좋아요하는 글 목록을 내 프로필일때만 보이게)-->
+        {% if author.id == request.user.id %}
+        <div class="like_count" style="text-align: center;">
+            <a href="{% url 'profilepost' author_id=author.id type='liked' %}">
+            <text>{{liked_posts_count}}</text></br>
+            <text> 좋아요</text>
+            </a>
+        </div>
+        {% endif %}
+        <!-- 좋아요 갯수 끝 -->
+
+        <!-- 팔로잉, 팔로워 수 보기 -->
+        <div class = "following_count" style="text-align: center;">
+            <a href="{% url 'following-list' id=author.id %}">
+                <text>{{ following_count }}</text></br>
+                <text> 팔로잉 </text>
+            </a>
+        </div>
+
+        <div class = "follower_count" style="text-align: center;">
+            <a href="{% url 'follower-list' id=author.id %}">
+                <text>{{ follower_count }}</text></br>
+                <text> 팔로워 </text>
+            </a>
+        </div>
+        <!-- 팔로잉, 팔로워 수 보기 끝 -->
     </div>
-</div>
 
 
-<!-- 게시물 갯수 -->
-<div class="post_count" style="text-align: center;">
-    <a href="{% url 'profilepost' author_id=author.id type='all' %}">
-    <text>{{total_post}}</text></br>
-    <text>게시물</text>
-    </a>
-</div>
+        <!-- 해당 사용자 게시글 리스트 -->
+        <div class="container profile_container">
+            {% for post in posts %}
+                <a href ="/api/sns/post/{{post.id}}" class = "profile_posts">
+                    <div class="card mb-3 profile_post_card" style="background:#ededed; border-radius:20px">
+                        <!--우선순위 때문에 인라인 적용-->
+                        <div class="row g-0" > 
+                            <!-- 게시글 리스트 이미지 썸네일 섹션 -->
+                            <div class="col-md-4" style="width : 200px">
+                                <!-- 업로드된 이미지가 있다면 -->
+                                {% if post.post_img %}
+                                    <img class="img-fluid profile_post_img" src="{{ post.post_img.url }}" alt="post image">
+                                    <!-- 업로드된 이미지가 없다면 : 디폴트값 -->
+                                {% else %}
+                                    <img class="img-fluid profile_post_img" src = "{% static 'admin/img/default_img.png' %}" alt = "default Image">
+                                {% endif %}
+                            </div>
+                            <!-- 게시글 리스트 이미지 썸네일 섹션 끝 -->
 
-<!--  좋아요 갯수 시작-->
-<!-- 프로필의 사용자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 = 내 프로필 페이지라면 (좋아요하는 글 목록을 내 프로필일때만 보이게)-->
-{% if author.id == request.user.id %}
-<div class="like_count" style="text-align: center;">
-    <a href="{% url 'profilepost' author_id=author.id type='liked' %}">
-    <text>{{liked_posts_count}}</text></br>
-    <text> 좋아요</text>
-    </a>
-</div>
-{% endif %}
-<!-- 좋아요 갯수 끝 -->
-
-<!-- 팔로잉, 팔로워 수 보기 -->
-<div class = "following_count" style="text-align: center;">
-    <a href="{% url 'following-list' id=author.id %}">
-        <text>{{ following_count }}</text></br>
-        <text> 팔로잉 </text>
-    </a>
-</div>
-
-<div class = "follower_count" style="text-align: center;">
-    <a href="{% url 'follower-list' id=author.id %}">
-        <text>{{ follower_count }}</text></br>
-        <text> 팔로워 </text>
-    </a>
-</div>
-<!-- 팔로잉, 팔로워 수 보기 끝 -->
-</div>
-
-
-    <!-- 해당 사용자 게시글 리스트 -->
-    <div class="container profile_container">
-        {% for post in posts %}
-            <a href ="/api/sns/post/{{post.id}}" class = "profile_posts">
-                <div class="card mb-3 profile_post_card" style="background:#ededed; border-radius:20px">
-                    <!--우선순위 때문에 인라인 적용-->
-                    <div class="row g-0" > 
-                        <!-- 게시글 리스트 이미지 썸네일 섹션 -->
-                        <div class="col-md-4" style="width : 200px">
-                            <!-- 업로드된 이미지가 있다면 -->
-                            {% if post.post_img %}
-                                <img class="img-fluid profile_post_img" src="{{ post.post_img.url }}" alt="post image">
-                                <!-- 업로드된 이미지가 없다면 : 디폴트값 -->
-                            {% else %}
-                                <img class="img-fluid profile_post_img" src = "{% static 'admin/img/default_img.png' %}" alt = "default Image">
-                            {% endif %}
-                        </div>
-                        <!-- 게시글 리스트 이미지 썸네일 섹션 끝 -->
-
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ post.post_title }}</h5>
-                                <p class="card-text">{{ post.post_content|truncatechars:100 }}</p> 
-                                {% comment %} 본문 100자까지만 나오게 {% endcomment %}
-                                <p class="card-text"><small class="text-body-secondary">by {{ post.post_author }}</small></p>
-                                <p class="card-text"><small class="text-body-secondary">{{ post.created_at }}</small></p>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ post.post_title }}</h5>
+                                    <p class="card-text">{{ post.post_content|truncatechars:100 }}</p> 
+                                    {% comment %} 본문 100자까지만 나오게 {% endcomment %}
+                                    <p class="card-text"><small class="text-body-secondary">by {{ post.post_author }}</small></p>
+                                    <p class="card-text"><small class="text-body-secondary">{{ post.created_at }}</small></p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </a>
-        {% endfor %}
-    
-    </div>
-    <!-- 해당 사용자 게시글 리스트 끝 -->
+                </a>
+            {% endfor %}
+        
+        </div>
+        <!-- 해당 사용자 게시글 리스트 끝 -->
+</div>
     {% endblock %}
