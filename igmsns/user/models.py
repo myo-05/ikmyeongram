@@ -33,14 +33,3 @@ class UserModel(AbstractUser):  # UserModel에서 AbstractUser(장고기본유�
             if user_img.size > 500 * 1024:
                 raise forms.ValidationError("프로필 이미지의 파일 크기가 500KB를 초과합니다.")
         return user_img
-    
-    
-    # def validate_file_size(value):
-    #     limit = 500 * 1024  # 500KB
-    #     if value.size > limit:
-    #         raise ValidationError(f'이미지의 크기는 최대 {limit // 1024}KB입니다.')
-        
-    #     def clean(self):
-    #         super().clean()
-    #         if self.my_file:
-    #             validate_file_size(self.my_file, 500 * 1024)
