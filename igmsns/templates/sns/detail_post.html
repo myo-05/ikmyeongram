@@ -279,6 +279,8 @@
         <br>
         <div class="comments-area">
           <ul style="margin-top: 10px;">
+                            
+            {# 댓글 작성자명 #}
               <a href="{% url 'profile' author_id=comment.user_id %}" class="detail_post_nickname">{{ comment.user.nickname }}</a></ul>
 
             {% if edit_comment == comment.id %}
