@@ -82,6 +82,10 @@
       .banner_img{
         width: 50px
       }
+      .banner_img:hover{
+        cursor: help;
+      }
+
 
       .profile-img-nav{
         height:50px;
@@ -98,7 +102,7 @@
 
     <script>
       function confirmSignin() {
-        if (confirm("정말... 가실건가요...? (익무룩..) ")) {
+        if (confirm("... 가실건가요...? (익무룩..) ")) {
           window.location.href = "{% url 'sign-out' %}";
         }
       }
@@ -129,11 +133,12 @@
                     
                     {####### 배너이미지 #######}
                     <div class="title_">
-                      <image src="{% static 'admin/img/영오.png' %}" class="banner_img">익
-                      <image src="{% static 'admin/img/채연.png' %}" class="banner_img">명
-                      <image src="{% static 'admin/img/정은.png' %}" class="banner_img">이
-                      <image src="{% static 'admin/img/정현.png' %}" class="banner_img">그
-                      <image src="{% static 'admin/img/찬주.png' %}" class="banner_img">램                
+                                                                                                {# 지정한 주소로 새창을 열어 연결 #}
+                      <image src="{% static 'admin/img/영오.png' %}" class="banner_img" onclick="window.open('https://github.com/myo-05/ikmyeongram');">익
+                      <image src="{% static 'admin/img/채연.png' %}" class="banner_img" onclick="window.open('https://github.com/ChaeYami');">명
+                      <image src="{% static 'admin/img/정은.png' %}" class="banner_img" onclick="window.open('https://github.com/Eunnylog');">이
+                      <image src="{% static 'admin/img/정현.png' %}" class="banner_img" onclick="window.open('https://github.com/Leejunghyun7735');">그
+                      <image src="{% static 'admin/img/찬주.png' %}" class="banner_img" onclick="window.open('https://github.com/chanjulee0309');">램                
                   </div>
 
               <form class="form-inline my-2 my-lg-0" >

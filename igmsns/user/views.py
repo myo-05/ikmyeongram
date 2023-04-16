@@ -105,7 +105,7 @@ def sign_in_view(request):
             if UserModel.objects.filter(username=username).exists(): #아이디가 존재한다면
                 return render(request, "user/signin.html", {"error_message" : "[비밀번호 오류!] 아...그거 그렇게 하는거 아닌뒈..!"})
             else:
-                return render(request, "user/signin.html", {"error_message" : "[아이디 오류!] 뭐에오 가입하고 와요! 훠이훠이~!"})
+                return render(request, "user/signin.html", {"error_message" : "[아이디 오류!] 뭐에오 가입하고 다시와요! 훠이훠이~!"})
 
     elif request.method == "GET":  # GET 요청, 즉 로그인페이지 버튼을 눌렀을 때
         user = request.user.is_authenticated

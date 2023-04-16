@@ -121,7 +121,6 @@ def delete(request, id):
         return redirect('home') # 삭제 성공
     else:
         return HttpResponse("꺼져라 닝겐") # 경고창
-   
 
 
 # ============================= 프로필 페이지보기  ============================= 
@@ -188,7 +187,7 @@ def profile_postlist_view(request, author_id, type):
             'follower_count': follower_count,
         }
         return render(request, 'sns/profile.html', context)
-       
+
 
     
     
