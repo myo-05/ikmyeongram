@@ -152,6 +152,14 @@
       border-radius:10px; 
       background-color: #ededed;
     }
+
+    .comment_content{
+      word-break: break-all;
+      /*같은 단어나열도 줄넘어가기*/
+      white-space: pre-line;
+      /*엔터 인식 + 줄 넘어가기*/
+    }
+
   </style>
 
   <!-- 삭제 버튼 클릭시 확인 문구 출력 -> 원하시면 다른 버튼들에도 활용할 수 있습니다. -->
@@ -295,12 +303,12 @@
               <form action="{% url 'comment_edit' id=post.id comment_id=comment.id %}" method="post" >
                 {% csrf_token %}
                 <label for="comment" style="margin-left:20px;">댓글</label>
-                <textarea class="form-control comment_edit" id="comment" name="comment" >{{ comment.comment }}</textarea>
+                <textarea class="form-control comment_edit comment_content" id="comment" name="comment" >{{ comment.comment }}</textarea>
                 <button type="submit" class="btn btn-primary detail_post_btn" style="margin-top:50px;">수정</button>
               </form>
               <!-- 댓글 수정 폼 끝 -->
             {% else %}
-              <ul>{{ comment.comment }}</ul>
+              <ul class="comment_content" >{{ comment.comment }}</ul>
             {% endif %}
               <ul>{{ comment.created_at|date:'Y-m-d H:i' }}</ul>
             {% if comment.user == request.user %}
