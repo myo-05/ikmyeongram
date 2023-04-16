@@ -56,11 +56,18 @@ def sign_up(request):
                     # 유저 이미지 불러와서 파일시스템에 저장하기
                     user_img = request.FILES.get("user_img",None) # 이미지 업로드 받아오기
                     
+                    
                     if user_img:
                         # 프로필사진 파일에 랜덤성 부여! → AWS 배포시 이름 겹치는 경우 고려
                         # user_img.name = 'user' + str(user.id) + '_' + str(
                         # random.randint(10000, 100000)) + '.' + str(user_img.name.split('.')[-1])
-                        
+                        # 파일 크기가 500KB를 초과하는 경우 에러 발생
+                        if user_img.size > 500 * 1024:
+                            return render(
+                                request,
+                                "user/signup_detail.html",
+                                {"error_message": "야레야레~ 500KB 이상은 버겁다구~"},
+                            )
                         # 파일을 시스템에 저장 | FileSystemStorage | DB가 아닌 시스템으로 지정한 dir에 저장
                         storage = FileSystemStorage()
                         # 
@@ -72,6 +79,7 @@ def sign_up(request):
                         # 신규 회원의 id 추출 후 업데이트
                         check = UserModel.objects.filter(id=user.id)
                         check.update(user_img=uploaded_file_url)
+                    
                 # 회원가입 성공시 로그인 페이지로 이동
                 return redirect("sign-in")
         # 공란이 하나라도 있으면 else가 작동하여 에러메세지 출력

@@ -172,6 +172,9 @@
             <label for="user_img" style="margin-left: 15px;">이미지</label>
             <input type="file" class="form-control-file" id="user_img" name="user_img" onchange="setThumbnail(event);">
             <div id="image_container"></div>
+            {% if form.user_img.errors %}
+            <p style="color: red;">{{ form.user_img.errors }}</p>
+            {% endif %}
           </div>
         </form>
         <!-- 회원가입 폼 끝 -->
