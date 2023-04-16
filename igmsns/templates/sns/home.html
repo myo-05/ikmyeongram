@@ -8,7 +8,6 @@
 <style>
 
 .home_post_card {
-    border : none;
     max-width : 800px;
     width : 70vw
 }
@@ -43,9 +42,23 @@
 .home_img_area {
     width : 200px;
 }
+
+.home_container{
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    margin-top : 10vmin;
+    margin-bottom : 10vmin;
+    padding : 20px;
+    border : 3px dashed #b5b4b4;
+    border-radius: 20px;
+    width : 80vw;
+    max-width: 1000px;
+    
+}
 </style>
 
-<div class="container home_container" style="display: flex; flex-direction: column; align-items: center;">
+<div class="container home_container" >
 
 {% for post in posts %}
 <a href ="{%url 'detail' id=post.id%}" class="home_post_text">
