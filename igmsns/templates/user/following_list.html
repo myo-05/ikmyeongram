@@ -8,24 +8,35 @@
 {% block content %}
 
 <style>
-
-     .following_list_section{
-        width : 60vw;
-        margin : 50px auto;
-    }
-
-    a.image-link {
-        display: inline-block; 
-        max-width: 100%; 
-        height: auto; 
-        text-align: center;
-      }
+    
     .list_profile-img{
-        max-width : 100%;
+        cursor:pointer;
+        margin : 15px;
     }
+
+    .following_list_section{
+        width : 80vw;
+        margin : 50px auto;
+        padding : 10vw;
+        border : 3px dashed #b5b4b4;
+        border-radius: 20px;
+        width : 80vw;
+        max-width: 1000px;
+    }
+
+    .unfollow_icon,
+    .follow_icon{
+        margin-top : 10px;
+        width : 35px;
+    }
+
+    .following_nickname{
+        text-align : center;
+    }
+
 </style>
 
-
+<h4 style = "text-align : center;  padding-top : 20px; color : #f37b90; font-family: 'IM_Hyemin-Bold',sans-serif;">팔로잉</h4>
  <div class = "following_list_section">
         
     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -37,30 +48,30 @@
                 <div class="col">
                     <div class="card h-100" style="border-radius : 15px">
                         <div style = "display:block; height:15px; "></div>
-                        <a class="image-link" href="{% url 'profile' author_id=following_user.id %}"> 
+                        
                             {% if following_user.user_img %}
-                            {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
-                            <image class="list_profile-img" src="{{following_user.user_img}}">
-                            {% else %}
-                            {% comment %} if문 - 프로필사진등록 안했다면 기본프로필 보여주기{% endcomment %}
-                            <image class="list_profile-img" src="{% static 'admin/img/default_img_profile.png' %}">
-                            {% endif %}
-                        </a>
+                        {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
+                            <image class="list_profile-img" src="{{following_user.user_img}}" onclick = location.href=("{% url 'profile' author_id=following_user.id %}")>
+                        {% else %}
+                        {% comment %} if문 - 프로필사진등록 안했다면 기본프로필 보여주기{% endcomment %}
+                            <image class="list_profile-img" src="{% static 'admin/img/default_img_profile.png'%}" onclick=location.href=("{% url 'profile' author_id=following_user.id %}")>
+                        {% endif %}
                     
-                        <div class="card-body">
+                        <div class="card-body following_nickname">
                             <h5 class="card-title">{{ following_user.username }}</h5>
                             <p class="card-text"></p>
                                 <!-- 팔로우하기 버튼 시작!-->
                                 <div class="profile_nickname">
+                                    <!-- 팔로우하기 버튼 시작!-->
                                     <div>
                                         <!-- 상대 팔로우 여부에 따라 다른 버튼 보이기 -->
                                         {% if request.user in following_user.followings.all %}
-                                            <button class="unfollow-btn" onclick="location.href='{% url 'follow' following_user.id %}'">언팔로우</button>
+                                            <a href = "{% url 'follow' following_user.id %}"><img src="/static/admin/img/unfollow1.png" class="unfollow_icon"></a>
                                         {% else %}
-                                            <button class="btn btn-success follow-btn" onclick="location.href='{% url 'follow' following_user.id %}'">팔로우</button>
+                                            <a href = "{% url 'follow' following_user.id %}"><img src="/static/admin/img/follow1.png" class="follow_icon"></a>
                                         {% endif %}        
                                     </div>
-                                    
+                                    <!-- 팔로우하기 버튼 끝 -->                                  
                                 </div>
     
                                 <!-- 팔로우하기 버튼 끝 -->
