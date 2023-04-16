@@ -279,16 +279,7 @@
         <br>
         <div class="comments-area">
           <ul style="margin-top: 10px;">
-            {# 댓글 프로필이미지 #}
-              {# if문 - 댓글러가 프로필사진이 있다면 해당프로필 표시, 클릭하면 프로필페이지로 이동 #}
-              {% if user.user_img %}
-              <a href="{% url 'profile' author_id=comment.user_id %}"><image src="{{ post.user_img }}" alt="default Image" class="comment_profile"></a>
-              {% else %}
-              {# if문 - 댓글러가 프로필사진이 없다면 기본프로필 표시, 클릭하면 프로필페이지로 이동 #}
-              <a href="{% url 'profile' author_id=comment.user_id %}"><image src="{% static 'admin/img/default_img.png' %}" class="comment_profile"></a>
-              {% endif %}
-              {# if문 종료 #}
-                
+                            
             {# 댓글 작성자명 #}
               <a href="{% url 'profile' author_id=comment.user_id %}" class="detail_post_nickname">{{ comment.user.nickname }}</a></ul>
 
