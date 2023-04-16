@@ -121,7 +121,7 @@
 
   <div class="container container-newpost">
     <div>
-      <img src="{% static 'admin/img/img_post.png' %}" class="new_update_img">
+      <img src="{% static 'admin/img/img_post.gif' %}" class="new_update_img">
     </div>
     <form class="post-form" action="{% url 'post' %}" method="post" enctype="multipart/form-data" onsubmit = "return validation()"> 
       {% csrf_token %}
