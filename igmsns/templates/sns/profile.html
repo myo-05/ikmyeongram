@@ -31,7 +31,7 @@
     text-align: center;
     font-size: 2rem;
 }
-.nickname{
+.profile_nickname{
     text-align:center;
     margin-top: 20px;
     font-weight: bold;
@@ -69,7 +69,32 @@
     {% endif %}
     {% comment %} if문 종료 {% endcomment %}
     <!-- 프로필 사진 섹션 끝 -->
-    <div class="nickname"><a> {{author.nickname}} </a></div>
+
+        <!-- 닉네임 -->
+    <div class="profile_nickname"> {{author.nickname}} </div>
+    <!-- 내 페이지라면 아이디를 보여준다. -->
+    {% if author.id == request.user.id %}
+        <div class="profile_nickname"> @{{author.username}} </div>
+    <!-- 니 페이지라면 팔로우 버튼을 보여준다. -->
+    {% else %}
+        <!-- 팔로우하기 버튼 시작!-->
+        <div class="profile_nickname">
+        <!-- 프로필의 사용자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 = 내 프로필 페이지라면 -->
+            <div>
+                <!-- 상대 팔로우 여부에 따라 다른 버튼 보이기 -->
+                {% if request.user in author.followings.all %}
+                    <button class="unfollow-btn" onclick="location.href='{% url 'follow' author.id %}'">언팔로우</button>
+                {% else %}
+                    <button class="follow-btn" onclick="location.href='{% url 'follow' author.id %}'">팔로우</button>
+                {% endif %}        
+            </div>
+        
+        </div>
+
+        <!-- 팔로우하기 버튼 끝 -->
+
+    {% endif %}
+
 </div>
 
 
@@ -111,30 +136,15 @@
 <!-- 팔로잉, 팔로워 수 보기 끝 -->
 
 
-<!-- 팔로우하기 버튼 시작! 적절한 위치를 찾아주세요 ㅠㅠ -->
 
-<!-- 프로필의 사용자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 = 내 프로필 페이지라면 -->
-{% if author.id == request.user.id %}
-    <div> </div>
-{% else %}
-    <div>
-        <!-- 상대 팔로우 여부에 따라 다른 버튼 보이기 -->
-        {% if request.user in author.followings.all %}
-            <button class="unfollow-btn" onclick="location.href='{% url 'follow' author.id %}'">언팔로우</button>
-        {% else %}
-            <button class="follow-btn" onclick="location.href='{% url 'follow' author.id %}'">팔로우</button>
-        {% endif %}        
-    </div>
-{% endif %}
-
-<!-- 팔로우하기 버튼 끝 -->
 
     <!-- 해당 사용자 게시글 리스트 -->
-    <div class="container add" style="width : 50%">
+    <div class="container profile_container" style="width : 50%">
         {% for post in posts %}
-            <a href ="/api/sns/post/{{post.id}}" style="text-decoration : none; color: inherit;">
-                <div class="card mb-3" >
-                    <div class="row g-0" >
+            <a href ="/api/sns/post/{{post.id}}" class = "profile_posts">
+                <div class="card mb-3 profile_post_card" >
+                    <!--우선순위 때문에 인라인 적용-->
+                    <div class="row g-0" style="background:#ededed; border-radius:20px"> 
                         <!-- 게시글 리스트 이미지 썸네일 섹션 -->
                         <div class="col-md-4" style="width : 200px">
                             <!-- 업로드된 이미지가 있다면 -->
