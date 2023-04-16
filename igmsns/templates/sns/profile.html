@@ -13,6 +13,8 @@
     position:relative;
     top: 50px;
     left:100px;
+    border : 1px solid gray
+    border-radius : 10px
 }
 .profile-img{
     display:block;
@@ -33,14 +35,15 @@
 }
 .profile_nickname{
     text-align:center;
-    margin-top: 20px;
+    margin: 20px;
     font-weight: bold;
 }
 .profile_container {
     position:relative;
     top: 100px;
     left:0px;
-    width:800px;
+    max-width : 800px;
+    width : 70vw
 }
 
 .profile_post_img {
@@ -59,6 +62,7 @@
     border : none;
 }
 </style>
+
 <div class="profile">
     {% if author.user_img %}
     {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
@@ -71,15 +75,14 @@
     <!-- 프로필 사진 섹션 끝 -->
 
         <!-- 닉네임 -->
-    <div class="profile_nickname"> {{author.nickname}} </div>
+    <div class="profile_nickname"> {{author.nickname}} 
     <!-- 내 페이지라면 아이디를 보여준다. -->
     {% if author.id == request.user.id %}
-        <div class="profile_nickname"> @{{author.username}} </div>
+        <p> @{{author.username}} </p>
     <!-- 니 페이지라면 팔로우 버튼을 보여준다. -->
     {% else %}
         <!-- 팔로우하기 버튼 시작!-->
-        <div class="profile_nickname">
-        <!-- 프로필의 사용자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 = 내 프로필 페이지라면 -->
+    
             <div>
                 <!-- 상대 팔로우 여부에 따라 다른 버튼 보이기 -->
                 {% if request.user in author.followings.all %}
@@ -89,12 +92,12 @@
                 {% endif %}        
             </div>
         
-        </div>
+        
 
         <!-- 팔로우하기 버튼 끝 -->
 
     {% endif %}
-
+    </div>
 </div>
 
 

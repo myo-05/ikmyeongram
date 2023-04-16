@@ -123,7 +123,7 @@ def follow(request, user_id):
                 target_user.followings.remove(request.user) # 팔로우 삭제
             else: # 팔로우중이 아닌 경우
                 target_user.followings.add(request.user) # 팔로우
-        return redirect('profile', target_user.id) # 내 프로필인 경우 팔로우하지않고 프로필로 돌아옴
+        return redirect(request.META['HTTP_REFERER']) # 팔로우 완료하면 새로고침
     return redirect('sign-in') # 로그인이 되지 않은 경우 로그인 페이지로 넘어옴
 
 
