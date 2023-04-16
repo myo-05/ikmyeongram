@@ -8,16 +8,18 @@
 {% block content %}
   <style>
     .container-post {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      width: 70vw;
+      max-width: 900px;
+      margin: 10vmin auto;
+      padding: 3vw 5vw;
+      width: 80vw;
+      border : 3px dashed #b5b4b4;
+      border-radius: 20px
     }
 
-    .title {
-      margin-top: 40px;
-      margin-bottom: 20px;
-      font-size: 36px;
+    .post_title{
+      padding-bottom : 30px;
+      border-bottom : 1px solid #00000029;
+      font-family: 'IM_Hyemin-Bold',sans-serif;
     }
 
     .post {
@@ -33,14 +35,14 @@
       /*같은 단어나열도 줄넘어가기*/
       white-space: pre-line;
       /*엔터 인식 + 줄 넘어가기*/
-      padding : 10px 5vw ;
+      padding : 30px 5vw ;
       border : 1px solid #CED4DA;
       border-radius:10px
     }
 
     .post-image {
       display: block;
-      margin: 20px auto;
+      margin: 40px auto;
       max-width: 300px;
       width : 50vw;
       border-radius : 15px;
@@ -89,7 +91,7 @@
     }
 
     .post_icon {
-      width: 40px;
+      width: 30px;
       margin-right: 20px;
       text-align: end;
     }
@@ -111,6 +113,10 @@
     .comment_edit {
       width: 90%;
       margin: 10px auto;
+      word-break: break-all;
+      /*같은 단어나열도 줄넘어가기*/
+      white-space: pre-line;
+      /*엔터 인식 + 줄 넘어가기*/
     }
 
     .comment_cancel_icon {
@@ -124,34 +130,14 @@
       border: double;
       border-radius:10px; 
       background-color: #ededed;
+      
     }
 
     .comment_profile{
       border-radius: 40px;
       height:40px;
     }
-
-    .comment_count{
-      margin_bottom: 10px;
-    }
-
-    .comment_edit {
-      width: 90%;
-      margin: 10px auto;
-    }
-
-    .comment_cancel_icon {
-      width: 20px;
-      margin-right: 10px;
-    }
-
-    .comments-area {
-      border-radius: 10px; 
-      background-color: #ededed;
-      border: double;
-      border-radius:10px; 
-      background-color: #ededed;
-    }
+  
   </style>
 
   <!-- 삭제 버튼 클릭시 확인 문구 출력 -> 원하시면 다른 버튼들에도 활용할 수 있습니다. -->
@@ -185,7 +171,7 @@
   <!-- ================================= 게시글 상세 페이지 ================================= -->
   <div class="container container-post">
      <!-- 게시글 상세 페이지 타이틀 -->
-    <h1 style="text-align: center; margin:20px; font-size: 35px;">{{post.post_title}}</h1> <!--우선순위 때문에 인라인 적용-->
+   
     <div class="detail_post_icon">
       <!-- 게시글의 작성자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 -->
       {% if post.post_author == request.user %}
@@ -197,6 +183,7 @@
           <img  src="/static/admin/img/post_delete_icon.png" class="post_icon"></a><br/>
       {% endif %}
     </div>
+    <h1 class = "post_title" style="text-align: center; margin:20px; font-size: 35px;">{{post.post_title}}</h1> <!--우선순위 때문에 인라인 적용-->
     <!-- 이미지 업로드 섹션 -->
     <!-- 업로드된 이미지가 있다면 -->
     {% if post.post_img %}
@@ -270,7 +257,7 @@
         <form action="{%url 'comment' id=post.id%}" method='post' onsubmit = "return validation()">
           {%csrf_token%}
           <label for="comment">댓글</label>
-          <textarea class="form-control" style="width:full;" id="comment" name="comment"></textarea>
+          <textarea class="form-control comment_textarea"  style="width:full;" id="comment" name="comment"></textarea>
           <button type="submit" class="btn btn-primary detail_post_btn">게시</button>
         </form>
       </div>

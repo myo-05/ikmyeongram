@@ -5,19 +5,24 @@
 {% block title %}프로필페이지{% endblock %}
 
 {% block content %}
+
 <style>
+.profile_section{
+    padding : 5vmin;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    
+}
+
 .profile{
-    display: inline-block;
+    margin : 20px;
     height:200px;
     width:200px;
-    position:relative;
     top: 50px;
     left:100px;
-    border : 1px solid gray
-    border-radius : 10px
 }
 .profile-img{
-    display:block;
     height:200px;
     width:200px;
     border-radius: 100px;
@@ -26,12 +31,9 @@
 .like_count,
 .following_count,
 .follower_count{
-    display: inline-block;
-    position:relative;
-    top: -10px;
-    left:300px;
     text-align: center;
     font-size: 2rem;
+    margin: 20px;
 }
 .profile_nickname{
     text-align:center;
@@ -61,15 +63,23 @@
 .profile_post_card {
     border : none;
 }
+
+.unfollow_icon,
+.follow_icon{
+    margin-top : 10px;
+    width : 35px;
+}
 </style>
 
+<div class = "profile_section">
+   
 <div class="profile">
     {% if author.user_img %}
     {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
-    <image class="profile-img" src="{{ author.user_img }}" alt="default Image">
+        <image class="profile-img" src="{{ author.user_img }}" alt="default Image">
     {% else %}
     {% comment %} if문 - 프로필사진등록 안했다면 기본프로필 보여주기{% endcomment %}
-    <image class="profile-img" src="{% static 'admin/img/default_img_profile.png' %}">
+        <image class="profile-img" src="{% static 'admin/img/default_img_profile.png' %}">
     {% endif %}
     {% comment %} if문 종료 {% endcomment %}
     <!-- 프로필 사진 섹션 끝 -->
@@ -82,18 +92,14 @@
     <!-- 니 페이지라면 팔로우 버튼을 보여준다. -->
     {% else %}
         <!-- 팔로우하기 버튼 시작!-->
-    
-            <div>
-                <!-- 상대 팔로우 여부에 따라 다른 버튼 보이기 -->
-                {% if request.user in author.followings.all %}
-                    <button class="unfollow-btn" onclick="location.href='{% url 'follow' author.id %}'">언팔로우</button>
-                {% else %}
-                    <button class="follow-btn" onclick="location.href='{% url 'follow' author.id %}'">팔로우</button>
-                {% endif %}        
-            </div>
-        
-        
-
+        <div>
+            <!-- 상대 팔로우 여부에 따라 다른 버튼 보이기 -->
+            {% if request.user in author.followings.all %}
+                <a href = "{% url 'follow' author.id %}"><img src="/static/admin/img/unfollow1.png" class="unfollow_icon"></a>
+            {% else %}
+                <a href = "{% url 'follow' author.id %}"><img src="/static/admin/img/follow1.png" class="follow_icon"></a>
+            {% endif %}        
+        </div>
         <!-- 팔로우하기 버튼 끝 -->
 
     {% endif %}
@@ -109,8 +115,8 @@
     </a>
 </div>
 
-<!-- 좋아요하는 글 목록을 내 프로필일때만 보이게 하고 싶다면 if문 사용하기 -->
-<!-- 프로필의 사용자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 = 내 프로필 페이지라면 -->
+<!--  좋아요 갯수 시작-->
+<!-- 프로필의 사용자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 = 내 프로필 페이지라면 (좋아요하는 글 목록을 내 프로필일때만 보이게)-->
 {% if author.id == request.user.id %}
 <div class="like_count" style="text-align: center;">
     <a href="{% url 'profilepost' author_id=author.id type='liked' %}">
@@ -119,7 +125,6 @@
     </a>
 </div>
 {% endif %}
-
 <!-- 좋아요 갯수 끝 -->
 
 <!-- 팔로잉, 팔로워 수 보기 -->
@@ -137,12 +142,11 @@
     </a>
 </div>
 <!-- 팔로잉, 팔로워 수 보기 끝 -->
-
-
+</div>
 
 
     <!-- 해당 사용자 게시글 리스트 -->
-    <div class="container profile_container" style="width : 50%">
+    <div class="container profile_container">
         {% for post in posts %}
             <a href ="/api/sns/post/{{post.id}}" class = "profile_posts">
                 <div class="card mb-3 profile_post_card" style="background:#ededed; border-radius:20px">
