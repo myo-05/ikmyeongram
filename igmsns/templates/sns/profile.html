@@ -59,6 +59,7 @@
     border : none;
 }
 </style>
+
 <div class="profile">
     {% if author.user_img %}
     {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
@@ -79,7 +80,6 @@
     {% else %}
         <!-- 팔로우하기 버튼 시작!-->
         <div class="profile_nickname">
-        <!-- 프로필의 사용자 id가 현재 로그인된 사용자의 id(기본키)와 같다면 = 내 프로필 페이지라면 -->
             <div>
                 <!-- 상대 팔로우 여부에 따라 다른 버튼 보이기 -->
                 {% if request.user in author.followings.all %}

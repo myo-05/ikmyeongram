@@ -10,12 +10,19 @@
 <style>
 
      .following_list_section{
-        width : 70vw;
+        width : 60vw;
         margin : 50px auto;
-
-
     }
 
+    a.image-link {
+        display: inline-block; 
+        max-width: 100%; 
+        height: auto; 
+        text-align: center;
+      }
+    .list_profile-img{
+        max-width : 100%;
+    }
 </style>
 
 
@@ -25,29 +32,45 @@
 
         {% for following_user in following_users %}
 
-            <a href="{% url 'profile' author_id=following_user.id %}"> 
+            
 
                 <div class="col">
-                    <div class="card">
-
-                        {% if following_user.user_img %}
-                        {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
-                        <image class="profile-img" src="{{following_user.user_img}}">
-                        {% else %}
-                        {% comment %} if문 - 프로필사진등록 안했다면 기본프로필 보여주기{% endcomment %}
-                        <image class="profile-img" src="{% static 'admin/img/default_img_profile.png' %}">
-                        {% endif %}
-
+                    <div class="card h-100">
+                        <a class="image-link" href="{% url 'profile' author_id=following_user.id %}"> 
+                            {% if following_user.user_img %}
+                            {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
+                            <image class="list_profile-img" src="{{following_user.user_img}}">
+                            {% else %}
+                            {% comment %} if문 - 프로필사진등록 안했다면 기본프로필 보여주기{% endcomment %}
+                            <image class="list_profile-img" src="{% static 'admin/img/default_img_profile.png' %}">
+                            {% endif %}
+                        </a>
                         <div class="card-body">
                             <h5 class="card-title">{{ following_user.username }}</h5>
                             <p class="card-text"></p>
+                                <!-- 팔로우하기 버튼 시작!-->
+                                <div class="profile_nickname">
+                                    <div>
+                                        <!-- 상대 팔로우 여부에 따라 다른 버튼 보이기 -->
+                                        {% if request.user in following_user.followings.all %}
+                                            <button class="unfollow-btn" onclick="location.href='{% url 'follow' following_user.id %}'">언팔로우</button>
+                                        {% else %}
+                                            <button class="btn btn-success follow-btn" onclick="location.href='{% url 'follow' following_user.id %}'">팔로우</button>
+                                        {% endif %}        
+                                    </div>
+                                    
+                                </div>
+    
+                                <!-- 팔로우하기 버튼 끝 -->
+
+                            
                         </div>
                     </div>
                 </div>
                         
                 {% empty %}
                     <p>팔로잉 중인 사용자가 없습니다.</p>
-            </a>
+            
 
         {% endfor %}
     </div>
