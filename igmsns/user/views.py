@@ -15,9 +15,9 @@ from django.core.files.storage import FileSystemStorage
 """
 
 # 회원가입
-def sign_up_detail(request):
+def sign_up(request):
     if request.method == "GET":  # 회원가입 페이지를 눌렀을 때
-        return render(request, "user/signup_detail.html")
+        return render(request, "user/signup.html")
 
     elif request.method == "POST":  # 회원가입정보 제출할 때
         username = request.POST.get("username", None)  # 회원 ID
@@ -32,7 +32,7 @@ def sign_up_detail(request):
             if password != password2:
                 return render(
                     request,
-                    "user/signup_detail.html",
+                    "user/signup.html",
                     {"error_message": "[비밀번호불일치!] 진정하고 천천히 다시써봐요 예?"},
                 )
             else:
@@ -42,7 +42,7 @@ def sign_up_detail(request):
                     # 영오: 이미 있는 ID입니다. 새로 지정해주세요. 메세지 떠야합니다.
                     return render(
                         request,
-                        "user/signup_detail.html",
+                        "user/signup.html",
                         {"error_message": "[중복 발견!] 이미 있는 ID입니다. 아시겠어요?"},
                     )
                 else:
@@ -78,7 +78,7 @@ def sign_up_detail(request):
         else:
             return render(
                 request,
-                "user/signup_detail.html",
+                "user/signup.html",
                 {"error_message": "[빈칸 발견!] 공란이 빤히 보이는데, 미치셨어요?"},
             )
 
@@ -123,7 +123,7 @@ def follow(request, user_id):
                 target_user.followings.remove(request.user) # 팔로우 삭제
             else: # 팔로우중이 아닌 경우
                 target_user.followings.add(request.user) # 팔로우
-        return redirect('profile', target_user.id) # 내 프로필인 경우 팔로우하지않고 프로필로 돌아옴
+        return redirect(request.META['HTTP_REFERER']) # 팔로우 완료하면 새로고침
     return redirect('sign-in') # 로그인이 되지 않은 경우 로그인 페이지로 넘어옴
 
 

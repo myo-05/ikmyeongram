@@ -7,14 +7,73 @@
 
 {% block content %}
 
-<h1>팔로워 리스트</h1>
 
-{% for follower_user in follower_users %}
-<a href="{% url 'profile' author_id=follower_user.id %}"> 
-    <div>{{ follower_user.username }}</div>
-</a>
-{% empty %}
-    <p>팔로워가 없습니다.</p>
-{% endfor %}
+<style>
 
-{% endblock %}
+    .follower_list_section{
+       width : 60vw;
+       margin : 50px auto;
+
+
+    }
+    a.image-link {
+        display: inline-block; 
+        max-width: 100%; 
+        height: auto; 
+        text-align: center;
+    }
+    .list_profile-img{
+        max-width : 100%;
+    }
+</style>
+<h5>팔로워</h5>
+
+<div class = "follower_list_section">
+       
+   <div class="row row-cols-1 row-cols-md-3 g-4">
+
+       {% for follower_user in follower_users %}
+
+           
+
+               <div class="col">
+                   <div class="card h-100">
+                    <a class="image-link" href="{% url 'profile' author_id=follower_user.id %}"> 
+                        {% if follower_user.user_img %}
+                        {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
+                            <image class="list_profile-img" src="{{follower_user.user_img}}">
+                        {% else %}
+                        {% comment %} if문 - 프로필사진등록 안했다면 기본프로필 보여주기{% endcomment %}
+                            <image class="list_profile-img" src="{% static 'admin/img/default_img_profile.png' %}">
+                        {% endif %}
+                    </a>
+                        <div class="card-body">
+                           <h5 class="card-title">{{ follower_user.username }}</h5>
+                           <p class="card-text"></p>
+                                <!-- 팔로우하기 버튼 시작!-->
+                                <div class="profile_nickname">
+                                    <div>
+                                        <!-- 상대 팔로우 여부에 따라 다른 버튼 보이기 -->
+                                        {% if request.user in follower_user.followings.all %}
+                                            <button class="unfollow-btn" onclick="location.href='{% url 'follow' follower_user.id %}'">언팔로우</button>
+                                        {% else %}
+                                            <button class="follow-btn" onclick="location.href='{% url 'follow' follower_user.id %}'">팔로우</button>
+                                        {% endif %}        
+                                    </div>
+                                    
+                                </div>
+
+                                <!-- 팔로우하기 버튼 끝 -->
+
+                           
+                        </div>
+                   </div>
+               </div>
+                       
+               {% empty %}
+                   <p>팔로잉 중인 사용자가 없습니다.</p>
+           
+
+       {% endfor %}
+   </div>
+   {% endblock %}
