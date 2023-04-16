@@ -120,7 +120,7 @@ def delete(request, id):
         post.delete()
         return redirect('home') # 삭제 성공
     else:
-        return HttpResponse("꺼져라 닝겐") # 임시로 해뒀습니다. 경고창으로 바꿔야 합니다
+        return HttpResponse("꺼져라 닝겐") # 경고창
    
 
 
