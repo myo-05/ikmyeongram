@@ -1,0 +1,144 @@
+/* detail_post.html */
+
+.container-post {
+    max-width: 900px;
+    margin: 10vmin auto;
+    padding: 3vw 5vw;
+    width: 80vw;
+    border: 3px dashed #b5b4b4;
+    border-radius: 20px
+}
+
+.post_title_text {
+    padding-bottom: 30px;
+    border-bottom: 1px solid #00000029;
+    font-family: 'IM_Hyemin-Bold', sans-serif;
+}
+
+.post {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.post-content {
+    line-height: 1.6;
+    font-size: 1em;
+    text-align: left;
+    word-break: break-all;
+    /*같은 단어나열도 줄넘어가기*/
+    white-space: pre-line;
+    /*엔터 인식 + 줄 넘어가기*/
+    padding: 30px 5vw;
+    border: 1px solid #CED4DA;
+    border-radius: 10px
+}
+
+.post-image {
+    display: block;
+    margin: 40px auto;
+    max-width: 300px;
+    width: 50vw;
+    border-radius: 15px;
+}
+
+.post-meta {
+    margin-top: 20px;
+    color: #666;
+    display: flex;
+    justify-content: center;
+}
+
+
+.post-date {
+    position: relative;
+    font-size: 0.7em;
+    left: 20vw;
+}
+
+.detail_post_btn {
+    width: 100px;
+    border: double;
+    background: none;
+    color: black;
+    border-radius: 50px;
+    float: right;
+    margin: 30px 10px;
+}
+
+.detail_post_btn:hover {
+    color: #fff;
+    background-color: #424242;
+    border-color: #424242;
+}
+
+.detail_post_nickname {
+    text-decoration: none;
+    color: #585858;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.detail_post_icon {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.post_icon {
+    width: 30px;
+    margin-right: 20px;
+    text-align: end;
+}
+
+.comment_icon {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.comment_icon_area {
+    text-align: end;
+    padding-right: 10px;
+}
+
+.comment_count {
+    margin-bottom: 10px;
+}
+
+.comment_edit {
+    width: 90%;
+    margin: 10px auto;
+    word-break: break-all;
+    /*같은 단어나열도 줄넘어가기*/
+    white-space: pre-line;
+    /*엔터 인식 + 줄 넘어가기*/
+}
+
+.comment_cancel_icon {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.comments-area {
+    border-radius: 10px;
+    background-color: #ededed;
+    border: double;
+    border-radius: 10px;
+    background-color: #ededed;
+
+}
+
+.comment_profile {
+    border-radius: 40px;
+    height: 40px;
+}
+
+.comment_cancel_icon {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.comment_content {
+    word-break: break-all;
+    /*같은 단어나열도 줄넘어가기*/
+    white-space: pre-line;
+    /*엔터 인식 + 줄 넘어가기*/
+}

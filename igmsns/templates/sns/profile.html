@@ -6,84 +6,14 @@
 
 {% block content %}
 
-<style>
-.profile_body{
-    margin : 30px auto;
-
-    border : 3px dashed #b5b4b4;
-    border-radius: 20px;
-    width : 80vw;
-    max-width: 1000px;
-}
-
-.profile_section{
-    padding : 5vmin;
-    display:flex;
-    align-items:center;
-    justify-content: center;
-    
-}
-
-.profile{
-    margin : 20px;
-    height:200px;
-    width:200px;
-    top: 50px;
-    left:100px;
-}
-.profile-img{
-    height:200px;
-    width:200px;
-    border-radius: 100px;
-}
-.post_count,
-.like_count,
-.following_count,
-.follower_count{
-    text-align: center;
-    font-size: 2rem;
-    margin: 20px;
-}
-.profile_nickname{
-    text-align:center;
-    margin: 20px;
-    font-weight: bold;
-}
-.profile_container {
-    padding : 50px 0px;
-    position:relative;
-    left:0px;
-    max-width : 800px;
-    width : 70vw
-}
-
-.profile_post_img {
-    margin: auto;
-    width: 200px;
-    padding: 15px;
-    border-radius: 50px;
-}
-
-.profile_posts {
-    text-decoration:none;
-    color: inherit;
-}
-
-.profile_post_card {
-    border : none;
-}
-
-.unfollow_icon,
-.follow_icon{
-    margin-top : 10px;
-    width : 35px;
-}
-</style>
+<!-- css -->
+<link rel="stylesheet" href="{% static 'css/sns/profile.css' %}">
 
 <div class = "profile_body">
     <div class = "profile_section">
-    
-        <div class="profile">
+        
+        {% comment %} 겹치는 것을 방지하기 위해 클래스명 앞뒤로 언더바 {% endcomment %}
+        <div class="_profile_">
             {% if author.user_img %}
             {% comment %} if문 - 프로필사진을 등록했다면 프로필사진 보여주기{% endcomment %}
                 <image class="profile-img" src="{{ author.user_img }}" alt="default Image">

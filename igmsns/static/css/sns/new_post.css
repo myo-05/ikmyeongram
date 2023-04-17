@@ -1,0 +1,63 @@
+/* new_post.html */
+
+
+.container-newpost {
+    max-width: 800px;
+    padding-right: var(--bs-gutter-x, .75rem);
+    padding-left: var(--bs-gutter-x, .75rem);
+    display: flex;
+    flex-direction: inherit;
+}
+
+/*new/update.html 클래스명 통일했어요 */
+
+.new_update_img {
+    width: 150px;
+    margin: 50px 20px;
+}
+
+/*new/update.html 클래스명 통일 했어요 */
+
+.post-form {
+    margin-top: 40px;
+    padding: 20px;
+    background: none;
+    border-color: #848484;
+    color: #6E6E6E;
+    border: double;
+    border-radius: 20px;
+    width: 800px;
+}
+
+/*클래스 겹치지 않기 위해 수정 */
+
+.new_post_form-group {
+    margin-bottom: 20px;
+}
+
+/*태그만 들어가있어서 클래스 안의 태그라고 명시 */
+
+.new_post_form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+
+/*new/update.html 버튼 클래스명 통일했어요 */
+
+.post_btn {
+    width: 100%;
+    background-color: #ffff;
+    color: #585858;
+    border: double;
+    border-radius: 20px;
+}
+
+.post_btn:hover {
+    background-color: #848484;
+    color: #ffff;
+    border: double;
+    width: 100%;
+    border-radius: 20px;
+}
