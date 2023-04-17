@@ -19,9 +19,11 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.homes),
     path("api/user/", include("user.urls")),
     path("api/sns/", include("sns.urls")),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) 
