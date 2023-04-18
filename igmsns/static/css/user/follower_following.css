@@ -1,0 +1,58 @@
+/* follower_list.html */
+
+.list_profile-img {
+    cursor: pointer;
+    margin: 15px;
+}
+
+.follower_list_section {
+    width: 80vw;
+    margin: 50px auto;
+    padding: 10vw;
+    border: 3px dashed #b5b4b4;
+    border-radius: 20px;
+    width: 80vw;
+    max-width: 1000px;
+}
+
+/* profile html과 같음  */
+.unfollow_icon,
+.follow_icon {
+    margin-top: 10px;
+    width: 35px;
+}
+
+.follower_nickname {
+    text-align: center;
+
+}
+
+
+/* following_list.html */
+
+.list_profile-img {
+    cursor: pointer;
+    margin: 15px;
+}
+
+.following_list_section {
+    width: 80vw;
+    margin: 50px auto;
+    padding: 10vw;
+    border: 3px dashed #b5b4b4;
+    border-radius: 20px;
+    width: 80vw;
+    max-width: 1000px;
+}
+
+/* profile html과 같음  */
+
+.unfollow_icon,
+.follow_icon {
+    margin-top: 10px;
+    width: 35px;
+}
+
+.following_nickname {
+    text-align: center;
+}

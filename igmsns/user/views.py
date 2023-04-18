@@ -87,6 +87,7 @@ def sign_up(request):
             )
 
 
+
 # 로그인 함수
 def sign_in_view(request):
     if request.method == "POST":  # POST 요청, 즉 로그인을 시도했을 때

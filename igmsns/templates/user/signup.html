@@ -6,108 +6,9 @@
 회원가입
 {% endblock %}
 {% block content %}
-  <style>
-
-    .signup-box {
-      background: #d9d9d9;
-      border-radius: 50px;
-      padding-bottom: 40px;
-      width: 60vw;
-      max-width : 700px;
-    }
-
-    .profil-img {
-      height: 100px;
-      position: relative;
-      left: -10px;
-    }
-    
-    .profil-title {
-      font-weight: bold;
-      position: relative;
-      left: -20px;
-    }
-
-    .signup_center {
-      padding: 20px 0;
-    }
-
-    .signup_form {
-      margin-top: 0px;
-      padding: 0px 0;
-      border-radius: 10px;
-    }
-    
-    .from_cover{
-      background-color: #fff;
-      border-radius: 10px;
-    }
-
-    
-    input.form-control {
-      border: none;
-      border-bottom: 1px solid #ccc;
-      height: 30px;
-      line-height: 30px;
-      background: transparent;
-      padding: 0;
-    }
-    
-    .sign-box {
-      display: flex;
-      padding: 10px 0;
-      background-color: #ffff;
-      border-radius: 30px;
-      text-align:center;
-    }
-
-    .label-name {
-      padding: 0 15px;
-      width: 140px;
-    }
-
-    .sign-input {
-      width: 70%;
-    }
-
-    .signup_cancel_btn {
-      color: #fff;
-      background-color: #848484;
-      border-color: #848484;
-      float: right;
-      margin-left: 3px;
-      margin-right: 3px;
-    }
-
-    .sign_up_btn {
-      color: #fff;
-      background-color: #585858;
-      border-color: #585858;
-      {% comment %} float: right; {% endcomment %}
-      margin-left: 5px;
-    }
-
-    .signup_btns{
-      text-align: right;
-      position: relative;
-    }
-
-    .signup_cancel_btn:hover {
-      color: #fff;
-      background-color: #A4A4A4;
-      border-color: #A4A4A4;
-    }
-    .sign_up_btn:hover {
-      color: #fff;
-      background-color: #1C1C1C;
-      border-color: #1C1C1C;
-    }
-
-    .user_img{
-      margin: auto;
-    }
-
-  </style>
+  
+<!-- css -->
+<link rel="stylesheet" href="{% static 'css/user/signup.css' %}">
 
   <script>
     /* 썸네일 미리보기 함수 */
@@ -175,7 +76,7 @@
           </div>
         </div>
           <div class="form-group">
-            <label for="user_img" style="margin-left: 30px;">프로필 이미지</label>
+            <label for="signup_user_img" style="margin-left: 30px;">프로필 이미지</label>
             <input type="file" class="form-control-file user_img" id="user_img" name="user_img" onchange="setThumbnail(event);">
             <div id="image_container"></div>
             {% if form.user_img.errors %}

@@ -1,0 +1,71 @@
+/* signin.html */
+
+.container-signin {
+    width: 60vw;
+    margin: auto;
+    max-width: 500px
+}
+
+.signin_form {
+    background-color: #ffff;
+    border-radius: 10px;
+    margin: 10px
+}
+
+.go_signup_btn {
+    color: black;
+    background: #d9d9d9;
+    border-color: #848484;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 100px;
+    border: double;
+}
+
+.go_signup_btn:hover {
+    color: #fff;
+    background-color: #A4A4A4;
+    border-color: #A4A4A4;
+}
+
+.login_btn {
+    color: black;
+    background: none;
+    border-color: #585858;
+    width: 100%;
+    margin-top: 40px;
+    border-radius: 100px;
+    border: double;
+}
+
+.login_btn:hover {
+    color: #fff;
+    background-color: #424242;
+    border-color: #424242;
+}
+
+/* 로그인 폼의 입력부분 클래스명 추가(중복방지)  */
+input.signin {
+    border: none !important;
+    border-bottom: 1px solid #ccc;
+    height: 35px;
+    line-height: 30px;
+    background: transparent;
+    padding: 0;
+}
+
+.form-control-label {
+    margin: 5px 0 0 5px;
+}
+
+.signin_center {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.signin_img {
+    width: 100px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    border-radius: 25px;
+}
