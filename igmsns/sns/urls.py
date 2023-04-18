@@ -2,7 +2,7 @@ from django.urls import path
 from sns import views
 
 urlpatterns = [
-    path('', views.home, name='home'),  # 
+    path('', views.home, name='home'),  # 모든 글 리스트보여주는 홈 페이지 
     path('new/', views.new, name='new'), # 새 글 작성 페이지로 렌더링
     path('post/', views.new_post_view, name='post'),  # # 새 글 작성 저장
     path('post/<int:id>/', views.detail_post_view, name = 'detail'),  # 게시글 상세 페이지
