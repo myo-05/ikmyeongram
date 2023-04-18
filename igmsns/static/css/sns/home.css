@@ -1,0 +1,52 @@
+/* home.html */
+
+.home_post_card {
+    max-width: 800px;
+    width: 70vw
+}
+
+.post_information {
+    background: #ededed;
+    border-radius: 20px;
+}
+
+.post_img_thumbnail {
+    height: 200px;
+    width: auto;
+    padding: 15px;
+    border-radius: 50px;
+}
+
+.home_posts {
+    text-decoration: none;
+    color: inherit;
+    margin: 20px;
+}
+
+.home_post_text {
+    margin-top: 20px;
+    text-decoration: none;
+    color: #212529;
+}
+
+.home_post_text:hover {
+    color: #212529;
+}
+
+.home_img_area {
+    width: 200px;
+}
+
+.home_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10vmin;
+    margin-bottom: 10vmin;
+    padding: 20px;
+    border: 3px dashed #b5b4b4;
+    border-radius: 20px;
+    width: 80vw;
+    max-width: 1000px;
+
+}

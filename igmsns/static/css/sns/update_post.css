@@ -1,0 +1,56 @@
+/* update_post.html */
+
+
+.container-update {
+    max-width: 800px;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    padding-right: var(--bs-gutter-x, .75rem);
+    padding-left: var(--bs-gutter-x, .75rem);
+}
+
+/* new/update.html 클래스명 통일 했어요 */
+.post-form {
+    margin-top: 40px;
+    padding: 20px;
+    background: none;
+    border-color: #848484;
+    color: #6E6E6E;
+    border: double;
+    border-radius: 20px;
+    width: 800px;
+}
+
+/* new/update.html 이미지 클래스명 통일했어요 */
+.new_update_img {
+    width: 200px;
+    margin-top: 50px;
+}
+
+.update-form-group {
+    margin-bottom: 20px;
+}
+
+.update-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* new/update.html 버튼 클래스명 통일했어요 */
+.post_btn {
+    width: 100%;
+    background-color: #ffff;
+    color: #585858;
+    border: double;
+    border-radius: 20px;
+}
+
+.post_btn:hover {
+    background-color: #848484;
+    color: #ffff;
+    border: double;
+    width: 100%;
+    border-radius: 20px;
+}

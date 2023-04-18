@@ -1,0 +1,78 @@
+/* profile.html */
+
+.profile_body {
+    margin: 30px auto;
+
+    border: 3px dashed #b5b4b4;
+    border-radius: 20px;
+    width: 80vw;
+    max-width: 1000px;
+}
+
+.profile_section {
+    padding: 5vmin;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+._profile_ {
+    margin: 20px;
+    height: 200px;
+    width: 200px;
+    top: 50px;
+    left: 100px;
+}
+
+._profile_ .profile-img {
+    height: 200px;
+    width: 200px;
+    border-radius: 100px;
+}
+
+.post_count,
+.like_count,
+.following_count,
+.follower_count {
+    text-align: center;
+    font-size: 2rem;
+    margin: 20px;
+}
+
+._profile_ .profile_nickname {
+    text-align: center;
+    margin: 20px;
+    font-weight: bold;
+}
+
+.profile_container {
+    padding : 0px 0px 40px 0px;
+    position: relative;
+    top:40px;
+    max-width: 800px;
+    width: 70vw
+}
+
+.profile_post_img {
+    margin: auto;
+    width: 200px;
+    padding: 15px;
+    border-radius: 50px;
+}
+
+.profile_posts {
+    text-decoration: none;
+    color: inherit;
+}
+
+.profile_post_card {
+    border: none;
+}
+
+/* follower,following html과 같음  */
+.unfollow_icon,
+.follow_icon {
+    margin-top: 10px;
+    width: 35px;
+}

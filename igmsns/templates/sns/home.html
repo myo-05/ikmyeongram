@@ -5,58 +5,9 @@
 {% block title %}홈{% endblock %}
 
 {% block content %}
-<style>
 
-.home_post_card {
-    max-width : 800px;
-    width : 70vw
-}
-.post_information {
-    background: #ededed;
-    border-radius: 20px;
-}
-
-.post_img{
-    height:200px;
-    weight: auto;
-    padding: 15px;
-    border-radius: 50px;
-}
-
-.home_posts {
-    text-decoration:none;
-    color:inherit;
-    margin:20px;
-}
-
-.home_post_text {
-    margin-top: 20px;
-    text-decoration : none;
-    color: #212529;
-}
-
-.home_post_text:hover {
-    color: #212529;
-}
-
-.home_img_area {
-    width : 200px;
-}
-
-.home_container{
-    display: flex; 
-    flex-direction: column;
-    align-items: center;
-    margin-top : 10vmin;
-    margin-bottom : 10vmin;
-    padding : 20px;
-    border : 3px dashed #b5b4b4;
-    border-radius: 20px;
-    width : 80vw;
-    max-width: 1000px;
-    
-}
-</style>
+<!-- css -->
+<link rel="stylesheet" href="{% static 'css/sns/home.css' %}">
 
 <div class="container home_container" >
 
@@ -66,9 +17,9 @@
         <div class="row g-0" >  <!--우선순위 때문에 인라인 적용-->
             <div class="col-md-4 home_img_area">
                 {% if post.post_img %} {# 게시글 사진이 있을 경우 #}
-                    <img class="img-fluid post_img" src="{{ post.post_img.url }}" alt="post image">
+                    <img class="img-fluid post_img_thumbnail" src="{{ post.post_img.url }}" alt="post image">
                 {% else %} {# 게시글 사진이 없을 경우 #}
-                    <img class="img-fluid post_img" src = "{% static 'admin/img/default_img.png' %}" alt = "default Image">
+                    <img class="img-fluid post_img_thumbnail" src = "{% static 'admin/img/default_img.png' %}" alt = "default Image">
                 {% endif %}
             </div>
             <div class="col-md-8">

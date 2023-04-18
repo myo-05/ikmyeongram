@@ -1,0 +1,101 @@
+/* signup.html */
+
+.signup-box {
+    background: #d9d9d9;
+    border-radius: 50px;
+    padding-bottom: 40px;
+    width: 60vw;
+    max-width: 700px;
+}
+
+.profil-img {
+    height: 100px;
+    position: relative;
+    left: -10px;
+}
+
+.profil-title {
+    font-weight: bold;
+    position: relative;
+    left: -20px;
+}
+
+.signup_center {
+    padding: 20px 0;
+}
+
+.signup_form {
+    margin-top: 0px;
+    padding: 0px 0;
+    border-radius: 10px;
+}
+
+.from_cover {
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+
+/* input.form-control 속성이 sign-input 클래스랑 동일해 병합 */
+
+.sign-box {
+    display: flex;
+    padding: 10px 0;
+    background-color: #ffff;
+    border-radius: 30px;
+    text-align: center;
+}
+
+.label-name {
+    padding: 0 15px;
+    width: 140px;
+
+}
+
+.sign-input {
+    width: 70%;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    height: 30px;
+    line-height: 30px;
+    background: transparent;
+    padding: 0;
+}
+
+.signup_cancel_btn {
+    color: #fff;
+    background-color: #848484;
+    border-color: #848484;
+    float: right;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.sign_up_btn {
+    color: #fff;
+    background-color: #585858;
+    border-color: #585858;
+    /* float: right; */
+    margin-left: 5px;
+}
+
+.signup_btns {
+    text-align: right;
+    position: relative;
+}
+
+.signup_cancel_btn:hover {
+    color: #fff;
+    background-color: #A4A4A4;
+    border-color: #A4A4A4;
+}
+
+.sign_up_btn:hover {
+    color: #fff;
+    background-color: #1C1C1C;
+    border-color: #1C1C1C;
+}
+
+.signup_user_img {
+    margin: auto;
+}
