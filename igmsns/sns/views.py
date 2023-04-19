@@ -7,16 +7,6 @@ from user.models import UserModel
 from django.views.decorators.http import require_POST
 
 
-
-'''
-[정은]
-게시글 리스트 불러오기는 회원이랑 비회원 접근이 가능하기 때문에 바로 렌더 되게 해줬습니다!
-
-[채연] 
-정은님이 만드실 홈화면 구동을 위해 임시로 만들었습니다.
-view 함수 이름만 다르고 완전히 같으니까, 참고해서 merge 해 주시면 됩니다. 팀장님 ^-^* 찡긋~!
-'''
-
 # ============================= 홈이동 (피드페이지) ============================= 
 
 # 로그인 없이도 피드는 조회가능하지만, 글작성버튼은 없다.
@@ -70,9 +60,6 @@ def detail_post_view(request, id):
     if request.method == 'GET':
         return render(request, 'sns/detail_post.html',context)
 
-'''
-수정 뷰, 삭제 뷰 위치 바꿨습니다. 기능의 흐름에 따라 함수를 배치하는 게 알아보기 쉬울 것 같습니다.
-'''
 
 # ============================= 게시글 수정하기 ============================= 
 
@@ -180,7 +167,7 @@ def profile_postlist_view(request, author_id, type):
             'total_post':total_post,
             'author': user , 
             'posts': posts,
-            'liked_posts': liked_posts, 
+            'liked_posts': liked_posts,
             'liked_posts_count': liked_posts_count,
             'type': type,
             'following_count': following_count,

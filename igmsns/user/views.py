@@ -14,7 +14,7 @@ from django.core.files.storage import FileSystemStorage
 채연 : 위치바꿨습니다.
 """
 
-# 회원가입
+# ============================= 회원가입 =============================
 def sign_up(request):
     if request.method == "GET":  # 회원가입 페이지를 눌렀을 때
         return render(request, "user/signup.html")
@@ -65,7 +65,7 @@ def sign_up(request):
                         )
                     if user_img:
                         # 파일을 시스템에 저장 | FileSystemStorage | DB가 아닌 시스템으로 지정한 dir에 저장
-                        storage = FileSystemStorage()
+                        storage = FileSystemStorage() #실제로 이미지 파일이 저장되는 것
                         # 
                         file_saved = storage.save(user_img.name, user_img)
 
@@ -85,10 +85,16 @@ def sign_up(request):
                 "user/signup.html",
                 {"error_message": "[빈칸 발견!] 공란이 빤히 보이는데, 미치셨어요?"},
             )
+            
+# ============================= 회원정보수정 ===============================
+def sign_update(request):
+
+    if request.method == "POST":
+        pass
 
 
 
-# 로그인 함수
+# ============================= 로그인 =============================
 def sign_in_view(request):
     if request.method == "POST":  # POST 요청, 즉 로그인을 시도했을 때
         username = request.POST.get("username", None)  # ID 받아옴
