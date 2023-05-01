@@ -5,6 +5,7 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 
+from .forms import UserUpdateForm
 
 # Create your views here.
 
@@ -90,8 +91,13 @@ def sign_up(request):
 def sign_update(request):
 
     if request.method == "POST":
-        pass
-
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = UserUpdateForm(instance=request.user)
+    return render(request, 'user/user_update.html', {'form': form})
 
 
 # ============================= 로그인 =============================
