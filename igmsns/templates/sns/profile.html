@@ -28,7 +28,9 @@
             <div class="profile_nickname"> {{author.nickname}} 
             <!-- 내 페이지라면 아이디를 보여준다. -->
             {% if author.id == request.user.id %}
-                <p> @{{author.username}} </p>
+                <p> @{{author.username}} <br>
+                <a href = "{% url 'update' %}">프로필 수정</a>
+            </p>
             <!-- 니 페이지라면 팔로우 버튼을 보여준다. -->
             {% else %}
                 <!-- 팔로우하기 버튼 시작!-->

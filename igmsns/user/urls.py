@@ -8,4 +8,6 @@ urlpatterns = [
     path('<int:user_id>/follow/', views.follow, name = 'follow'), # 팔로우
     path('following-list/<int:id>/', views.following_list, name='following-list'),
     path('follower-list/<int:id>/', views.follower_list, name='follower-list'),
+    path('update/', views.sign_update, name = 'update'),
+    
 ]
